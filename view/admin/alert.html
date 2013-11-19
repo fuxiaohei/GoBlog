@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
+<head>
+    <meta charset="utf-8"/>
+    <title>错误提示 - GoRink</title>
+    <link rel="stylesheet" href="/public/css/admin.css" type="text/css" media="all"/>
+</head>
+<body>
+<div id="admin-alert">
+    <h3>错误提示</h3>
+    <ul>{{range .Errors}}
+        <li>{{.}}</li>{{end}}
+    </ul>
+    <p class="back">
+        <a href="javascript:history.go(-1)">返回前一页</a>
+    </p>
+</div>
+</body>
+</html>

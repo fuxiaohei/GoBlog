@@ -1,0 +1,61 @@
+{{template "header.html" .}}
+<div class="container" id="admin-main">
+    <h4>添加新用户</h4>
+    <form id="profile-container" class="clear">
+        <div id="profile-form" class="form left" action="">
+            <p class="item">
+                <label for="user" class="require">登录用户名</label>
+                <input id="user" class="ipt" type="text" required="required"/>
+            </p>
+            <p class="item">
+                <label for="nick" class="require">用户昵称</label>
+                <input id="nick" class="ipt" type="text" required="required"/>
+                <span class="tip">前台只显示昵称，不现实登录用户名</span>
+            </p>
+            <p class="item">
+                <label for="email" class="require">邮箱</label>
+                <input id="email" class="ipt" type="email" required="required"/>
+                <span class="tip"><strong>非常重要</strong></span>
+            </p>
+            <p class="item">
+                <label for="url">网址</label>
+                <input id="url" class="ipt" type="url"/>
+            </p>
+            <h5 class="item line">个人介绍</h5>
+            <p class="item">
+                <textarea class="ipt" name="bio"></textarea>
+                <span class="tip">一段简短的个人介绍，可以配置出现在模板中</span>
+            </p>
+        </div>
+        <div id="password-form" class="form right">
+            <p class="item">
+                <label for="new" class="require">登录密码</label>
+                <input id="new" class="ipt" type="password" name="new"/>
+            </p>
+            <p class="item">
+                <label for="confirm-new" class="require">确认新密码</label>
+                <input id="confirm-new" class="ipt" type="password" name="confirm"/>
+                <span class="tip">必须与新密码相同</span>
+            </p>
+            <p class="item">
+                <label for="email-new">发邮件通知</label>
+                <input class="chk" type="checkbox" value="on" name="email-new" id="email-new"/>
+            </p>
+            <p class="item">
+                <label for="role">角色</label>
+                <select class="select" name="role" id="role">
+                    <option value="reader">读者</option>
+                    <option value="editor">编辑</option>
+                    <option value="admin">管理员</option>
+                    <option value="super">超级管理员</option>
+                </select>
+            </p>
+            <p class="item">
+                <button class="btn red">添加新用户</button>
+            </p>
+        </div>
+    </form>
+</div>
+{{template "footer.html" .}}
+</body>
+</html>

@@ -1,0 +1,50 @@
+{{template "header.html" .}}
+<div class="container" id="admin-main">
+    <header class="clear" id="article-manage-header">
+        <h4 class="left">文章管理</h4>
+        <a class="btn left" id="article-add" href="/admin/article/new">撰写新文章</a>
+        <form id="article-search" class="right" action="">
+            <input class="ipt left" type="search"/>
+            <button class="btn left green">搜索</button>
+        </form>
+    </header>
+    <form id="article-manage" class="form" action="">
+        <ul id="article-manage-list">
+            <li class="clear">
+                <span class="comment right"><i class="fa fa-comment fa-lg"></i> 22</span>
+                <input class="chk left" type="checkbox"/>
+                <h4 class="left"><a href="#">Hello GoRink Engine!</a></h4>
+                <p class="left">作者： <a href="#">傅小黑</a> 分类： <a href="#">默认分类</a> 发布于：10月12日 13:45
+                    <span class="opt"><a href="#" class="edit"><i class="fa fa-edit"></i>编辑</a>
+                        <a class="trash" href="#"><i class="fa fa-inbox"></i>回收</a>
+                        <a class="view" href="#"><i class="fa fa-eye"></i>浏览</a>
+                    </span>
+                </p>
+            </li>
+            <li class="clear">
+                <span class="comment right"><i class="fa fa-comment fa-lg"></i> 22</span>
+                <input class="chk left" type="checkbox"/>
+                <span class="status left">[草稿]</span>
+                <h4 class="left"><a href="#">Hello GoRink Engine!</a></h4>
+                <p class="left">作者： <a href="#">傅小黑</a> 分类： <a href="#">默认分类</a> 发布于：10月12日 13:45
+                    <span class="opt"><a href="#" class="edit"><i class="fa fa-edit"></i>编辑</a>
+                        <a class="trash" href="#"><i class="fa fa-inbox"></i>回收</a>
+                        <a class="view" href="#"><i class="fa fa-eye"></i>预览</a>
+                    </span>
+                </p>
+            </li>
+            <li class="clear">
+                <span class="opt left">
+                    选中项目：&nbsp;&nbsp;<a class="trash" href="#"><i class="fa fa-inbox"></i>回收</a>
+                </span>
+                <span class="page right">
+                    <a class="i in" href="#">1</a>
+                    <a class="i" href="#">2</a>
+                </span>
+            </li>
+        </ul>
+    </form>
+</div>
+{{template "footer.html" .}}
+</body>
+</html>

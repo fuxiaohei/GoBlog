@@ -1,0 +1,26 @@
+{{template "header.html" .}}
+<div class="container" id="admin-main">
+    <h4>添加分类</h4>
+    <form id="category-form" class="clear form" action="">
+        <p class="item">
+            <label for="name" class="require">分类名称</label>
+            <input id="name" class="ipt" type="text" required="required" name="name"/>
+        </p>
+        <p class="item">
+            <label for="slug" class="require">固定链接</label>
+            <input id="slug" class="ipt" type="text" required="required" name="slug"/>
+            <span class="tip">用于生成友好的URL链接，不支持中文和特殊字符</span>
+        </p>
+        <p class="item">
+            <label for="desc">分类介绍</label>
+            <input id="desc" class="ipt" type="text" name="desc"/>
+            <span class="tip">分类的简单介绍，一句话就够了；可以配置出现在页面中</span>
+        </p>
+        <p class="item">
+            <button class="btn" id="submit">保存</button>
+        </p>
+    </form>
+</div>
+{{template "footer.html" .}}
+</body>
+</html>

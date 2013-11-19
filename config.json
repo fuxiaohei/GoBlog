@@ -1,0 +1,27 @@
+{
+    "filter": {
+        "is_print": false
+    },
+    "server": {
+        "addr": "localhost:8080",
+        "gzip": false
+    },
+    "database": {
+        "driver": "sqlite3",
+        "dsn": "sqlite.db",
+        "show_sql": true
+    },
+    "view": {
+        "static": "public",
+        "dir": "view",
+        "404": "error/404.html"
+    },
+    "log": {
+        "dir": "log",
+        "clock": 300
+    },
+    "salt": {
+        "password": "194hf034dg%386",
+        "session": "1nfd75lfguejgspdu"
+    }
+}

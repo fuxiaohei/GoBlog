@@ -1,0 +1,66 @@
+{{template "header.html" .}}
+<div class="container" id="admin-main">
+    <h4>个人资料</h4>
+    <div id="profile-container" class="clear">
+        <form id="profile-form" class="form left" action="/admin/user/edit?id={{.Profile.Id}}" method="post">{{if .Input.updated}}
+            <p class="item">
+                <span class="green msg">用户资料已更新</span>
+            </p>{{end}}
+            <p class="item">
+                <label for="user" class="require">登录用户名</label>
+                <input id="user" class="ipt" type="text" required="required" name="login" value="{{.Profile.LoginName}}"/>
+            </p>
+            <p class="item">
+                <label for="nick" class="require">用户昵称</label>
+                <input id="nick" class="ipt" type="text" required="required" name="nick" value="{{.Profile.NickName}}"/>
+                <span class="tip">前台只显示昵称，不现实登录用户名</span>
+            </p>
+            <h5 class="item line">联系方式</h5>
+            <p class="item">
+                <label for="email" class="require">邮箱</label>
+                <input id="email" class="ipt" type="email" required="required" name="email" value="{{.Profile.Email}}"/>
+                <span class="tip"><strong>非常重要</strong></span>
+            </p>
+            <p class="item">
+                <label for="url">网址</label>
+                <input id="url" class="ipt" type="url" value="{{.Profile.Url}}" name="url"/>
+            </p>
+            <h5 class="item line">个人介绍</h5>
+            <p class="item">
+                <textarea class="ipt" name="bio">{{.Profile.Bio}}</textarea>
+                <span class="tip">一段简短的个人介绍，可以配置出现在模板中</span>
+            </p>
+            <p class="item">
+                <button class="btn">更新个人资料</button>
+            </p>
+        </form>{{if .IsCurrent}}
+        <form id="password-form" class="form right" method="post" action="/admin/password/">
+            <h4 class="item line">修改密码</h4>
+            {{if .Input.password}}
+            <p class="item">
+                <span class="green msg">登录密码已更新</span>
+            </p>{{end}}
+            <p class="item">
+                <label for="old" class="require">旧密码</label>
+                <input id="old" class="ipt" type="password" name="old"/>
+                <span class="tip">输入旧密码，验证您的身份</span>
+            </p>
+            <p class="item">
+                <label for="new" class="require">新密码</label>
+                <input id="new" class="ipt" type="password" name="new"/>
+            </p>
+            <p class="item">
+                <label for="confirm-new" class="require">确认新密码</label>
+                <input id="confirm-new" class="ipt" type="password" name="confirm"/>
+                <span class="tip">必须与新密码相同</span>
+            </p>
+            <p class="item">
+                <button class="btn red">更新密码</button>
+                <span class="tip">更新密码后需要重新登录</span>
+            </p>
+        </form>{{end}}
+    </div>
+</div>
+{{template "footer.html" .}}
+</body>
+</html>

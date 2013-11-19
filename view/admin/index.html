@@ -1,0 +1,41 @@
+{{template "header.html" .}}
+<div class="container clear" id="admin-main">
+    <h4>控制面板</h4>
+    <div class="admin-panel-container left">
+        <div class="panel">
+            <p class="title">欢迎，Welcome!</p>
+            <div class="body">
+                <p class="quick-link">欢迎回来，<a href="/admin/profile/"><strong>{{.Flash.CurrentUser}}</strong></a> 。你可以从这里快速开始：</p>
+                <p class="quick-link"><i class="fa fa-edit fa-lg"></i>撰写 <a href="/admin/article/new/">新文章</a>，或 <a href="#">新页面</a></p>
+                <p class="quick-link"><i class="fa fa-folder-open fa-lg"></i>管理 <a href="/admin/file">附件媒体</a>，
+                    <a href="#">友情链接</a> ，或 <a href="#">注册用户</a></p>
+                <p class="quick-link"><i class="fa fa-comments-o fa-lg"></i><a href="#">审核</a> ，
+                    <a href="#">清理</a> 评论，并 <a href="#">设置</a> 其功能</p>
+            </div>
+        </div>
+        <div class="panel">
+            <p class="title">站点统计</p>
+            <div class="body">
+                <p>网站运行了 <strong>125</strong> 天，存有&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-file-text fa-lg"></i>文章 <strong>12</strong> 篇，&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-file-o fa-lg"></i>独立页面 <strong>5</strong> 个</p>
+            </div>
+        </div>
+        <div class="panel">
+            <p class="title">运行状态</p>
+            <div class="body">
+                <p>存有&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-users fa-lg"></i><strong>{{.Stats.Tokens}}</strong> 个会话有效</p>
+            </div>
+        </div>
+    </div>
+    <div class="admin-panel-container right">
+        <div class="panel">
+            <p class="title">最新动态</p>
+            <div class="body">
+                最新动态消息
+            </div>
+        </div>
+
+    </div>
+</div>
+{{template "footer.html" .}}
+</body>
+</html>
