@@ -5,27 +5,17 @@
         <a class="btn left" id="category-add" href="/admin/category/new">添加新分类</a>
     </header>
     <form id="category-manage" class="form" action="">
-        <ul id="category-manage-list">
+        <ul id="category-manage-list">{{range .Categories}}
             <li class="clear">
-                <span class="articles right"><i class="fa fa-file fa-lg"></i> 22</span>
-                <input class="chk left" type="checkbox"/>
-                <h4 class="left"><a href="/admin/category/edit">默认分类</a></h4>
-                <span class="slug">(default)</span>
-                <span class="opt"><a href="#" class="edit"><i class="fa fa-edit"></i>编辑</a>
-                        <a class="trash" href="#"><i class="fa fa-inbox"></i>删除</a>
-                        <a class="view" href="#"><i class="fa fa-eye"></i>浏览</a>
+                <span class="articles right"><i class="fa fa-file fa-lg"></i> {{.Articles}}</span>
+                <input class="radio left" type="radio" name="category" id="{{.Id}}"/>
+                <h4 class="left"><a href="/admin/category/edit?id={{.Id}}">{{.Name}}</a></h4>
+                <span class="slug">({{.Slug}})</span>
+                <span class="opt"><a href="/admin/category/edit?id={{.Id}}" class="edit"><i class="fa fa-edit"></i>编辑</a>
+                        <a class="trash" href="/admin/category/delete?id={{.Id}}"><i class="fa fa-inbox"></i>删除</a>
+                        <a class="view" href="{{.Link}}" target="_blank"><i class="fa fa-eye"></i>浏览</a>
                     </span>
-            </li>
-            <li class="clear">
-                <span class="articles right"><i class="fa fa-file fa-lg"></i> 22</span>
-                <input class="chk left" type="checkbox"/>
-                <h4 class="left"><a href="#">默认分类</a></h4>
-                <span class="slug">(default)</span>
-                <span class="opt"><a href="#" class="edit"><i class="fa fa-edit"></i>编辑</a>
-                        <a class="trash" href="#"><i class="fa fa-inbox"></i>删除</a>
-                        <a class="view" href="#"><i class="fa fa-eye"></i>浏览</a>
-                    </span>
-            </li>
+            </li>{{end}}
             <li class="clear">
                 <span class="opt extra left">
                     选中项目：&nbsp;&nbsp;<a class="trash" href="#"><i class="fa fa-inbox"></i>删除</a>

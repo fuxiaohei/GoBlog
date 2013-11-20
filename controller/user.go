@@ -7,6 +7,7 @@ import (
 	"github.com/fuxiaohei/gorink/lib"
 	"strings"
 	"strconv"
+	"fmt"
 )
 
 func init() {
@@ -35,7 +36,10 @@ func init() {
 			id, _ := strconv.Atoi(context.String("id"))
 			e := model.UpdateUserProfile(id, login, nick, email, url, bio)
 			if e != nil {
-				panic(e)
+				context.Render("admin/alert.html", map[string]interface {}{
+						"Errors":[]string{fmt.Sprint(e)},
+					})
+				return nil
 			}
 			context.Redirect("/admin/user/edit?updated=1&id=" + context.String("id"), 302)
 			return nil

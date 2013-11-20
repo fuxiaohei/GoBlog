@@ -5,6 +5,7 @@ import (
 	"github.com/fuxiaohei/goink/db"
 	"github.com/fuxiaohei/goink/app"
 	"errors"
+	"fmt"
 )
 
 type User struct {
@@ -81,8 +82,16 @@ func GetCurrentUserId(context *app.InkContext) int {
 }
 
 func UpdateUserProfile(userId int, login string, nick string, email string, url string, bio string) error {
-	sql := db.NewSql("gorink_user", "login", "nick", "email", "url", "biography").Where("id = ?").Update()
-	_, e := Db.Exec(sql, login, nick, email, url, bio, userId)
+	sql := db.NewSql("gorink_user", "id").Where("email = ?").Select()
+	result, e := Db.Query(sql, email)
+	data := result.Map()
+	if data != nil {
+		if len(data["id"]) > 0 && data["id"] != fmt.Sprint(userId) {
+			return errors.New("邮箱和别的用户重复")
+		}
+	}
+	sql = db.NewSql("gorink_user", "login", "nick", "email", "url", "biography").Where("id = ?").Update()
+	_, e = Db.Exec(sql, login, nick, email, url, bio, userId)
 	return e
 }
 
@@ -103,7 +112,7 @@ func UpdatePassword(userId int, old string, new string, salt string) error {
 func GetUsers() []*User {
 	data, e := Orm.Find("model.User", nil)
 	if e != nil {
-		App.LogErr(data)
+		App.LogErr(e)
 		return make([]*User, 0)
 	}
 	res := make([]*User, len(data))
