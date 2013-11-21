@@ -75,3 +75,9 @@ func AddCategory(c *Category) (int, error) {
 	i, e := Orm.Insert(c)
 	return i, e
 }
+
+func DeleteCategoryById(id int) error {
+	sql := db.NewSql("gorink_category").Where("id = ?").Delete()
+	_ , e := Db.Exec(sql, id)
+	return e
+}

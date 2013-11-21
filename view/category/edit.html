@@ -21,10 +21,17 @@
         </p>
         <p class="item">
             <button class="btn" id="submit">更新</button>
-            <a class="trash" href="#"><i class="fa fa-inbox"></i>删除</a>
+            <a class="trash" href="/admin/category/delete?id={{.Category.Id}}"><i class="fa fa-inbox"></i>删除</a>
         </p>
     </form>
 </div>
 {{template "footer.html" .}}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.trash').on("click",function(){
+            return confirm("确认删除?");
+        });
+    });
+</script>
 </body>
 </html>

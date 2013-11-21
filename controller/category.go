@@ -89,6 +89,24 @@ func init() {
 			context.Redirect("/admin/category/edit?id=" + fmt.Sprint(i), 302)
 			return nil
 		})
+	App.GET("/admin/category/delete", func(context *app.InkContext) interface {} {
+			id, _ := strconv.Atoi(context.String("id"))
+			if id < 10 {
+				context.Render("admin/alert.html", map[string]interface {}{
+						"Errors":[]string{"参数错误"},
+					})
+				return nil
+			}
+			e := model.DeleteCategoryById(id)
+			if e != nil {
+				context.Render("admin/alert.html", map[string]interface {}{
+						"Errors":[]string{e.Error()},
+					})
+				return nil
+			}
+			context.Redirect("/admin/category?deleted=1", 302)
+			return nil
+		})
 }
 
 func validateCategoryData(context *app.InkContext) string {

@@ -4,11 +4,14 @@
         <h4 class="left">分类管理</h4>
         <a class="btn left" id="category-add" href="/admin/category/new">添加新分类</a>
     </header>
-    <form id="category-manage" class="form" action="">
+    <form id="category-manage" class="form" action="">{{if .Input.deleted}}
+        <p class="msg-item">
+            <span class="green msg">分类已删除</span>
+        </p>{{end}}
         <ul id="category-manage-list">{{range .Categories}}
             <li class="clear">
                 <span class="articles right"><i class="fa fa-file fa-lg"></i> {{.Articles}}</span>
-                <input class="radio left" type="radio" name="category" id="{{.Id}}"/>
+                <!--<input class="radio left" type="radio" name="category" id="{{.Id}}"/>-->
                 <h4 class="left"><a href="/admin/category/edit?id={{.Id}}">{{.Name}}</a></h4>
                 <span class="slug">({{.Slug}})</span>
                 <span class="opt"><a href="/admin/category/edit?id={{.Id}}" class="edit"><i class="fa fa-edit"></i>编辑</a>
@@ -17,14 +20,21 @@
                     </span>
             </li>{{end}}
             <li class="clear">
-                <span class="opt extra left">
+                <!--<span class="opt extra left">
                     选中项目：&nbsp;&nbsp;<a class="trash" href="#"><i class="fa fa-inbox"></i>删除</a>
-                </span>
+                </span>-->
                 <span class="tip left">删除分类后，对应文章的分类会存为 <strong>"未分类"</strong></span>
             </li>
         </ul>
     </form>
 </div>
 {{template "footer.html" .}}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.trash').on("click",function(){
+           return confirm("确认删除?");
+        });
+    });
+</script>
 </body>
 </html>
