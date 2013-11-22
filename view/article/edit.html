@@ -1,13 +1,19 @@
 {{template "header.html" .}}
 <div class="container" id="admin-main">
-    <h4>添加文章</h4>
-    <form id="article-form" class="clear form" action="" method="post">
+    <h4>编辑文章 "{{.Article.Title}}"</h4>
+    <form id="article-form" class="clear form" action="" method="post">{{if .Input.updated}}
+        <p class="item">
+            <span class="green msg">文章已更新</span>
+        </p>{{end}}{{if .Input.saved}}
+        <p class="item">
+            <span class="green msg">文章已保存</span>
+        </p>{{end}}
         <div class="article-form-main left">
             <p class="item">
-                <input class="title ipt" type="text" name="title" placeholder="输入文章标题" required="required"/>
+                <input class="title ipt" type="text" name="title" placeholder="输入文章标题" required="required" value="{{.Article.Title}}"/>
             </p>
             <p class="item">
-                <textarea class="ipt content" name="context" id="article-content"></textarea>
+                <textarea class="ipt content" name="context" id="article-content">{{.Article.Context}}</textarea>
                 <span class="tip">使用 [break] 截断内容，前半部分将作为全文的概述。</span>
             </p>
         </div>
@@ -19,17 +25,19 @@
                         <i class="fa fa-bookmark-o"></i>
                         <label for="article-status">状态</label>
                         <select class="select clean" name="status" id="article-status">
-                            <option value="publish">直接发布</option>
-                            <option value="draft">草稿箱</option>
-                            <option value="archived">归档</option>
+                            {{if eq .Article.StatusText "publish"}}<option value="publish" selected>直接发布</option>{{else}}<option value="publish">直接发布</option>{{end}}
+                            {{if eq .Article.StatusText "draft"}}<option value="draft" selected>草稿箱</option>{{else}}<option value="draft">草稿箱</option>{{end}}
+                            {{if eq .Article.StatusText "archived"}}<option value="archived" selected>归档</option>{{else}}<option value="archived">归档</option>{{end}}
                         </select>
                     </p>
                     <p>
                         <i class="fa fa-comment-o"></i>
                         <label for="article-status">评论状态</label>
                         <select class="select clean" name="comment" id="article-comment">
+                            {{if .Article.IsAllowComment}}<option value="1" selected>允许</option>
+                            <option value="-1">关闭</option>{{else}}
                             <option value="1">允许</option>
-                            <option value="-1">关闭</option>
+                            <option value="-1" selected>关闭</option>{{end}}
                         </select>
                     </p>
                 </div>
@@ -44,8 +52,8 @@
                     <i class="fa fa-asterisk"></i>
                     <label for="article-category">分类</label>
                     <select class="select clean" name="category" id="article-category">{{range .Categories}}
-                        <option value="{{.Id}}">{{..Name}}</option>{{end}}
-                        <option value="1">无分类</option>
+                        {{if eq $.Article.CategoryId .Id}}<option value="{{.Id}}" selected>{{..Name}}</option>{{else}}<option value="{{.Id}}">{{..Name}}</option>{{end}}{{end}}
+                        {{if eq $.Article.CategoryId 1}}<option value="1" selected>无分类</option>{{else}}<option value="1">无分类</option>{{end}}
                     </select>
                 </div>
             </div>
@@ -53,7 +61,7 @@
                 <p class="title require">缩略名</p>
                 <div class="body">
                     <i class="fa fa-link"></i>
-                    <input id="article-slug" class="ipt lined" type="text" required="required" placeholder="输入缩略名" name="slug"/>
+                    <input id="article-slug" class="ipt lined" type="text" required="required" placeholder="输入缩略名" name="slug" value="{{.Article.Slug}}"/>
                     <span class="tip">缩略名用于生成友好的链接，不支持中文字符和特殊符号</span>
                 </div>
             </div>
@@ -63,8 +71,13 @@
 {{template "footer.html" .}}
 <script type="text/javascript" src="/public/js/bootstrap-markdown.js"></script>
 <script type="text/javascript" src="/public/js/marked.js"></script>
+<script type="text/javascript" src="/public/js/prettify/prettify.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
+        $("<link>").attr({ rel: "stylesheet",
+            type: "text/css",
+            href: "/public/js/prettify/prettify.css"
+        }).appendTo("head");
         $("#article-content").markdown({
             autofocus:false,
             savable:false,
@@ -72,6 +85,12 @@
                 var content = marked(e.getContent(), {
                     breaks: true
                 });
+                if (content.indexOf("</pre>") >= 1) {
+                    setTimeout(function () {
+                        $(".markdown-content pre").addClass("prettyprint").addClass("linenums");
+                        prettyPrint();
+                    }, 200);
+                }
                 return content;
             }
         });

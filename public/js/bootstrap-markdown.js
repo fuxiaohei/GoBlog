@@ -299,7 +299,7 @@
           callbackContent = options.onPreview(this), // Try to get the content from callback
           container = this.$textarea,
           afterContainer = container.next(),
-          replacementContainer = $('<div/>',{'class':'md-preview','data-provider':'markdown-preview'}),
+          replacementContainer = $('<div/>',{'class':'md-preview markdown-content','data-provider':'markdown-preview'}),
           content
 
       // Give flag that tell the editor enter preview mode

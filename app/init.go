@@ -5,6 +5,8 @@ import (
 	"github.com/fuxiaohei/goink/app"
 	"github.com/fuxiaohei/goink/db"
 	_ "github.com/mattn/go-sqlite3"
+	"html/template"
+	"github.com/fuxiaohei/gorink/lib"
 )
 
 const (
@@ -25,6 +27,7 @@ func init() {
 			context.Send("", 404)
 		})
 	initDatabase()
+	initViewFuncs()
 }
 
 func initDatabase() {
@@ -40,4 +43,12 @@ func initDatabase() {
 		App.Crash(err)
 	}
 	Orm = db.NewOrm(Db)
+}
+
+func initViewFuncs() {
+	App.View().Func("RawHtml", func(str string) template.HTML {
+			return template.HTML(str)
+		})
+	App.View().Func("DateString", lib.DateString)
+	App.View().Func("DateInt64", lib.DateInt64)
 }

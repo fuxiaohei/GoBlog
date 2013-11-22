@@ -1,0 +1,36 @@
+@import "_mixin";
+.markdown-content{
+  h1,h2,h3,h4,h5,h6{
+    margin-bottom: .25em;
+    margin-top: .25em;
+  }
+  h1,h2,h3,h4{
+    padding-bottom: .25em;
+    border-bottom: 1px dotted @Gray2;
+  }
+  pre{
+    line-height: 18px;
+    font-size: 12px;
+    border-left: 4px solid @Gray1;
+    padding: 8px;
+    margin: 8px 0;
+  }
+  p{
+    code{
+      background-color: @White2;
+      padding: 2px 8px;
+      margin: 0 4px;
+      color: @Red1;
+    }
+  }
+  ul{
+    li{
+      list-style: disc inside;
+    }
+  }
+  ol{
+    li{
+      list-style: decimal inside;
+    }
+  }
+}

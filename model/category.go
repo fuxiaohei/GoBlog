@@ -22,6 +22,12 @@ func (this *Category) Link() string {
 
 func init() {
 	db.Define(Category{})
+	App.On("model.article.add@category_update", func() {
+			go UpdateCategoryArticles()
+		});
+	App.On("model.article.update@category_update", func() {
+			go UpdateCategoryArticles()
+		});
 }
 
 func GetCategories() []*Category {
@@ -80,4 +86,9 @@ func DeleteCategoryById(id int) error {
 	sql := db.NewSql("gorink_category").Where("id = ?").Delete()
 	_ , e := Db.Exec(sql, id)
 	return e
+}
+
+func UpdateCategoryArticles() {
+	sql := "UPDATE gorink_category SET articles = (SELECT count(*) FROM gorink_article WHERE gorink_article.category_id = gorink_category.id) AND gorink_article.format_type != 'trash';"
+	Db.Exec(sql)
 }
