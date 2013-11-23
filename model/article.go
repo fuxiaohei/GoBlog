@@ -93,12 +93,7 @@ func UpdateArticle(a *Article) error {
 	return e
 }
 
-func GetArticleAllList(page int, size int) ([]*Article, *Counter) {
-	data, e := Orm.Find("model.Article", db.NewSql("").Where("format_type != ?").Page(page, size).Order("id DESC"), "trash")
-	if e != nil {
-		App.LogErr(e)
-		return make([]*Article, 0), nil
-	}
+func assembleArticleList(data []interface {}) []*Article {
 	res := make([]*Article, len(data))
 	tmpCategory := make(map[int]*Category)
 	tmpUser := make(map[int]*User)
@@ -114,6 +109,16 @@ func GetArticleAllList(page int, size int) ([]*Article, *Counter) {
 		a.Author = tmpUser[a.AuthorId]
 		res[i] = a
 	}
+	return res
+}
+
+func GetArticleAllList(page int, size int) ([]*Article, *Counter) {
+	data, e := Orm.Find("model.Article", db.NewSql("").Where("format_type != ?").Page(page, size).Order("id DESC"), "trash")
+	if e != nil {
+		App.LogErr(e)
+		return make([]*Article, 0), nil
+	}
+	res := assembleArticleList(data)
 	countRes, _ := Db.Query(db.NewSql("gorink_article").Where("format_type != ?").Count(), "trash")
 	count, _ := strconv.Atoi(countRes.Map()["countNum"])
 	return res, NewCounter(count, page, size)

@@ -7,22 +7,18 @@ import (
 	"strconv"
 	"github.com/fuxiaohei/gorink/lib"
 	"fmt"
+	"errors"
 )
 
 func init() {
 	App.GET("/admin/category", func(context *app.InkContext) interface {} {
-			context.Render("category/manage.html,admin/header.html,admin/footer.html", map[string]interface {}{
-					"Title":"分类",
-					"Rel":"category",
+			renderAdminPage(context, "category/manage.html", "分类", "category", map[string]interface {}{
 					"Categories":model.GetCategories(),
 				})
 			return nil
 		})
 	App.GET("/admin/category/new", func(context *app.InkContext) interface {} {
-			context.Render("category/new.html,admin/header.html,admin/footer.html", map[string]interface {}{
-					"Title":"新建分类",
-					"Rel":"category",
-				})
+			renderAdminPage(context, "category/new.html", "新建分类", "category", nil)
 			return nil
 		})
 	App.GET("/admin/category/edit", func(context *app.InkContext) interface {} {
@@ -31,9 +27,7 @@ func init() {
 				context.Redirect("/admin/category", 302)
 				return nil
 			}
-			context.Render("category/edit.html,admin/header.html,admin/footer.html", map[string]interface {}{
-					"Title":"编辑分类",
-					"Rel":"category",
+			renderAdminPage(context, "category/edit.html", "编辑分类", "category", map[string]interface {}{
 					"Category":model.GetCategoryById(id),
 				})
 			return nil
@@ -46,9 +40,7 @@ func init() {
 			}
 			msg := validateCategoryData(context)
 			if len(msg) > 1 {
-				context.Render("admin/alert.html", map[string]interface {}{
-						"Errors":[]string{msg},
-					})
+				renderAdminAlert(context, []error{errors.New(msg)})
 				return nil
 			}
 			c := &model.Category{
@@ -59,9 +51,7 @@ func init() {
 			}
 			e := model.UpdateCategory(c)
 			if e != nil {
-				context.Render("admin/alert.html", map[string]interface {}{
-						"Errors":[]string{e.Error()},
-					})
+				renderAdminAlert(context, []error{e})
 				return nil
 			}
 			context.Redirect("/admin/category/edit?updated=1&id=" + context.String("id"), 302)
@@ -70,9 +60,7 @@ func init() {
 	App.POST("/admin/category/new", func(context *app.InkContext) interface {} {
 			msg := validateCategoryData(context)
 			if len(msg) > 1 {
-				context.Render("admin/alert.html", map[string]interface {}{
-						"Errors":[]string{msg},
-					})
+				renderAdminAlert(context, []error{errors.New(msg)})
 				return nil
 			}
 			c := &model.Category{}
@@ -81,9 +69,7 @@ func init() {
 			c.Desc = context.String("desc")
 			i, e := model.AddCategory(c)
 			if e != nil {
-				context.Render("admin/alert.html", map[string]interface {}{
-						"Errors":[]string{e.Error()},
-					})
+				renderAdminAlert(context, []error{e})
 				return nil
 			}
 			context.Redirect("/admin/category/edit?id=" + fmt.Sprint(i), 302)
@@ -92,16 +78,12 @@ func init() {
 	App.GET("/admin/category/delete", func(context *app.InkContext) interface {} {
 			id, _ := strconv.Atoi(context.String("id"))
 			if id < 10 {
-				context.Render("admin/alert.html", map[string]interface {}{
-						"Errors":[]string{"参数错误"},
-					})
+				renderAdminAlert(context, []error{errors.New("参数错误")})
 				return nil
 			}
 			e := model.DeleteCategoryById(id)
 			if e != nil {
-				context.Render("admin/alert.html", map[string]interface {}{
-						"Errors":[]string{e.Error()},
-					})
+				renderAdminAlert(context, []error{e})
 				return nil
 			}
 			context.Redirect("/admin/category?deleted=1", 302)

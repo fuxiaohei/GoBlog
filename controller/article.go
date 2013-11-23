@@ -13,15 +13,16 @@ import (
 )
 
 func init() {
+	App.GET("/article", func(context *app.InkContext) interface {} {
+			return nil
+		})
 	App.GET("/admin/article", func(context *app.InkContext) interface {} {
 			page, _ := strconv.Atoi(context.String("page"))
 			if page < 1 {
 				page = 1
 			}
 			articles, counter := model.GetArticleAllList(page, 10)
-			context.Render("article/manage.html,admin/header.html,admin/footer.html", map[string]interface {}{
-					"Title":"文章",
-					"Rel":"article",
+			renderAdminPage(context, "article/manage.html", "文章", "article", map[string]interface {}{
 					"Articles":articles,
 					"ArticlesLength":len(articles),
 					"ArticleCounter":counter,
@@ -29,9 +30,7 @@ func init() {
 			return nil
 		})
 	App.GET("/admin/article/new", func(context *app.InkContext) interface {} {
-			context.Render("article/new.html,admin/header.html,admin/footer.html", map[string]interface {}{
-					"Title":"撰写文章",
-					"Rel":"article",
+			renderAdminPage(context, "article/new.html", "撰写文章", "article", map[string]interface {}{
 					"Categories":model.GetCategories(),
 				})
 			return nil
@@ -42,9 +41,7 @@ func init() {
 				context.Redirect("/admin/article", 302)
 				return nil
 			}
-			context.Render("article/edit.html,admin/header.html,admin/footer.html", map[string]interface {}{
-					"Title":"编辑文章",
-					"Rel":"article",
+			renderAdminPage(context, "article/edit.html", "编辑文章", "article", map[string]interface {}{
 					"Categories":model.GetCategories(),
 					"Article":model.GetArticleById(id),
 				})
@@ -53,47 +50,37 @@ func init() {
 	App.POST("/admin/article/new", func(context *app.InkContext) interface {} {
 			e := validateArticleData(context)
 			if len(e) > 0 {
-				context.Render("admin/alert.html", map[string]interface {}{
-						"Errors":e,
-					})
+				renderAdminAlert(context, e)
 				return nil
 			}
 			i, e2 := model.AddArticle(createNewArticle(context))
 			if e2 != nil {
-				context.Render("admin/alert.html", map[string]interface {}{
-						"Errors":[]string{e2.Error()},
-					})
+				renderAdminAlert(context, []error{e2})
 				return nil
 			}
-			App.Trigger("model.article.add@category_update")
+			App.Trigger("model.article.add", i)
 			context.Redirect("/admin/article/edit?saved=1&id=" + fmt.Sprint(i), 302)
 			return nil
 		})
 	App.POST("/admin/article/edit", func(context *app.InkContext) interface {} {
 			id, _ := strconv.Atoi(context.String("id"))
 			if id < 1 {
-				context.Render("admin/alert.html", map[string]interface {}{
-						"Errors":[]string{"参数错误"},
-					})
+				renderAdminAlert(context, []error{errors.New("参数错误")})
 				return nil
 			}
 			e := validateArticleData(context)
 			if len(e) > 0 {
-				context.Render("admin/alert.html", map[string]interface {}{
-						"Errors":e,
-					})
+				renderAdminAlert(context, e)
 				return nil
 			}
 			article := createNewArticle(context)
 			article.Id = id
 			e2 := model.UpdateArticle(article)
 			if e2 != nil {
-				context.Render("admin/alert.html", map[string]interface {}{
-						"Errors":[]string{e2.Error()},
-					})
+				renderAdminAlert(context, []error{e2})
 				return nil
 			}
-			App.Trigger("model.article.update@category_update")
+			App.Trigger("model.article.update", article.Id)
 			context.Redirect("/admin/article/edit?updated=1&id=" + fmt.Sprint(id), 302)
 			return nil
 		})

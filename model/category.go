@@ -22,10 +22,10 @@ func (this *Category) Link() string {
 
 func init() {
 	db.Define(Category{})
-	App.On("model.article.add@category_update", func() {
+	App.On("model.article.add@category_update", func(id int) {
 			go UpdateCategoryArticles()
 		});
-	App.On("model.article.update@category_update", func() {
+	App.On("model.article.update@category_update", func(id int) {
 			go UpdateCategoryArticles()
 		});
 }

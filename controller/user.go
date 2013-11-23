@@ -7,14 +7,12 @@ import (
 	"github.com/fuxiaohei/gorink/lib"
 	"strings"
 	"strconv"
-	"fmt"
+	"errors"
 )
 
 func init() {
 	App.GET("/admin/profile", func(context *app.InkContext) interface {} {
-			context.Render("user/profile.html,admin/header.html,admin/footer.html", map[string]interface {}{
-					"Title":"个人资料",
-					"Rel":"profile",
+			renderAdminPage(context, "user/profile.html", "个人资料", "profile", map[string]interface {}{
 					"Profile":model.GetUserById(model.GetCurrentUserId(context)),
 					"IsCurrent":true,
 				})
@@ -23,9 +21,7 @@ func init() {
 	App.POST("/admin/user/edit", func(context *app.InkContext) interface {} {
 			validateErrors := validateProfileData(context)
 			if len(validateErrors) > 0 {
-				context.Render("admin/alert.html", map[string]interface {}{
-						"Errors":validateErrors,
-					})
+				renderAdminAlert(context, validateErrors)
 				return nil
 			}
 			login := context.String("login")
@@ -36,9 +32,7 @@ func init() {
 			id, _ := strconv.Atoi(context.String("id"))
 			e := model.UpdateUserProfile(id, login, nick, email, url, bio)
 			if e != nil {
-				context.Render("admin/alert.html", map[string]interface {}{
-						"Errors":[]string{fmt.Sprint(e)},
-					})
+				renderAdminAlert(context, []error{e})
 				return nil
 			}
 			context.Redirect("/admin/user/edit?updated=1&id=" + context.String("id"), 302)
@@ -46,18 +40,13 @@ func init() {
 		})
 	//---------------------
 	App.GET("/admin/user", func(context *app.InkContext) interface {} {
-			context.Render("user/manage.html,admin/header.html,admin/footer.html", map[string]interface {}{
-					"Title":"用户",
-					"Rel":"user",
+			renderAdminPage(context, "user/manage.html", "用户", "user", map[string]interface {}{
 					"Users":model.GetUsers(),
 				})
 			return nil
 		})
 	App.GET("/admin/user/new", func(context *app.InkContext) interface {} {
-			context.Render("user/new.html,admin/header.html,admin/footer.html", map[string]interface {}{
-					"Title":"添加新用户",
-					"Rel":"user",
-				})
+			renderAdminPage(context, "user/new.html", "添加用户", "user", nil)
 			return nil
 		})
 	App.GET("/admin/user/edit", func(context *app.InkContext) interface {} {
@@ -70,9 +59,7 @@ func init() {
 				context.Redirect("/admin/profile", 302)
 				return nil
 			}
-			context.Render("user/profile.html,admin/header.html,admin/footer.html", map[string]interface {}{
-					"Title":"个人资料",
-					"Rel":"profile",
+			renderAdminPage(context, "user/profile.html", "个人资料", "user", map[string]interface {}{
 					"Profile":model.GetUserById(id),
 				})
 			return nil
@@ -82,23 +69,17 @@ func init() {
 			new := strings.TrimSpace(context.String("new"))
 			confirm := strings.TrimSpace(context.String("confirm"))
 			if len(new) < 6 || len(new) > 20 || new != confirm {
-				context.Render("admin/alert.html", map[string]interface {}{
-						"Errors":[]string{"密码长度应在6-20位之间", "确认密码不匹配"},
-					})
+				renderAdminAlert(context, []error{errors.New("密码长度应在6-20位之间"), errors.New("确认密码不匹配")})
 				return nil
 			}
 			old := strings.TrimSpace(context.String("old"))
 			if len(old) < 6 || len(old) > 20 {
-				context.Render("admin/alert.html", map[string]interface {}{
-						"Errors":[]string{"旧密码错误"},
-					})
+				renderAdminAlert(context, []error{errors.New("旧密码")})
 				return nil
 			}
 			e := model.UpdatePassword(model.GetCurrentUserId(context), old, new, context.Ink.String("salt.password"))
 			if e != nil {
-				context.Render("admin/alert.html", map[string]interface {}{
-						"Errors":[]string{e.Error()},
-					})
+				renderAdminAlert(context, []error{e})
 				return nil
 			}
 			context.Redirect("/admin/profile/?password=1", 302)
@@ -106,18 +87,18 @@ func init() {
 		})
 }
 
-func validateProfileData(context *app.InkContext) []string {
-	messages := []string{}
+func validateProfileData(context *app.InkContext) []error {
+	messages := []error{}
 	if !lib.IsASCII(context.String("login")) {
-		messages = append(messages, "登录名不支持中文和特殊符号")
+		messages = append(messages, errors.New("登录名不支持中文和特殊符号"))
 	}
 	if !lib.IsEmail(context.String("email")) {
-		messages = append(messages, "邮箱格式错误")
+		messages = append(messages, errors.New("邮箱格式错误"))
 	}
 	url := context.String("url")
 	if len(url) > 0 {
 		if !lib.IsURL(url) {
-			messages = append(messages, "网址格式错误")
+			messages = append(messages, errors.New("网址格式错误"))
 		}
 	}
 	return messages
