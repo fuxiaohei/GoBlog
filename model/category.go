@@ -85,10 +85,12 @@ func AddCategory(c *Category) (int, error) {
 func DeleteCategoryById(id int) error {
 	sql := db.NewSql("gorink_category").Where("id = ?").Delete()
 	_ , e := Db.Exec(sql, id)
+	sql = db.NewSql("gorink_article", "category_id").Where("category_id = ?").Update()
+	Db.Exec(sql, 1, id)
 	return e
 }
 
 func UpdateCategoryArticles() {
-	sql := "UPDATE gorink_category SET articles = (SELECT count(*) FROM gorink_article WHERE gorink_article.category_id = gorink_category.id) AND gorink_article.format_type != 'trash';"
+	sql := "UPDATE gorink_category SET articles = (SELECT count(*) FROM gorink_article WHERE gorink_article.category_id = gorink_category.id AND gorink_article.format_type != 'trash');"
 	Db.Exec(sql)
 }

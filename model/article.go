@@ -71,7 +71,10 @@ func GetArticleById(id int) *Article {
 		App.LogErr(e)
 		return nil
 	}
-	return data.(*Article)
+	article := data.(*Article)
+	article.Author = GetUserById(article.AuthorId)
+	article.Category = GetCategoryById(article.CategoryId)
+	return article
 }
 
 func UpdateArticle(a *Article) error {
