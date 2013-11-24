@@ -123,3 +123,15 @@ func GetArticleAllList(page int, size int) ([]*Article, *Counter) {
 	count, _ := strconv.Atoi(countRes.Map()["countNum"])
 	return res, NewCounter(count, page, size)
 }
+
+func GetArticleVisibleList(page int, size int) ([]*Article, *Counter) {
+	data, e := Orm.Find("model.Article", db.NewSql("").Where("format_type != ?").Where("status != ?").Page(page, size).Order("id DESC"), "trash", "draft")
+	if e != nil {
+		App.LogErr(e)
+		return make([]*Article, 0), nil
+	}
+	res := assembleArticleList(data)
+	countRes, _ := Db.Query(db.NewSql("gorink_article").Where("format_type != ?").Where("status != ?").Count(), "trash", "draft")
+	count, _ := strconv.Atoi(countRes.Map()["countNum"])
+	return res, NewCounter(count, page, size)
+}

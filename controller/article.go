@@ -14,6 +14,7 @@ import (
 
 func init() {
 	App.GET("/article", func(context *app.InkContext) interface {} {
+			context.Render("article/list.html", nil)
 			return nil
 		})
 	App.GET("/admin/article", func(context *app.InkContext) interface {} {
