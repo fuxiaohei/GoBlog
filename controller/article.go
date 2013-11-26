@@ -14,7 +14,30 @@ import (
 
 func init() {
 	App.GET("/article", func(context *app.InkContext) interface {} {
-			context.Render("article/list.html", nil)
+			if len(context.Params(1)) > 0 && context.Is("html") {
+				article := model.GetArticleBySlug(context.Params(1))
+				if article == nil {
+					renderNotFoundPage(context)
+					return nil
+				}else {
+					renderHomePage(context, "article/single.html", article.Title, "article", map[string]interface {}{
+							"Article":article,
+							"Categories":model.GetCategories(),
+						})
+					return nil
+				}
+			}
+			page, _ := strconv.Atoi(context.String("page"))
+			if page < 1 {
+				page = 1
+			}
+			articles, counter := model.GetArticleVisibleList(page, 4)
+			renderHomePage(context, "article/list.html", "文章", "article", map[string]interface {}{
+					"Articles":articles,
+					"ArticlesLength":len(articles),
+					"ArticleCounter":counter,
+					"Categories":model.GetCategories(),
+				})
 			return nil
 		})
 	App.GET("/admin/article", func(context *app.InkContext) interface {} {

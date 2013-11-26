@@ -63,8 +63,13 @@
 {{template "footer.html" .}}
 <script type="text/javascript" src="/public/js/bootstrap-markdown.js"></script>
 <script type="text/javascript" src="/public/js/marked.js"></script>
+<script type="text/javascript" src="/public/js/prettify/prettify.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
+        $("<link>").attr({ rel: "stylesheet",
+            type: "text/css",
+            href: "/public/js/prettify/prettify.css"
+        }).appendTo("head");
         $("#article-content").markdown({
             autofocus:false,
             savable:false,
@@ -72,6 +77,12 @@
                 var content = marked(e.getContent(), {
                     breaks: true
                 });
+                if (content.indexOf("</pre>") >= 1) {
+                    setTimeout(function () {
+                        $(".markdown-content pre").addClass("prettyprint").addClass("linenums");
+                        prettyPrint();
+                    }, 200);
+                }
                 return content;
             }
         });

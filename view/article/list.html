@@ -1,119 +1,27 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
-<head>
-    <meta charset="utf-8"/>
-    <title>文章 - GoRink</title>
-    <link rel="stylesheet" href="/public/css/style.css" type="text/css" media="all"/>
-    <link rel="stylesheet" href="/public/css/font-awesome.css" type="text/css" media="all"/>
-    <script type="text/javascript" src="/public/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/public/js/main.js"></script>
-</head>
-<body>
-<header id="header">
-    <div class="container clear">
-        <h1 id="logo" class="left"><a href="/">GoRink</a><sup>Go开发的程序</sup></h1>
-        <nav id="nav" class="left">
-            <ul>
-                <li><a href="/"><i class="fa fa-home"></i>首页</a></li>
-                <li><a href="/article">文章</a></li>
-                <li><a href="/archive">归档</a></li>
-                <li><a href="/about">关于</a></li>
-                <li><a href="/friend">好友</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
+{{template "header.html" .}}
 <div id="main">
     <div class="container clear">
-        <div id="article-list" class="left">
-            <article class="article">
+        <div id="article-list" class="left">{{range .Articles}}
+            <article class="article {{.StatusText}}" id="article-{{.Id}}">
                 <header class="title clear">
-                    <h3 class="left"><a href="#">检验检疫局备案</a></h3>
-                    <sup class="left"><a class="comment left" href="#">2</a></sup>
+                    <h3 class="left"><a href="{{.Link}}">{{.Title}}</a></h3>{{if lt .Comments 0}}
+                    <sup class="left"><a class="comment left" href="{{.Link}}#comment">{{.Comments}}</a></sup>{{end}}
                 </header>
                 <aside class="info">
-                    <span class="time"><i class="fa fa-clock-o"></i>10.22</span>
-                    <span class="author"><i class="fa fa-user"></i><a href="#">傅小黑</a></span>
-                    <span class="category"><i class="fa fa-asterisk"></i><a href="#">默认分类</a></span>
-                    <span class="view"><i class="fa fa-meh-o"></i>阅读 12 次</span>
+                    <span class="time"><i class="fa fa-clock-o"></i>{{DateInt64 .CreateTime "MM.DD"}}</span>
+                    <span class="author"><i class="fa fa-user"></i><a href="#">{{.Author.DisplayName}}</a></span>
+                    <span class="category"><i class="fa fa-asterisk"></i><a href="#">{{.Category.Name}}</a></span>
+                    <span class="view"><i class="fa fa-meh-o"></i>阅读 {{.Views}} 次</span>
                 </aside>
-                <section class="markdown-content excerpt">
-                    <p>昨天微软发布了新一代Xbox游戏机Xbox One。今天该公司宣布不到24小时该产品就已经在13个市场共售出了超过100万台，这是Xbox有史以来发布日成绩最好的一次，超过了Xbox 360及第一代Xbox。</p>
-                    <p>强劲的销售业绩导致Xbox One在大部分零售点均已脱销。微软称正在尽快补货以满足前所未有的销售狂潮。上周索尼也推出了新的游戏机PlayStation 4s，据称销量也突破了100万。</p>
-                    <p>行业资讯机构cg42的执行合伙人Steve Beck认为，这反映出尽管游戏版图扩大到了手机和平板电脑领域，但游戏体验好的游戏机市场的发展依然强劲。</p>
-                    <p>Beck认为Xbox One+Kinect的组合（500美元）相对而言有若干优势，但索尼PS 4s也有自己的价格优势（400美元）。目前有22款游戏支持Xbox One。</p>
-                    <p>此次发布意义重大，因为它展示出整个游戏机产业的复苏机会。对于微软来说，Xbox One是其7年来的第一款新的游戏机，也标志着新的Xbox One经济的开端。微软已售出8000多万台Xbox 360，并从中获得了数十亿美元，还带动了第三方游戏发行商的数十亿美元的收入，令电子游戏成为全球最重要、最有钱途的产业之一。</p>
-                </section>
-            </article>
-            <article class="article">
-                <header class="title clear">
-                    <h3 class="left"><a href="#">检验检疫局备案</a></h3>
-                    <sup class="left"><a class="comment left" href="#">2</a></sup>
-                </header>
-                <aside class="info">
-                    <span class="time"><i class="fa fa-clock-o"></i>10.22</span>
-                    <span class="author"><i class="fa fa-user"></i><a href="#">傅小黑</a></span>
-                    <span class="category"><i class="fa fa-asterisk"></i><a href="#">默认分类</a></span>
-                    <span class="view"><i class="fa fa-meh-o"></i>阅读 12 次</span>
-                </aside>
-                <section class="markdown-content excerpt">
-                    <p>昨天微软发布了新一代Xbox游戏机Xbox One。今天该公司宣布不到24小时该产品就已经在13个市场共售出了超过100万台，这是Xbox有史以来发布日成绩最好的一次，超过了Xbox 360及第一代Xbox。</p>
-                    <p>强劲的销售业绩导致Xbox One在大部分零售点均已脱销。微软称正在尽快补货以满足前所未有的销售狂潮。上周索尼也推出了新的游戏机PlayStation 4s，据称销量也突破了100万。</p>
-                    <p>行业资讯机构cg42的执行合伙人Steve Beck认为，这反映出尽管游戏版图扩大到了手机和平板电脑领域，但游戏体验好的游戏机市场的发展依然强劲。</p>
-                    <p>Beck认为Xbox One+Kinect的组合（500美元）相对而言有若干优势，但索尼PS 4s也有自己的价格优势（400美元）。目前有22款游戏支持Xbox One。</p>
-                    <p>此次发布意义重大，因为它展示出整个游戏机产业的复苏机会。对于微软来说，Xbox One是其7年来的第一款新的游戏机，也标志着新的Xbox One经济的开端。微软已售出8000多万台Xbox 360，并从中获得了数十亿美元，还带动了第三方游戏发行商的数十亿美元的收入，令电子游戏成为全球最重要、最有钱途的产业之一。</p>
-                </section>
-            </article>
-            <article class="article">
-                <header class="title clear">
-                    <h3 class="left"><a href="#">检验检疫局备案</a></h3>
-                    <sup class="left"><a class="comment left" href="#">2</a></sup>
-                </header>
-                <aside class="info">
-                    <span class="time"><i class="fa fa-clock-o"></i>10.22</span>
-                    <span class="author"><i class="fa fa-user"></i><a href="#">傅小黑</a></span>
-                    <span class="category"><i class="fa fa-asterisk"></i><a href="#">默认分类</a></span>
-                    <span class="view"><i class="fa fa-meh-o"></i>阅读 12 次</span>
-                </aside>
-                <section class="markdown-content excerpt">
-                    <p>昨天微软发布了新一代Xbox游戏机Xbox One。今天该公司宣布不到24小时该产品就已经在13个市场共售出了超过100万台，这是Xbox有史以来发布日成绩最好的一次，超过了Xbox 360及第一代Xbox。</p>
-                    <p>强劲的销售业绩导致Xbox One在大部分零售点均已脱销。微软称正在尽快补货以满足前所未有的销售狂潮。上周索尼也推出了新的游戏机PlayStation 4s，据称销量也突破了100万。</p>
-                    <p>行业资讯机构cg42的执行合伙人Steve Beck认为，这反映出尽管游戏版图扩大到了手机和平板电脑领域，但游戏体验好的游戏机市场的发展依然强劲。</p>
-                    <p>Beck认为Xbox One+Kinect的组合（500美元）相对而言有若干优势，但索尼PS 4s也有自己的价格优势（400美元）。目前有22款游戏支持Xbox One。</p>
-                    <p>此次发布意义重大，因为它展示出整个游戏机产业的复苏机会。对于微软来说，Xbox One是其7年来的第一款新的游戏机，也标志着新的Xbox One经济的开端。微软已售出8000多万台Xbox 360，并从中获得了数十亿美元，还带动了第三方游戏发行商的数十亿美元的收入，令电子游戏成为全球最重要、最有钱途的产业之一。</p>
-                </section>
-            </article>
-            <article class="article">
-                <header class="title clear">
-                    <h3 class="left"><a href="#">检验检疫局备案</a></h3>
-                    <sup class="left"><a class="comment left" href="#">2</a></sup>
-                </header>
-                <aside class="info">
-                    <span class="time"><i class="fa fa-clock-o"></i>10.22</span>
-                    <span class="author"><i class="fa fa-user"></i><a href="#">傅小黑</a></span>
-                    <span class="category"><i class="fa fa-asterisk"></i><a href="#">默认分类</a></span>
-                    <span class="view"><i class="fa fa-meh-o"></i>阅读 12 次</span>
-                </aside>
-                <section class="markdown-content excerpt">
-                    <p>昨天微软发布了新一代Xbox游戏机Xbox One。今天该公司宣布不到24小时该产品就已经在13个市场共售出了超过100万台，这是Xbox有史以来发布日成绩最好的一次，超过了Xbox 360及第一代Xbox。</p>
-                    <p>强劲的销售业绩导致Xbox One在大部分零售点均已脱销。微软称正在尽快补货以满足前所未有的销售狂潮。上周索尼也推出了新的游戏机PlayStation 4s，据称销量也突破了100万。</p>
-                    <p>行业资讯机构cg42的执行合伙人Steve Beck认为，这反映出尽管游戏版图扩大到了手机和平板电脑领域，但游戏体验好的游戏机市场的发展依然强劲。</p>
-                    <p>Beck认为Xbox One+Kinect的组合（500美元）相对而言有若干优势，但索尼PS 4s也有自己的价格优势（400美元）。目前有22款游戏支持Xbox One。</p>
-                    <p>此次发布意义重大，因为它展示出整个游戏机产业的复苏机会。对于微软来说，Xbox One是其7年来的第一款新的游戏机，也标志着新的Xbox One经济的开端。微软已售出8000多万台Xbox 360，并从中获得了数十亿美元，还带动了第三方游戏发行商的数十亿美元的收入，令电子游戏成为全球最重要、最有钱途的产业之一。</p>
-                </section>
-            </article>
-            <div id="article-list-page" class="page">
-                <a class="i in" href="#">1</a>
-                <a class="i" href="#">2</a>
-            </div>
+                <section class="markdown-content excerpt">{{.Excerpt}}</section>
+            </article>{{end}}
+            <div id="article-list-page" class="page">{{.ArticleCounter.Html "/article/" | RawHtml}}</div>
         </div>
         <div id="article-sidebar" class="right">
             <div class="side" id="article-category" >
                 <h4 class="title">分类目录</h4>
-                <ul class="cnt">
-                    <li><a href="#">无分类</a><span>12</span></li>
-                    <li><a href="#">默认分类</a><span>9</span></li>
-                    <li><a href="#">Database</a><span>4</span></li>
+                <ul class="cnt">{{range .Categories}}
+                    <li><a href="{{.Link}}">{{.Name}}</a><span>{{.Articles}}</span></li>{{end}}
                 </ul>
             </div>
             <div class="side" id="article-pop">
@@ -127,15 +35,7 @@
         </div>
     </div>
 </div>
-<footer id="footer">
-    <div class="container clear">
-        <a class="top right" href="#"><i class="fa fa-chevron-up"></i>回到页顶</a>
-        <p><span>Copyright © 2013 傅小黑</span>
-            <span>Powered By <a href="#"><i class="fa fa-github-alt"></i>GoRink</a> & <a href="#">Golang</a></span>
-            <span><a href="#"><i class="fa fa-rss"></i>RSS</a></span>
-            <span><a href="#"><i class="fa fa-sitemap"></i>SiteMap</a></span>
-        </p>
-    </div>
-</footer>
+{{template "footer.html" .}}
+<script type="text/javascript" src="/public/js/marked.js"></script>
 </body>
 </html>

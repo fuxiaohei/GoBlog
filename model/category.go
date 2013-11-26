@@ -13,7 +13,7 @@ type Category struct {
 	Slug     string `col:"slug"`
 	Desc     string `col:"desc"`
 	Articles int `col:"articles"`
-	Parent   int `col:"parent"`
+	//Parent   int `col:"parent"`
 }
 
 func (this *Category) Link() string {

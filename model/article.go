@@ -65,16 +65,27 @@ func AddArticle(a *Article) (int, error) {
 	return i, e
 }
 
-func GetArticleById(id int) *Article {
-	data, e := Orm.FindOne("model.Article", db.NewSql("").Where("id = ?"), id)
+func getArticle(key string, value interface {}) *Article {
+	data, e := Orm.FindOne("model.Article", db.NewSql("").Where(key + " = ?"), value)
 	if e != nil {
 		App.LogErr(e)
 		return nil
 	}
 	article := data.(*Article)
+	if article.Id < 1 {
+		return nil
+	}
 	article.Author = GetUserById(article.AuthorId)
 	article.Category = GetCategoryById(article.CategoryId)
 	return article
+}
+
+func GetArticleById(id int) *Article {
+	return getArticle("id", id)
+}
+
+func GetArticleBySlug(slug string) *Article {
+	return getArticle("slug", slug)
 }
 
 func UpdateArticle(a *Article) error {
