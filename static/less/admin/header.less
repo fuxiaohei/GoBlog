@@ -1,0 +1,50 @@
+@import "../common/mixin";
+
+#header {
+  height: 40px;
+  line-height: 40px;
+  background-color: @Black1;
+  color: @White3;
+  a {
+    color: @Gray3;
+    &:hover {
+      color: @White1;
+    }
+  }
+}
+
+#nav {
+  li {
+    float: left;
+    margin-right: 24px;
+  }
+}
+
+#header {
+  .out {
+    color: lighten(@Red1, 20%);
+    &:hover {
+      color: @Red1;
+    }
+  }
+  .right{
+    margin-left: 24px;
+  }
+  .new-article {
+    color: lighten(@Green1, 20%);
+    &:hover {
+      color: @Green1;
+    }
+  }
+  .password{
+    color: lighten(@Orange1, 20%);
+    &:hover {
+      color: @Orange1;
+    }
+  }
+}
+
+#admin-main{
+  margin-top: 24px;
+  margin-bottom: 48px;
+}

@@ -1,0 +1,173 @@
+@import "mixin";
+
+/* 主内容 */
+.main {
+  width: 1170px;
+}
+
+.main960 {
+  width: 960px;
+}
+
+.main, .main960 {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+// 标题
+
+h1{
+  font-size: 30px;
+  line-height: 60px;
+}
+
+h2{
+  font-size: 24px;
+  line-height: 48px;
+}
+
+h3{
+  font-size: 21px;
+  line-height: 42px;
+}
+
+h4{
+  font-size: 18px;
+  line-height: 36px;
+}
+
+h5{
+  font-size: 16px;
+  line-height: 32px;
+}
+
+h6{
+  font-size: 14px;
+  line-height: 28px;
+}
+
+
+// form element
+
+.form{
+  .item{
+    margin-bottom: 1.5em;
+  }
+  .full{
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+.ipt,.select{
+  padding: 8px 12px;
+  border: 1px solid @Gray1;
+  outline: none;
+  &:focus{
+    border-color: @Blue1;
+  }
+  background-color: @White0;
+  border-radius: 2px;
+}
+
+.btn{
+  height: 35px;
+  padding: 0 1.5em;
+  background-color: @Blue1;
+  color: @White1;
+  &:hover{
+    background-color: lighten(@Blue1,5%);
+    cursor: pointer;
+  }
+  border: none;
+  line-height: 35px;
+  border-radius: 2px;
+}
+
+.btn.red{
+  background-color: @Red1;
+  &:hover{
+    background-color: lighten(@Red1,5%);
+  }
+}
+
+.btn.green{
+  background-color: @Green1;
+  &:hover{
+    background-color: lighten(@Green1,5%);
+  }
+}
+
+.btn.full{
+  text-align: center;
+}
+
+a.btn{
+  &:hover{
+    color: @White1;
+  }
+}
+
+.chk{
+  margin-top: 5px;
+}
+
+.chk-text{
+  margin-left: 1em;
+}
+
+// text element
+
+.msg{
+  padding: 2px 6px;
+  margin: 0 3px;
+  border-radius: 2px;
+}
+
+.msg.blue{
+  background-color: @Blue1;
+  color: @White1;
+}
+
+.msg.red{
+  background-color: @Red1;
+  color: @White1;
+}
+
+.msg.green{
+  background-color: @Green1;
+  color: @White1;
+}
+
+// icon font
+
+.fa{
+  margin-right: 6px;
+}
+
+// table elements
+
+.table{
+  th,td{
+    padding: 6px 0;
+  }
+  thead{
+    tr{
+      border-bottom: 1px solid @Gray2;
+    }
+  }
+  th{
+    text-align: left;
+  }
+  tbody{
+    tr{
+      border-bottom: 1px dashed @Gray3;
+    }
+  }
+}
+
+// code style
+
+pre,code{
+  font-family: Consolas,"Courier New",Arial;
+}

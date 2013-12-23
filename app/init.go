@@ -1,54 +1,32 @@
 package app
 
 import (
-	"github.com/fuxiaohei/goink"
-	"github.com/fuxiaohei/goink/app"
-	"github.com/fuxiaohei/goink/db"
+	"github.com/fuxiaohei/GoInk"
+	GoInkDb "github.com/fuxiaohei/GoInk/Db"
 	_ "github.com/mattn/go-sqlite3"
-	"html/template"
-	"github.com/fuxiaohei/gorink/lib"
-)
-
-const (
-	VERSION = "0.5"
+	"os"
 )
 
 var (
-	App *app.InkApp
-	Db  *db.InkDatabase
-	Orm *db.InkOrm
+	Ink *GoInk.Simple
+	Db  *GoInkDb.Engine
 )
 
-func init() {
-	App = goink.NewApp("config.json")
-	App.Static(App.Config().StringOr("view.static", "static"))
-	App.On("router.run.null@default", func(context *app.InkContext) {
-			context.Render(App.Config().StringOr("view.404", "404.html"), nil)
-			context.Send("", 404)
-		})
-	initDatabase()
-	initViewFuncs()
-}
-
-func initDatabase() {
-	options := &db.InkDatabaseOption{}
-	options.Driver = App.String("database.driver")
-	options.Dsn = App.String("database.dsn")
-	options.MaxConnection = App.Config().IntOr("database.max_conn", 10)
-	options.IdleConnection = App.Config().IntOr("database.idle_conn", 5)
-	options.Mode = App.Config().StringOr("database.mode", app.MODE_DEBUG)
+func Init() {
 	var err error
-	Db, err = db.NewDatabase(options, App)
-	if err != nil {
-		App.Crash(err)
-	}
-	Orm = db.NewOrm(Db)
-}
 
-func initViewFuncs() {
-	App.View().Func("RawHtml", func(str string) template.HTML {
-			return template.HTML(str)
-		})
-	App.View().Func("DateString", lib.DateString)
-	App.View().Func("DateInt64", lib.DateInt64)
+	// create *GoInk.Simple application
+	Ink, err = GoInk.NewSimple("config.json")
+	if err != nil {
+		panic(err)
+		os.Exit(1)
+	}
+
+	// create *Db.Engine object
+	Db, err = GoInkDb.NewEngine("sqlite3", "sqlite.db", 20, 30)
+	if err != nil {
+		panic(err)
+		os.Exit(1)
+	}
+
 }

@@ -1,0 +1,20 @@
+<form id="category-form" class="form" action="" method="post">
+    <h4>修改分类 - {{.Category.Name}}</h4>
+    <p class="item">
+        <label for="name">名称</label>
+        <input id="name" class="ipt" type="text" name="name" value="{{.Category.Name}}" required="required"/>
+    </p>
+    <p class="item">
+        <label for="slug">缩略名</label>
+        <input id="slug" class="ipt" type="text" name="slug" value="{{.Category.Slug}}" required="required"/>
+    </p>
+    <p class="item">
+        <label for="desc">简介</label>
+        <input id="desc" class="ipt" type="text" name="desc" value="{{.Category.Description}}"/>
+    </p>
+    <p class="item">
+        <label>&nbsp;</label>
+        <button class="btn" type="submit">保存修改</button>
+        <input type="hidden" name="id" value="{{.Category.Id}}"/>
+    </p>
+</form>

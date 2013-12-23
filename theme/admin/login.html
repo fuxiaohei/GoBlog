@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>登录 - GoBlog</title>
+    <link rel="shortcut icon" href="/static/favicon.ico">
+    <link rel="stylesheet" href="/static/css/login.css"/>
+    <script src="/static/js/jquery-2.0.3.min.js"></script>
+    <script src="/static/js/jquery.form.min.js"></script>
+</head>
+<body>
+<form id="login-form" class="form clear rel" action="/login.html" method="post">
+    <span id="login-error" class="abs msg red hide">请填写登录用户名</span>
+    <span id="password-error" class="abs msg red hide">请填写登录密码</span>
+    <h1>GoBlog <span>@ golang blog engine</span></h1>
+    <input class="item ipt full" type="text" name="login" id="login" placeholder="登录用户名"/>
+    <input class="item ipt full" type="password" name="password" id="password" placeholder="密码"/>
+    <button class="btn item full" type="submit" id="login-submit">登&nbsp;&nbsp;&nbsp;&nbsp;录</button>
+    <p class="clear item">
+        <input class="left chk" type="checkbox" name="remember" value="on"/>
+        <span class="chk-text">记住登录状态 3 天</span>
+        <a id="login-password-forget" class="right" href="/forget-password/">忘记密码?</a>
+    </p>
+    <a class="btn item full block red" href="#" id="login-msg"></a>
+</form>
+<script>
+    $(document).ready(function () {
+        "use strict";
+        var $msg = $('#login-msg').hide();
+        var $submit = $('#login-submit');
+        function validate() {
+            $msg.hide();
+            $submit.hide();
+            var $login = $('#login');
+            if ($login.val().length < 2) {
+                $('#login-error').show(200);
+                $login.focus();
+                $submit.show();
+                return false;
+            } else {
+                $('#login-error').hide(200);
+            }
+            var $pwd = $('#password');
+            if ($pwd.val().length < 4) {
+                $('#password-error').show(200);
+                $pwd.focus();
+                $submit.show();
+                return false;
+            } else {
+                $('#password-error').hide(200);
+            }
+            return true;
+        }
+
+        function parseJson(json) {
+            if(json.res){
+                window.location.href = "/admin/";
+                return;
+            }else{
+                $submit.show(200);
+                $msg.text(json.msg).show(200);
+            }
+        }
+
+        $('#login-form').ajaxForm({
+            beforeSubmit: validate,
+            dataType: "json",
+            success: function (json) {
+                parseJson(json);
+            }
+        })
+    });
+</script>
+</body>
+</html>

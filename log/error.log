@@ -1,19 +1,161 @@
-2013-11-15 00:08:43	[E] 127.0.0.1:9703 - - [15 Nov 13 00:08 +0800] "GET /login/ HTTP/1.1" 503 64 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Maxthon/4.2.0.2400 Chrome/30.0.1551.0 Safari/537.36
-2013-11-15 00:09:23	[E] 127.0.0.1:9703 - - [15 Nov 13 00:09 +0800] "GET /login/ HTTP/1.1" 503 64 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Maxthon/4.2.0.2400 Chrome/30.0.1551.0 Safari/537.36
-[E] 127.0.0.1:9719 - - [15 Nov 13 00:10 +0800] "GET /login/ HTTP/1.1" 503 64 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Maxthon/4.2.0.2400 Chrome/30.0.1551.0 Safari/537.36
-[E] 127.0.0.1:9719 - - [15 Nov 13 00:10 +0800] "GET /login/ HTTP/1.1" 503 64 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Maxthon/4.2.0.2400 Chrome/30.0.1551.0 Safari/537.36
-[E] 127.0.0.1:9719 - - [15 Nov 13 00:10 +0800] "GET /login/ HTTP/1.1" 503 64 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Maxthon/4.2.0.2400 Chrome/30.0.1551.0 Safari/537.36
-[E] 127.0.0.1:9719 - - [15 Nov 13 00:10 +0800] "GET /login/ HTTP/1.1" 503 64 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Maxthon/4.2.0.2400 Chrome/30.0.1551.0 Safari/537.36
-[E] 127.0.0.1:9719 - - [15 Nov 13 00:10 +0800] "GET /login/ HTTP/1.1" 503 64 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Maxthon/4.2.0.2400 Chrome/30.0.1551.0 Safari/537.36
-[E] 127.0.0.1:9719 - - [15 Nov 13 00:10 +0800] "GET /login/ HTTP/1.1" 503 64 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Maxthon/4.2.0.2400 Chrome/30.0.1551.0 Safari/537.36
-[E] 127.0.0.1:9719 - - [15 Nov 13 00:10 +0800] "GET /login/ HTTP/1.1" 503 64 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Maxthon/4.2.0.2400 Chrome/30.0.1551.0 Safari/537.36
-[E] 127.0.0.1:9167 - - [16 Nov 13 00:16 +0800] "GET /login HTTP/1.1" 503 61 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Maxthon/4.2.0.2400 Chrome/30.0.1551.0 Safari/537.36
-[E] 127.0.0.1:12945 - - [19 Nov 13 23:23 +0800] "GET /admin/profile HTTP/1.1" 503 1299 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Maxthon/4.2.0.2400 Chrome/30.0.1551.0 Safari/537.36
-[E] 127.0.0.1:16987 - - [20 Nov 13 17:01 +0800] "POST /admin/user/edit?id=2 HTTP/1.1" 503 1057 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Maxthon/4.2.0.2400 Chrome/30.0.1551.0 Safari/537.36
-[E] 127.0.0.1:22565 - - [21 Nov 13 17:35 +0800] "GET /admin/article/edit?id=2 HTTP/1.1" 503 1297 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Maxthon/4.2.0.2400 Chrome/30.0.1551.0 Safari/537.36
-[E] 127.0.0.1:36915 - - [21 Nov 13 22:54 +0800] "GET /admin/article HTTP/1.1" 503 1299 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Maxthon/4.2.0.2400 Chrome/30.0.1551.0 Safari/537.36
-[E] 127.0.0.1:38169 - - [21 Nov 13 23:31 +0800] "GET /admin/article HTTP/1.1" 503 1292 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Maxthon/4.2.0.2400 Chrome/30.0.1551.0 Safari/537.36
-[E] 127.0.0.1:38529 - - [21 Nov 13 23:39 +0800] "GET /admin/article HTTP/1.1" 503 1286 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Maxthon/4.2.0.2400 Chrome/30.0.1551.0 Safari/537.36
-[E] 127.0.0.1:1860 - - [24 Nov 13 10:56 +0800] "GET /article HTTP/1.1" 503 1269 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Maxthon/4.2.0.2400 Chrome/30.0.1551.0 Safari/537.36
-[E] 127.0.0.1:7689 - - [26 Nov 13 11:29 +0800] "GET /article/go-restful.html HTTP/1.1" 503 1490 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Maxthon/4.2.0.2400 Chrome/30.0.1551.0 Safari/537.36
-[E] 127.0.0.1:7689 - - [26 Nov 13 11:30 +0800] "GET /article/go-restful.html HTTP/1.1" 503 1477 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Maxthon/4.2.0.2400 Chrome/30.0.1551.0 Safari/537.36
+2013-12-19T19:25:46+08:00 [ERROR] 503 /login.html -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER open G:\go\src\github.com\fuxiaohei\GoBlog/theme/admin/login.html: The system cannot find the path specified. G:/go/src/github.com/fuxiaohei/GoInk/app.go:69 (0x4284a7)
+	com/fuxiaohei/GoInk.func.002: this.Logger.Error("[ERROR]", http.StatusServiceUnavailable, context.Url, "--", context.Ip, context.UserAgent, e, string(debug.Stack()))
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/panic.c:248 (0x411a18)
+G:/go/src/github.com/fuxiaohei/GoInk/Core/context.go:196 (0x45b849)
+	com/fuxiaohei/GoInk/Core.(*Context).Render: panic(e)
+G:/go/src/github.com/fuxiaohei/GoBlog/app/handler/login.go:7 (0x4277bf)
+	com/fuxiaohei/GoBlog/app/handler.Login: context.Render("admin/login.html",nil)
+G:/go/src/github.com/fuxiaohei/GoInk/app.go:133 (0x4293f5)
+	com/fuxiaohei/GoInk.func.004: result := fn(context)
+G:/go/src/github.com/fuxiaohei/GoInk/app.go:85 (0x428fd1)
+	com/fuxiaohei/GoInk.func.003: this.dispatchFunc(context)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1220 (0x46e1bd)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1496 (0x46f23f)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1597 (0x46f862)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1167 (0x46deb0)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/proc.c:1394 (0x415aa0)
+
+2013-12-21T00:49:44+08:00 [ERROR] 503 /admin/ -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER open G:\go\src\github.com\fuxiaohei\GoBlog/theme/admin.layout: The system cannot find the file specified. G:/go/src/github.com/fuxiaohei/GoInk/app.go:69 (0x429567)
+	com/fuxiaohei/GoInk.func.002: this.Logger.Error("[ERROR]", http.StatusServiceUnavailable, context.Url, "--", context.Ip, context.UserAgent, e, string(debug.Stack()))
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/panic.c:248 (0x411a18)
+G:/go/src/github.com/fuxiaohei/GoInk/Core/context.go:196 (0x45c809)
+	com/fuxiaohei/GoInk/Core.(*Context).Render: panic(e)
+G:/go/src/github.com/fuxiaohei/GoBlog/app/handler/admin.go:13 (0x427982)
+	com/fuxiaohei/GoBlog/app/handler.Admin: })
+G:/go/src/github.com/fuxiaohei/GoInk/app.go:133 (0x42a4b5)
+	com/fuxiaohei/GoInk.func.004: result := fn(context)
+G:/go/src/github.com/fuxiaohei/GoInk/app.go:85 (0x42a091)
+	com/fuxiaohei/GoInk.func.003: this.dispatchFunc(context)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1220 (0x480ddd)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1496 (0x481e5f)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1597 (0x482482)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1167 (0x480ad0)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/proc.c:1394 (0x415aa0)
+
+2013-12-21T14:44:35+08:00 [ERROR] 503 /admin/ -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER no layout admin G:/go/src/github.com/fuxiaohei/GoInk/app.go:70 (0x429a87)
+	com/fuxiaohei/GoInk.func.002: this.Logger.Error("[ERROR]", http.StatusServiceUnavailable, context.Url, "--", context.Ip, context.UserAgent, e, string(debug.Stack()))
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/panic.c:248 (0x411a18)
+G:/go/src/github.com/fuxiaohei/GoInk/Core/context.go:196 (0x45cd29)
+	com/fuxiaohei/GoInk/Core.(*Context).Render: panic(e)
+G:/go/src/github.com/fuxiaohei/GoBlog/app/handler/admin.go:14 (0x427b25)
+	com/fuxiaohei/GoBlog/app/handler.Admin: })
+G:/go/src/github.com/fuxiaohei/GoInk/app.go:134 (0x42a9d5)
+	com/fuxiaohei/GoInk.func.004: result := fn(context)
+G:/go/src/github.com/fuxiaohei/GoInk/app.go:86 (0x42a5f0)
+	com/fuxiaohei/GoInk.func.003: this.dispatchFunc(context)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1220 (0x4812fd)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1496 (0x48237f)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1597 (0x4829a2)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1167 (0x480ff0)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/proc.c:1394 (0x415aa0)
+
+2013-12-21T14:45:19+08:00 [ERROR] 503 /admin/ -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER no layout admin G:/go/src/github.com/fuxiaohei/GoInk/app.go:70 (0x429a87)
+	com/fuxiaohei/GoInk.func.002: this.Logger.Error("[ERROR]", http.StatusServiceUnavailable, context.Url, "--", context.Ip, context.UserAgent, e, string(debug.Stack()))
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/panic.c:248 (0x411a18)
+G:/go/src/github.com/fuxiaohei/GoInk/Core/context.go:196 (0x45cd29)
+	com/fuxiaohei/GoInk/Core.(*Context).Render: panic(e)
+G:/go/src/github.com/fuxiaohei/GoBlog/app/handler/admin.go:14 (0x427b25)
+	com/fuxiaohei/GoBlog/app/handler.Admin: })
+G:/go/src/github.com/fuxiaohei/GoInk/app.go:134 (0x42a9d5)
+	com/fuxiaohei/GoInk.func.004: result := fn(context)
+G:/go/src/github.com/fuxiaohei/GoInk/app.go:86 (0x42a5f0)
+	com/fuxiaohei/GoInk.func.003: this.dispatchFunc(context)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1220 (0x4812fd)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1496 (0x48237f)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1597 (0x4829a2)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1167 (0x480ff0)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/proc.c:1394 (0x415aa0)
+
+2013-12-21T14:46:10+08:00 [CRASH] open G:\go\src\github.com\fuxiaohei\GoBlog/theme/admin/layout.html: The system cannot find the file specified. G:/go/src/github.com/fuxiaohei/GoInk/app.go:23 (0x428ec3)
+	com/fuxiaohei/GoInk.(*Simple).Crash: this.Logger.Error("[CRASH]", e, string(debug.Stack()))
+G:/go/src/github.com/fuxiaohei/GoBlog/app/handler/init.go:9 (0x427ed3)
+	com/fuxiaohei/GoBlog/app/handler.Init: app.Ink.Crash(e)
+G:/go/src/github.com/fuxiaohei/GoBlog/main.go:17 (0x40102a)
+	main: handler.Init()
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/proc.c:220 (0x4137dc)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/proc.c:1394 (0x415aa0)
+
+2013-12-21T14:46:29+08:00 [CRASH] template: admin.layout:37: unexpected EOF G:/go/src/github.com/fuxiaohei/GoInk/app.go:23 (0x428ec3)
+	com/fuxiaohei/GoInk.(*Simple).Crash: this.Logger.Error("[CRASH]", e, string(debug.Stack()))
+G:/go/src/github.com/fuxiaohei/GoBlog/app/handler/init.go:9 (0x427ed3)
+	com/fuxiaohei/GoBlog/app/handler.Init: app.Ink.Crash(e)
+G:/go/src/github.com/fuxiaohei/GoBlog/main.go:17 (0x40102a)
+	main: handler.Init()
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/proc.c:220 (0x4137dc)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/proc.c:1394 (0x415aa0)
+
+2013-12-21T18:31:25+08:00 [ERROR] 503 /admin/meta/ -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER template: category.html:21: unexpected "}" in operand; missing space? G:/go/src/github.com/fuxiaohei/GoInk/app.go:70 (0x42a057)
+	com/fuxiaohei/GoInk.func.002: this.Logger.Error("[ERROR]", http.StatusServiceUnavailable, context.Url, "--", context.Ip, context.UserAgent, e, string(debug.Stack()))
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/panic.c:248 (0x411a18)
+G:/go/src/github.com/fuxiaohei/GoInk/Core/context.go:196 (0x45d4f9)
+	com/fuxiaohei/GoInk/Core.(*Context).Render: panic(e)
+G:/go/src/github.com/fuxiaohei/GoBlog/app/handler/admin_category.go:15 (0x42792c)
+	com/fuxiaohei/GoBlog/app/handler.AdminCategory: })
+G:/go/src/github.com/fuxiaohei/GoInk/app.go:134 (0x42afa5)
+	com/fuxiaohei/GoInk.func.004: result := fn(context)
+G:/go/src/github.com/fuxiaohei/GoInk/app.go:86 (0x42abc0)
+	com/fuxiaohei/GoInk.func.003: this.dispatchFunc(context)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1220 (0x481acd)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1496 (0x482b4f)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1597 (0x483172)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1167 (0x4817c0)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/proc.c:1394 (0x415aa0)
+
+2013-12-21T20:20:00+08:00 [ERROR] 503 /admin/category/edit/1.html -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER open G:\go\src\github.com\fuxiaohei\GoBlog/theme/admin/category_edit.html: The system cannot find the file specified. G:/go/src/github.com/fuxiaohei/GoInk/app.go:70 (0x42a3f7)
+	com/fuxiaohei/GoInk.func.002: this.Logger.Error("[ERROR]", http.StatusServiceUnavailable, context.Url, "--", context.Ip, context.UserAgent, e, string(debug.Stack()))
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/panic.c:248 (0x411a18)
+G:/go/src/github.com/fuxiaohei/GoInk/Core/context.go:196 (0x45d899)
+	com/fuxiaohei/GoInk/Core.(*Context).Render: panic(e)
+G:/go/src/github.com/fuxiaohei/GoBlog/app/handler/admin_category.go:30 (0x427b2d)
+	com/fuxiaohei/GoBlog/app/handler.AdminCategoryEdit: })
+G:/go/src/github.com/fuxiaohei/GoInk/app.go:134 (0x42b345)
+	com/fuxiaohei/GoInk.func.004: result := fn(context)
+G:/go/src/github.com/fuxiaohei/GoInk/app.go:86 (0x42af60)
+	com/fuxiaohei/GoInk.func.003: this.dispatchFunc(context)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1220 (0x481e6d)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1496 (0x482eef)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1597 (0x483512)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1167 (0x481b60)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/proc.c:1394 (0x415aa0)
+
+2013-12-21T20:22:59+08:00 [ERROR] 503 /admin/category/edit/2.html -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER open G:\go\src\github.com\fuxiaohei\GoBlog/theme/admin/category_edit.html: The system cannot find the file specified. G:/go/src/github.com/fuxiaohei/GoInk/app.go:70 (0x42a3f7)
+	com/fuxiaohei/GoInk.func.002: this.Logger.Error("[ERROR]", http.StatusServiceUnavailable, context.Url, "--", context.Ip, context.UserAgent, e, string(debug.Stack()))
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/panic.c:248 (0x411a18)
+G:/go/src/github.com/fuxiaohei/GoInk/Core/context.go:196 (0x45d899)
+	com/fuxiaohei/GoInk/Core.(*Context).Render: panic(e)
+G:/go/src/github.com/fuxiaohei/GoBlog/app/handler/admin_category.go:30 (0x427b2d)
+	com/fuxiaohei/GoBlog/app/handler.AdminCategoryEdit: })
+G:/go/src/github.com/fuxiaohei/GoInk/app.go:134 (0x42b345)
+	com/fuxiaohei/GoInk.func.004: result := fn(context)
+G:/go/src/github.com/fuxiaohei/GoInk/app.go:86 (0x42af60)
+	com/fuxiaohei/GoInk.func.003: this.dispatchFunc(context)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1220 (0x481e6d)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1496 (0x482eef)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1597 (0x483512)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1167 (0x481b60)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/proc.c:1394 (0x415aa0)
+
+2013-12-21T21:45:18+08:00 [ERROR] 503 /admin/category/edit/2.html -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER open G:\go\src\github.com\fuxiaohei\GoBlog/theme/admin/category_edit.html: The system cannot find the file specified. G:/go/src/github.com/fuxiaohei/GoInk/app.go:70 (0x42a537)
+	com/fuxiaohei/GoInk.func.002: this.Logger.Error("[ERROR]", http.StatusServiceUnavailable, context.Url, "--", context.Ip, context.UserAgent, e, string(debug.Stack()))
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/panic.c:248 (0x411a18)
+G:/go/src/github.com/fuxiaohei/GoInk/Core/context.go:196 (0x45d9d9)
+	com/fuxiaohei/GoInk/Core.(*Context).Render: panic(e)
+G:/go/src/github.com/fuxiaohei/GoBlog/app/handler/admin_category.go:30 (0x427c6d)
+	com/fuxiaohei/GoBlog/app/handler.AdminCategoryEdit: })
+G:/go/src/github.com/fuxiaohei/GoInk/app.go:134 (0x42b485)
+	com/fuxiaohei/GoInk.func.004: result := fn(context)
+G:/go/src/github.com/fuxiaohei/GoInk/app.go:86 (0x42b0a0)
+	com/fuxiaohei/GoInk.func.003: this.dispatchFunc(context)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1220 (0x481fad)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1496 (0x48302f)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1597 (0x483652)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1167 (0x481ca0)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/proc.c:1394 (0x415aa0)
+
+2013-12-22T00:24:38+08:00 [LOG] POST 404 /admin/category/new/ -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER
+2013-12-22T00:35:22+08:00 [LOG] POST 404 /admin/meta/ -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER
+2013-12-22T00:36:38+08:00 [LOG] POST 404 /admin/meta/ -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER
+2013-12-22T00:38:49+08:00 [LOG] POST 404 /admin/meta/ -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER
+2013-12-22T00:38:58+08:00 [LOG] POST 404 /admin/meta/ -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER
+2013-12-22T16:03:54+08:00 [LOG] POST 404 /admin/meta/ -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER
+2013-12-22T16:04:40+08:00 [LOG] POST 404 /admin/meta/ -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER

@@ -1,0 +1,99 @@
+/**
+ * Bootstrap-Markdown.less
+ *
+ * @author Taufan Aditya @taufanaditya
+ * @copyright 2013 Taufan Aditya
+ */
+
+@import "common/mixin";
+
+.md-editor {
+  display: block;
+  border: none;
+
+  .btn-group{
+    display: inline-block;
+    padding-right: 8px;
+    margin-right: 8px;
+    border-right: 1px solid @Gray3;
+    &:last-child{
+      border-right: none;
+    }
+  }
+  > .md-header, .md-footer {
+    display: block;
+    padding: 6px 4px;
+    background: transparent;
+    border-top: 1px solid @Gray3;
+    border-bottom: 1px solid @Gray3;
+  }
+
+  > .md-preview {
+    background: @White1;
+    border-bottom: 1px solid @Gray3;
+    min-height: 10px;
+    padding: 6px 12px;
+  }
+
+  .md-btn{
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    border: 1px solid transparent;
+    background-color: transparent;
+    margin-right: 6px;
+    color: @Black3;
+    &:hover{
+      color: @Black1;
+      cursor: pointer;
+      border: 1px solid @Gray1;
+      background-color: @White0;
+      border-radius: 2px;
+    }
+    &:last-child{
+      margin-right: 0;
+    }
+    .fa{
+      text-align: center;
+      margin-right: 0;
+      line-height: 23px;
+    }
+  }
+
+  .md-btn[disabled]{
+    &:hover{
+      color: @Black3;
+      border: 1px solid transparent;
+      cursor: default;
+    }
+  }
+
+  > textarea {
+    font-family: @FontFamily;
+    font-size: @FontSize;
+    outline: 0;
+    outline: thin dotted  \9; /* IE6-9 */
+    margin: 0;
+    display: block;
+    padding: 6px 12px;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid @Gray3;
+    border-radius: 0;
+    box-shadow: none;
+    background: @White1;
+    &:focus {
+      box-shadow: none;
+      background: transparent;
+    }
+  }
+
+  // Hover state
+  @color: @White1;
+  @color-rgba: rgba(red(@color), green(@color), blue(@color), .6);
+  &.active {
+    border-color: @color;
+    outline: 0;
+  }
+}

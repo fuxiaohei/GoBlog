@@ -1,10 +1,22 @@
 package main
 
 import (
-	. "github.com/fuxiaohei/gorink/app"
-	_ "github.com/fuxiaohei/gorink/controller"
+	"github.com/fuxiaohei/GoBlog/app"
+	"github.com/fuxiaohei/GoBlog/app/model"
+	"github.com/fuxiaohei/GoBlog/app/handler"
 )
 
 func main() {
-	App.Listen()
+	// init application
+	app.Init()
+
+	// init model
+	model.Init()
+
+	// init handler
+	handler.Init()
+
+	// run *GoInk.Simple application
+	app.Ink.Run()
 }
+

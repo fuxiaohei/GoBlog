@@ -1,0 +1,16 @@
+@charset "utf-8";
+html,body{color:#444;background-color:#fafafa;font-family:"Ubuntu","Microsoft YaHei","Verdana","Tahoma",Arial,sans-serif;font-size:13px;line-height:24px}
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td,hr,button,article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{margin:0;padding:0}
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}
+button,input,option,select,textarea{font-size:13px;font-family:"Ubuntu","Microsoft YaHei","Verdana","Tahoma",Arial,sans-serif}
+table{border-collapse:collapse;border-spacing:0}
+ol,ul{list-style:none}
+h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
+a{text-decoration:none;color:#428bca}a:hover{color:#2a6496}
+.clear:after{visibility:hidden;display:block;font-size:0;content:" ";clear:both;height:0}
+.hide{display:none}
+.left{float:left}
+.right{float:right}
+.block{display:block}
+.abs{position:absolute}
+.rel{position:relative}

@@ -1,0 +1,5 @@
+#article-form .left-col{width:72%}
+#article-form .right-col{width:26%}
+#article-form #title{border:none;font-size:21px;background-color:transparent}#article-form #title:focus{background-color:#fff}
+#article-form #content{box-sizing:border-box}
+#article-form label{display:inline-block;width:4em;margin-right:12px}
