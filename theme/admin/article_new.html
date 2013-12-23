@@ -2,16 +2,17 @@
     @import "/static/css/bootstrap-markdown.css";
     @import "/static/js/prettify/prettify.css";
 </style>
-<form id="article-form" class="clear form" action="" method="post">
+<form id="article-form" class="clear form" action="/admin/article/new/" method="post">
     <div class="left-col left">
         <input class="ipt full" id="title" type="text" name="title" required="required" placeholder="文章标题"/>
-        <textarea name="content" id="content"></textarea>
+        <textarea name="content" id="content" required="required"></textarea>
     </div>
     <div class="right-col right">
         <p class="item">
             <label for="category">选择分类</label>
             <select class="select" name="category" id="category">{{range .Categories}}
-                <option value="{{.Id}}">{{.Name}}</option>{{end}}
+                <option value="{{.Id}}">{{.Name}}</option>
+                {{end}}
             </select>
         </p>
         <p class="item">
@@ -49,7 +50,7 @@
 <script src="/static/js/jquery.autosize.js"></script>
 <script src="/static/js/prettify/prettify.js"></script>
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
         $("#content").markdown({
             autofocus: false,
             savable: false,
@@ -66,5 +67,16 @@
                 return content;
             }
         }).autosize({"append": "\n"});
+        $('#article-form').ajaxForm({
+            dataType: "json",
+            success: function (json) {
+                if(json.res){
+                    alert("保存完成");
+                    window.location.href = "/admin/article/edit/"+json.id+"/";
+                }else{
+                    alert(json.msg);
+                }
+            }
+        })
     });
 </script>

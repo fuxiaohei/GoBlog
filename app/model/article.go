@@ -3,6 +3,7 @@ package model
 import (
 	"github.com/fuxiaohei/GoBlog/app"
 	"fmt"
+	"strconv"
 )
 
 type Article struct {
@@ -17,8 +18,8 @@ type Article struct {
 	AuthorId   int
 	Format     string
 	Status     string
-	IsComment  bool
-	IsFeed     bool
+	IsComment  int
+	IsFeed     int
 	Comments   int
 	Views      int
 }
@@ -35,6 +36,7 @@ type ArticleModel struct {
 	article map[string]*Article
 	idIndex map[int]string
 	pagedCache map[string][]*Article
+	pagerCache map[string]*Pager
 }
 
 func (this *ArticleModel) cacheArticle(a *Article) {
@@ -84,11 +86,12 @@ func (this *ArticleModel) GetArticleById(id int) *Article {
 	return a
 }
 
-func (this *ArticleModel) nocachePagedAll() {
+func (this *ArticleModel) nocachePaged() {
 	this.pagedCache = make(map[string][]*Article)
+	this.pagerCache = make(map[string]*Pager)
 }
 
-func (this *ArticleModel) GetPaged(page, size int, noDraft bool) []*Article {
+func (this *ArticleModel) GetPaged(page, size int, noDraft bool) ([]*Article, *Pager) {
 	page = (page-1) * size
 	key := fmt.Sprintf("%d-%d-draft-%t", page, size, noDraft)
 	if this.pagedCache[key] == nil {
@@ -99,15 +102,30 @@ func (this *ArticleModel) GetPaged(page, size int, noDraft bool) []*Article {
 			args = append(args, "draft")
 		}
 		sql +=" ORDER BY id DESC LIMIT " + fmt.Sprintf("%d,%d", page, size)
-		res, _ := app.Db.Query(sql, args...)
-		if len(res.Data) < 1 {
-			return nil
+		res, e := app.Db.Query(sql, args...)
+		if len(res.Data) < 1 || e != nil {
+			return nil, nil
 		}
 		articles := make([]*Article, 0)
 		res.All(&articles)
 		this.pagedCache[key] = articles
 	}
-	return this.pagedCache[key]
+	pagerKey := fmt.Sprintf("counter-draft-%t", noDraft)
+	if this.pagerCache[pagerKey] == nil {
+		sql := "SELECT count(*) AS c FROM blog_content WHERE type = ?"
+		args := []interface {}{"article"};
+		if noDraft {
+			sql +=" AND status != ?"
+			args = append(args, "draft")
+		}
+		res, e := app.Db.Query(sql, args...)
+		if e != nil {
+			return nil, nil
+		}
+		all, _ := strconv.Atoi(res.Data[0]["c"])
+		this.pagerCache[pagerKey] = newPager(page, size, all)
+	}
+	return this.pagedCache[key], this.pagerCache[pagerKey]
 }
 
 func (this *ArticleModel) GetCategoryPaged(categoryId, page, size int, noDraft bool) []*Article {
@@ -130,5 +148,27 @@ func (this *ArticleModel) GetCategoryPaged(categoryId, page, size int, noDraft b
 		this.pagedCache[key] = articles
 	}
 	return this.pagedCache[key]
+}
+
+func (this *ArticleModel) SaveArticle(article *Article) *Article {
+	sql := "INSERT INTO blog_content(title,slug,summary,content,create_time,edit_time,category_id,author_id,type,format,status,is_comment,is_feed) "
+	sql += "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)"
+	res, e := app.Db.Exec(sql, article.Title, article.Slug, article.Summary, article.Content, article.CreateTime, article.EditTime, article.CategoryId, article.AuthorId, "article", "md", article.Status, article.IsComment, article.IsFeed)
+	if e != nil {
+		return nil
+	}
+	if res.LastInsertId > 0 {
+		article.Id = res.LastInsertId
+		return article
+	}
+	return nil
+}
+
+func NewArticleModel() *ArticleModel {
+	articleM := new(ArticleModel)
+	articleM.article = make(map[string]*Article)
+	articleM.idIndex = make(map[int]string)
+	articleM.nocachePaged()
+	return articleM
 }
 

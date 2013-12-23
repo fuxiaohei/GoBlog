@@ -34,5 +34,6 @@ func Init() {
 
 	// admin article handler
 	app.Ink.Router.Get("/admin/article/new", AdminArticleNew)
+	app.Ink.Router.Post("/admin/article/new", AdminArticleNewPost)
 }
 

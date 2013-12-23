@@ -1,6 +1,7 @@
 package model
 
 var (
+	ArticleM *ArticleModel
 	CategoryM *CategoryModel
 	TagM *TagModel
 	UserM *UserModel
@@ -9,6 +10,7 @@ var (
 
 // init models
 func Init() {
+	ArticleM = NewArticleModel()
 	CategoryM = NewCategoryModel()
 	TagM = NewTagModel()
 	UserM = NewUserModel()
