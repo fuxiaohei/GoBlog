@@ -29,7 +29,7 @@ type UserModel struct {
 // get all users.
 // its result is cached.
 func (this *UserModel) GetAllUser() map[int]*User {
-	if this.users != nil {
+	if len(this.users) < 1 {
 		return this.users
 	}
 	sql := "SELECT * FROM blog_user"
@@ -143,16 +143,17 @@ func (this *UserModel) SavePassword(id int, old string, new string) error {
 	return nil
 }
 
+func (this *UserModel) reset() {
+	this.users = make(map[int]*User)
+	this.loginIndex = make(map[string]int)
+	this.GetAllUser()
+	this.generateLoginIndex()
+}
+
 // create new userModel.
 // load all user data for caching.
 func NewUserModel() *UserModel {
 	userM := new(UserModel)
-	userM.users = make(map[int]*User)
-	userM.loginIndex = make(map[string]int)
-	/*
-	go func() {
-		userM.GetAllUser()
-		userM.generateLoginIndex()
-	}()*/
+	go userM.reset()
 	return userM
 }

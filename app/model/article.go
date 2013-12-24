@@ -159,6 +159,8 @@ func (this *ArticleModel) SaveArticle(article *Article) *Article {
 	}
 	if res.LastInsertId > 0 {
 		article.Id = res.LastInsertId
+		// clean all cache.
+		this.nocachePaged()
 		return article
 	}
 	return nil

@@ -89,18 +89,19 @@ func (this *SessionModel) Recycle() {
 	}
 }
 
+func (this *SessionModel) reset() {
+	this.sessions = make(map[string]*Session)
+	sessions := this.GetAvailableSessions()
+	this.sessions = make(map[string]*Session)
+	for _, session := range sessions {
+		this.sessions[session.Token] = session
+	}
+}
+
 // create new session model.
 func NewSessionModel() *SessionModel {
 	s := new(SessionModel)
-	s.sessions = make(map[string]*Session)
-	/*
-	go func() {
-		sessions := s.GetAvailableSessions()
-		s.sessions = make(map[string]*Session)
-		for _, session := range sessions {
-			s.sessions[session.Token] = session
-		}
-	}()*/
+	go s.reset()
 	return s
 }
 

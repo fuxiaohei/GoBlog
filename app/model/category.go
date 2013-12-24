@@ -140,17 +140,19 @@ func (this *CategoryModel) DeleteCategory(id int, move int) {
 	app.Db.Exec(sql, id)
 }
 
+func (this *CategoryModel) reset() {
+	this.categories = make(map[string]*Category)
+	this.idIndex = make(map[int]string)
+	categories := this.GetAll()
+	for _, ca := range categories {
+		this.categories[ca.Slug] = ca
+		this.idIndex[ca.Id] = ca.Slug
+	}
+}
+
 // create new category model.
 func NewCategoryModel() *CategoryModel {
 	c := new(CategoryModel)
-	c.categories = make(map[string]*Category)
-	c.idIndex = make(map[int]string)
-	go func() {
-		categories := c.GetAll()
-		for _, ca := range categories {
-			c.categories[ca.Slug] = ca
-			c.idIndex[ca.Id] = ca.Slug
-		}
-	}()
+	go c.reset()
 	return c
 }

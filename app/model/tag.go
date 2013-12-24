@@ -114,18 +114,19 @@ func (this *TagModel) DeleteTag(id int) {
 	app.Db.Exec(sql, id)
 }
 
+func (this *TagModel) reset() {
+	this.tags = make(map[string]*Tag)
+	this.idIndex = make(map[int]string)
+	tags := this.GetAll()
+	for _, tag := range tags {
+		this.tags[tag.Slug] = tag
+		this.idIndex[tag.Id] = tag.Slug
+	}
+}
+
 // create new tag model.
 func NewTagModel() *TagModel {
 	t := new(TagModel)
-	t.tags = make(map[string]*Tag)
-	t.idIndex = make(map[int]string)
-	/*
-	go func() {
-		tags := t.GetAll()
-		for _, tag := range tags {
-			t.tags[tag.Slug] = tag
-			t.idIndex[tag.Id] = tag.Slug
-		}
-	}()*/
+ 	go t.reset()
 	return t
 }
