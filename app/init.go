@@ -4,6 +4,7 @@ import (
 	"github.com/fuxiaohei/GoInk"
 	GoInkDb "github.com/fuxiaohei/GoInk/Db"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/fuxiaohei/GoBlog/app/utils"
 	"os"
 )
 
@@ -29,4 +30,9 @@ func Init() {
 		os.Exit(1)
 	}
 
+	// init something
+	Ink.View.NewFunc("DateInt64", utils.DateInt64)
+	Ink.View.NewFunc("DateString", utils.DateString)
+	Ink.View.NewFunc("DateTime", utils.DateTime)
+	Ink.View.NewFunc("Now", utils.Now)
 }

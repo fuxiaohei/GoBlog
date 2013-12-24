@@ -20,7 +20,7 @@ func AdminCategory(context *Core.Context) interface {} {
 func AdminCategoryEdit(context *Core.Context) interface {} {
 	cid, _ := strconv.Atoi(context.Param(3))
 	if cid < 1 {
-		context.Redirect("/admin/meta/")
+		context.Redirect("/admin/category/")
 		return nil
 	}
 	context.Render("admin:admin/category_edit.html", map[string]interface {}{
@@ -35,7 +35,7 @@ func AdminCategoryEdit(context *Core.Context) interface {} {
 func AdminCategoryEditPost(context *Core.Context) interface {} {
 	cid, _ := strconv.Atoi(context.Param(3))
 	if cid < 1 {
-		context.Redirect("/admin/meta/")
+		context.Redirect("/admin/category/")
 		return nil
 	}
 	data := context.Input()
@@ -46,7 +46,7 @@ func AdminCategoryEditPost(context *Core.Context) interface {} {
 		return nil
 	}
 	model.CategoryM.SaveCategory(cid, data["name"], data["slug"], data["desc"])
-	context.Redirect("/admin/meta/?update=1")
+	context.Redirect("/admin/category/?update=1")
 	app.Ink.Listener.EmitAll("model.category.update", cid)
 	return nil
 }
@@ -63,12 +63,12 @@ func AdminCategoryNew(context *Core.Context) interface {} {
 func AdminCategoryNewPost(context *Core.Context) interface {} {
 	data := context.Input()
 	c := model.CategoryM.GetCategoryBySlug(data["slug"])
-	if c.Id > 0 {
+	if c != nil {
 		context.Redirect(context.Referer+"?err=1")
 		return nil
 	}
 	c = model.CategoryM.CreateCategory(data["name"], data["slug"], data["desc"])
-	context.Redirect("/admin/meta/?new=1")
+	context.Redirect("/admin/category/?new=1")
 	app.Ink.Listener.EmitAll("model.category.new", c)
 	return nil
 }
@@ -76,13 +76,13 @@ func AdminCategoryNewPost(context *Core.Context) interface {} {
 func AdminCategoryDelete(context *Core.Context) interface {} {
 	data := context.Input()
 	if data["category"] == data["move"] {
-		context.Redirect("/admin/meta/?err=1")
+		context.Redirect("/admin/category/?err=1")
 		return nil
 	}
 	category , _ := strconv.Atoi(data["category"])
 	move, _ := strconv.Atoi(data["move"])
 	model.CategoryM.DeleteCategory(category, move)
-	context.Redirect("/admin/meta/?move=1")
+	context.Redirect("/admin/category/?move=1")
 	app.Ink.Listener.EmitAll("mode.category.move", category, move)
 	return nil
 }

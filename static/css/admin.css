@@ -466,3 +466,7 @@ pre,code{font-family:Consolas,"Courier New",Arial}
 #article-form #title{border:none;font-size:21px;background-color:transparent}#article-form #title:focus{background-color:#fff}
 #article-form #content{box-sizing:border-box}
 #article-form label{display:inline-block;width:4em;margin-right:12px}
+#article-table{width:100%}#article-table tr:hover .opt a{opacity:1}
+#article-table .title{font-size:14px;color:#444}#article-table .title i{color:#428bca;margin-left:6px;font-size:13px}
+#article-table .create-time,#article-table .comment{font-family:Verdana,Tahoma,'微软雅黑','宋体',sans-serif}
+#article-table .opt{width:168px}#article-table .opt a{opacity:0;margin-right:8px}

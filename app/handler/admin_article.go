@@ -6,11 +6,20 @@ import (
 	"strings"
 	"time"
 	"strconv"
-	"fmt"
 )
 
+func AdminArticle(context *Core.Context) interface {} {
+	articles, pager := model.ArticleM.GetPaged(1, 8, false)
+	context.Render("admin:admin/article.html", map[string]interface {}{
+			"Title":"文章",
+			"IsArticle":true,
+			"Articles":articles,
+			"Pager":pager,
+		})
+	return nil
+}
+
 func AdminArticleNew(context *Core.Context) interface {} {
-	fmt.Println(model.ArticleM.GetPaged(1, 10, false))
 	context.Render("admin:admin/article_new.html", map[string]interface {}{
 			"Title":"写文章",
 			"Categories":model.CategoryM.GetAll(),

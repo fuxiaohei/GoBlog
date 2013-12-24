@@ -1,0 +1,28 @@
+<div id="article-list-container" class="clear">
+    <table id="article-table" class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>标题</th>
+            <th>发布时间</th>
+            <th>分类</th>
+            <th>评论数</th>
+            <th class="opt"></th>
+        </tr>
+        </thead>
+        <tbody>{{range .Articles}}
+            <tr>
+                <td>{{.Id}}</td>
+                <td>{{if eq .Status "publish"}}
+                    <a href="/article/{{.Id}}/{{.Slug}}.html" target="_blank" class="title" title="/article/{{.Id}}/{{.Slug}}.html">{{.Title}}<i class="fa fa-external-link"></i></a>{{else}}
+                    {{.Title}}{{end}}
+                </td>
+                <td class="create-time">{{DateInt64 .CreateTime "MM.DD HH:mm"}}</td>
+                <td>{{.Category.Name}}</td>
+                <td><strong class="comment">{{.Comments}}</strong></td>
+                <td class="opt"><a href="/admin/article/edit/{{.Id}}/" class="msg green">编辑</a><a href="/admin/article/delete/{{.Id}}/" class="msg red">删除</a></td>
+            </tr>
+        {{end}}
+        </tbody>
+    </table>
+</div>

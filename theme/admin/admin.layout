@@ -28,7 +28,8 @@
         <a class="right" href="/admin/profile/">个人资料</a>{{if .IsDashboard}}
         <a class="right new-article" href="/admin/article/new/"><i class="fa fa-edit"></i>写文章</a>{{end}}{{if .IsProfile}}
         <a class="right password" href="/admin/password/"><i class="fa fa-key"></i>修改密码</a>{{end}}{{if .IsCategory}}
-        <a class="right category" href="/admin/category/new/"><i class="fa fa-plus"></i>添加分类</a>{{end}}
+        <a class="right category" href="/admin/category/new/"><i class="fa fa-plus"></i>添加分类</a>{{end}}{{if .IsArticle}}
+        <a class="right new-article" href="/admin/article/new/"><i class="fa fa-edit"></i>写文章</a>{{end}}
     </div>
 </header>
 <div id="admin-main" class="main clear">

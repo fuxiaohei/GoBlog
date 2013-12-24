@@ -33,6 +33,7 @@ func Init() {
 	app.Ink.Router.Post("/admin/category", AdminCategoryDelete)
 
 	// admin article handler
+	app.Ink.Router.Get("/admin/article", AdminArticle)
 	app.Ink.Router.Get("/admin/article/new", AdminArticleNew)
 	app.Ink.Router.Post("/admin/article/new", AdminArticleNewPost)
 }
