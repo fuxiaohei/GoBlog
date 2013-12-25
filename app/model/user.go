@@ -29,7 +29,7 @@ type UserModel struct {
 // get all users.
 // its result is cached.
 func (this *UserModel) GetAllUser() map[int]*User {
-	if len(this.users) < 1 {
+	if len(this.users) > 0 {
 		return this.users
 	}
 	sql := "SELECT * FROM blog_user"
@@ -45,7 +45,7 @@ func (this *UserModel) GetAllUser() map[int]*User {
 
 // generate an index for login/id pair.
 func (this *UserModel) generateLoginIndex() {
-	if this.users == nil {
+	if len(this.users) < 1 {
 		return
 	}
 	this.loginIndex = make(map[string]int)

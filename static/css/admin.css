@@ -37,11 +37,14 @@ a.btn:hover{color:#fafafa}
 .msg.blue{background-color:#428bca;color:#fafafa}
 .msg.red{background-color:#d44950;color:#fafafa}
 .msg.green{background-color:#5cb85c;color:#fafafa}
+.msg.gray{background-color:#888;color:#fafafa}
 .fa{margin-right:6px}
 .table th,.table td{padding:6px 0}
 .table thead tr{border-bottom:1px solid #ccc}
 .table th{text-align:left}
 .table tbody tr{border-bottom:1px dashed #ddd}
+.pager .item{display:inline-block;margin-right:12px}.pager .item a{padding:2px 6px;margin:0 3px;border-radius:2px;background-color:#428bca;color:#fafafa;margin:0}
+.pager .item.current a{background-color:#d44950;color:#fafafa}
 pre,code{font-family:Consolas,"Courier New",Arial}
 @font-face{font-family:'FontAwesome';src:url('../fonts/fontawesome-webfont.eot?v=4.0.3');src:url('../fonts/fontawesome-webfont.eot?#iefix&v=4.0.3') format('embedded-opentype'),url('../fonts/fontawesome-webfont.woff?v=4.0.3') format('woff'),url('../fonts/fontawesome-webfont.ttf?v=4.0.3') format('truetype'),url('../fonts/fontawesome-webfont.svg?v=4.0.3#fontawesomeregular') format('svg');font-weight:normal;font-style:normal}.fa{display:inline-block;font-family:FontAwesome;font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 .fa-lg{font-size:1.3333333333333333em;line-height:.75em;vertical-align:-15%}
@@ -470,3 +473,5 @@ pre,code{font-family:Consolas,"Courier New",Arial}
 #article-table .title{font-size:14px;color:#444}#article-table .title i{color:#428bca;margin-left:6px;font-size:13px}
 #article-table .create-time,#article-table .comment{font-family:Verdana,Tahoma,'微软雅黑','宋体',sans-serif}
 #article-table .opt{width:168px}#article-table .opt a{opacity:0;margin-right:8px}
+#article-table .msg.draft{margin-left:8px}
+#article-pager{margin-top:18px}

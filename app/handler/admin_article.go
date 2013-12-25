@@ -9,7 +9,14 @@ import (
 )
 
 func AdminArticle(context *Core.Context) interface {} {
-	articles, pager := model.ArticleM.GetPaged(1, 8, false)
+	page := 1
+	if context.Param(2) == "page" {
+		page, _ = strconv.Atoi(context.Param(3))
+		if page < 1 {
+			page = 1
+		}
+	}
+	articles, pager := model.ArticleM.GetPaged(page, 10, false)
 	context.Render("admin:admin/article.html", map[string]interface {}{
 			"Title":"文章",
 			"IsArticle":true,
@@ -59,6 +66,7 @@ func AdminArticleNewPost(context *Core.Context) interface {} {
 			"res":true,
 			"id":article.Id,
 		})
+		go model.CategoryM.CountArticle()
 		return nil
 	}
 	context.Json(map[string]interface {}{

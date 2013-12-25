@@ -3,6 +3,7 @@ package model
 import (
 	"github.com/fuxiaohei/GoBlog/app"
 	"time"
+	"fmt"
 )
 
 type Category struct {
@@ -132,12 +133,20 @@ func (this *CategoryModel) SaveCategory(id int, name string, slug string, desc s
 // delete one category.
 // move relationship to new category id.
 func (this *CategoryModel) DeleteCategory(id int, move int) {
-	sql := "UPDATE blog_relationship SET meta_id = ? WHERE meta_id = ?"
+	sql := "UPDATE blog_content SET category_id = ? WHERE category_id = ?"
 	app.Db.Exec(sql, move, id)
+	fmt.Println("move",move,"id",id)
 	this.nocacheCategory(this.GetCategoryById(id))
 	sql = "DELETE FROM blog_meta WHERE id = ?"
 	this.countsDescExpire = 0
 	app.Db.Exec(sql, id)
+	go this.CountArticle()
+}
+
+func (this *CategoryModel) CountArticle() {
+	sql := "UPDATE blog_meta SET counts = (SELECT count(*) FROM blog_content WHERE blog_content.category_id = blog_meta.id AND blog_content.status = 'publish' AND blog_content.type = 'article')"
+	app.Db.Exec(sql)
+	this.reset()
 }
 
 func (this *CategoryModel) reset() {

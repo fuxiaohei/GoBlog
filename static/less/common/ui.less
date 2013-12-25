@@ -139,6 +139,11 @@ a.btn{
   color: @White1;
 }
 
+.msg.gray{
+  background-color: @Black3;
+  color: @White1;
+}
+
 // icon font
 
 .fa{
@@ -162,6 +167,25 @@ a.btn{
   tbody{
     tr{
       border-bottom: 1px dashed @Gray3;
+    }
+  }
+}
+
+// pager
+
+.pager{
+  .item{
+    display: inline-block;
+    a{
+      .msg;
+      .msg.blue;
+      margin: 0;
+    }
+    margin-right: 12px;
+  }
+  .item.current{
+    a{
+      .msg.red;
     }
   }
 }
