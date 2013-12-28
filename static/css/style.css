@@ -452,16 +452,24 @@ blockquote{background-color:#f0f0f0;border-left:4px solid #ddd;padding:6px 12px;
 #site-title .sub-title{color:#888;margin-left:16px;display:inline-block;vertical-align:top}
 #nav{margin-right:-12px}#nav li{float:left;margin-left:24px}#nav li a{font-size:15px;color:#444;padding:0 12px;display:block}#nav li a:hover{border-bottom:4px solid #428bca}
 #main{margin:24px auto 48px auto}
-#article-list{width:75%}
+#footer{height:50px;background-color:#666;color:#bbb;line-height:48px}#footer a{color:#bbb}#footer a:hover{color:#f0f0f0}
+#footer span.left{margin-right:16px}
+#article-list{width:75%}#article-list .article-banner{border-left:4px solid #ddd;background-color:#f0f0f0;padding:8px 12px;margin-bottom:18px}#article-list .article-banner h4{display:inline-block;margin-right:18px}
+#article-list .article-banner span{color:#888}
 .article{padding-bottom:12px;border-bottom:1px solid #ccc;margin-bottom:18px}.article .prefix{border-left:4px solid #428bca;margin-right:18px;height:30px;margin-top:8px}
-.article .comment{font-family:Verdana,Tahoma,'微软雅黑','宋体',sans-serif;margin-top:8px;margin-right:12px}.article .comment .fa{margin-right:3px}
+.article .comment{font-family:Verdana,Tahoma,'微软雅黑','宋体',sans-serif;margin-top:8px;margin-right:18px}.article .comment .fa{margin-right:4px}
 .article .publish{font-size:21px;color:#ddd;font-family:Verdana,Tahoma,'微软雅黑','宋体',sans-serif;margin-top:8px}
 .article .summary{line-height:30px;margin:8px 0}
-.article .aside span{margin-right:18px;color:#666}.article .aside span .fa{color:#888}
+.article .aside span{margin-right:18px;color:#888}.article .aside span a{color:#888}.article .aside span a:hover{color:#398439}
 .article .content.md h1,.article .summary.md h1{font-size:1.6em}
 .article .content.md h2,.article .summary.md h2{font-size:1.4em}
 .article .content.md h3,.article .summary.md h3{font-size:1.2em}
 .article .content.md h4,.article .summary.md h4,.article .content.md h6,.article .summary.md h6,.article .content.md h5,.article .summary.md h5{font-size:1em}
 .article .content.md h1,.article .summary.md h1,.article .content.md h2,.article .summary.md h2,.article .content.md h3,.article .summary.md h3,.article .content.md h4,.article .summary.md h4,.article .content.md h5,.article .summary.md h5,.article .content.md h6,.article .summary.md h6{font-weight:bold}
+.article .content.md>p,.article .summary.md>p{margin-bottom:.8em}
 .article-single .header,.article-single .aside{margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #ddd}
 #article-side{width:22%}
+.article-side{margin-bottom:18px}.article-side h5{margin-bottom:6px}
+.article-side ul{margin:0 12px}.article-side ul li{margin-bottom:12px;list-style:inside disc}
+#category-side a{color:#5cb85c;margin-right:12px}#category-side a:hover{color:#398439}
+#popular-side a{margin-right:12px}

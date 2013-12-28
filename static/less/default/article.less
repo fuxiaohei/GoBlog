@@ -1,6 +1,19 @@
 @import "../common/mixin";
 #article-list {
   width: 75%;
+  .article-banner{
+    border-left: 4px solid @Gray3;
+    background-color: @White3;
+    padding: 8px 12px;
+    margin-bottom: 18px;
+    h4{
+      display: inline-block;
+      margin-right: 18px;
+    }
+    span{
+      color: @Black3;
+    }
+  }
 }
 
 .article {
@@ -13,9 +26,9 @@
   .comment{
     font-family: Verdana, Tahoma, '微软雅黑', '宋体', sans-serif;
     margin-top: 8px;
-    margin-right: 12px;
+    margin-right: 18px;
     .fa{
-      margin-right: 3px;
+      margin-right: 4px;
     }
   }
   .publish{
@@ -31,9 +44,12 @@
   .aside{
     span{
       margin-right: 18px;
-      color: @Black2;
-      .fa{
+      color: @Black3;
+      a{
         color: @Black3;
+        &:hover{
+          color: @Green3;
+        }
       }
     }
   }
@@ -56,6 +72,9 @@
     h1,h2,h3,h4,h5,h6{
       font-weight: bold;
     }
+    > p{
+      margin-bottom: .8em;
+    }
   }
 }
 
@@ -69,4 +88,34 @@
 
 #article-side {
   width: 22%;
+}
+
+.article-side{
+  h5{
+    margin-bottom: 6px;
+  }
+  ul{
+    margin: 0 12px;
+    li{
+      margin-bottom: 12px;
+      list-style: inside disc;
+    }
+  }
+  margin-bottom: 18px;
+}
+
+#category-side{
+  a{
+    color: @Green1;
+    margin-right: 12px;
+    &:hover{
+      color: @Green3;
+    }
+  }
+}
+
+#popular-side{
+  a{
+    margin-right: 12px;
+  }
 }

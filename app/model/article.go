@@ -6,6 +6,7 @@ import (
 	"strconv"
 )
 
+// article object
 type Article struct {
 	Id         int
 	Title      string
@@ -24,18 +25,22 @@ type Article struct {
 	Views      int
 }
 
+// return article slug link.
 func (this *Article) Link() string {
 	return "/article/" + fmt.Sprintf("%d/%s.html", this.Id, this.Slug)
 }
 
+// return article author *User
 func (this *Article) Author() *User {
 	return UserM.GetUserById(this.AuthorId)
 }
 
+// return article *Category
 func (this *Article) Category() *Category {
 	return CategoryM.GetCategoryById(this.CategoryId)
 }
 
+// article model
 type ArticleModel struct {
 	article    map[string]*Article
 	idIndex    map[int]string
@@ -43,6 +48,7 @@ type ArticleModel struct {
 	pagerCache map[string]int
 }
 
+// cache one article in model.
 func (this *ArticleModel) cacheArticle(a *Article) {
 	if a == nil {
 		return
@@ -51,6 +57,7 @@ func (this *ArticleModel) cacheArticle(a *Article) {
 	this.idIndex[a.Id] = a.Slug
 }
 
+// remove cached one article in model.
 func (this *ArticleModel) nocacheArticle(a *Article) {
 	if a == nil {
 		return
@@ -59,6 +66,7 @@ func (this *ArticleModel) nocacheArticle(a *Article) {
 	delete(this.idIndex, a.Id)
 }
 
+// get one article by slug string.
 func (this *ArticleModel) GetArticleBySlug(slug string) *Article {
 	a := this.article["slug"]
 	if a == nil {
@@ -74,6 +82,7 @@ func (this *ArticleModel) GetArticleBySlug(slug string) *Article {
 	return a
 }
 
+// get one article by given id.
 func (this *ArticleModel) GetArticleById(id int) *Article {
 	slug := this.idIndex[id]
 	if slug != "" {
@@ -90,11 +99,13 @@ func (this *ArticleModel) GetArticleById(id int) *Article {
 	return a
 }
 
+// remove all paged article slice cache.
 func (this *ArticleModel) nocachePaged() {
 	this.pagedCache = make(map[string][]*Article)
 	this.pagerCache = make(map[string]int)
 }
 
+// get paged article.
 func (this *ArticleModel) GetPaged(page, size int, noDraft bool) ([]*Article, *Pager) {
 	key := fmt.Sprintf("%d-%d-draft-%t", page, size, noDraft)
 	if this.pagedCache[key] == nil {
@@ -131,19 +142,48 @@ func (this *ArticleModel) GetPaged(page, size int, noDraft bool) ([]*Article, *P
 	return this.pagedCache[key], newPager(page, size, this.pagerCache[pagerKey])
 }
 
-func (this *ArticleModel) GetCategoryPaged(categoryId, page, size int, noDraft bool) []*Article {
-	page = (page-1) * size
+func (this *ArticleModel) GetCategoryPaged(categoryId, page, size int, noDraft bool) ([]*Article, *Pager) {
 	key := fmt.Sprintf("%d-%d-draft-%t-category-%d", page, size, noDraft, categoryId)
 	if this.pagedCache[key] == nil {
 		sql := "SELECT * FROM blog_content WHERE type = ? AND category_id = ?"
+		args := []interface{}{"article", categoryId}
+		limit := (page - 1) * size
+		if noDraft {
+			sql += " AND status != ?"
+			args = append(args, "draft")
+		}
+		sql += " ORDER BY id DESC LIMIT "+fmt.Sprintf("%d,%d", limit, size)
+		res, e := app.Db.Query(sql, args...)
+		if len(res.Data) > 0 && e == nil {
+			articles := make([]*Article, 0)
+			res.All(&articles)
+			this.pagedCache[key] = articles
+		}
+	}
+	pagerKey := fmt.Sprintf("counter-draft-%t-category-%d", noDraft, categoryId)
+	if this.pagerCache[pagerKey] == 0 {
+		sql := "SELECT count(*) AS c FROM blog_content WHERE type = ? AND category_id = ?"
 		args := []interface{}{"article", categoryId}
 		if noDraft {
 			sql += " AND status != ?"
 			args = append(args, "draft")
 		}
-		sql += " ORDER BY id DESC LIMIT "+fmt.Sprintf("%d,%d", page, size)
-		res, _ := app.Db.Query(sql, args...)
-		if len(res.Data) < 1 {
+		res, e := app.Db.Query(sql, args...)
+		if e != nil {
+			return nil, nil
+		}
+		all, _ := strconv.Atoi(res.Data[0]["c"])
+		this.pagerCache[pagerKey] = all
+	}
+	return this.pagedCache[key], newPager(page, size, this.pagerCache[pagerKey])
+}
+
+func (this *ArticleModel) GetPopular(size int) []*Article {
+	key := fmt.Sprintf("popular-%d", size)
+	if this.pagedCache[key] == nil {
+		sql := "SELECT * FROM blog_content WHERE type = ? AND status = ? ORDER BY comments DESC LIMIT ?"
+		res, e := app.Db.Query(sql, "article", "publish", size)
+		if e != nil {
 			return nil
 		}
 		articles := make([]*Article, 0)

@@ -1,4 +1,8 @@
-<div id="article-list" class="left">{{range .Articles}}
+<div id="article-list" class="left">{{if .Category}}
+    <div class="article-banner category">
+        <h4>{{.Category.Name}}</h4>
+        <span class="desc">{{.Category.Description}}</span>
+    </div>{{end}}{{range .Articles}}
     <article class="article clear">
         <header class="header clear">{{if gt .Comments 0}}
             <span class="comment left msg red"><i class="fa fa-comment"></i>{{.Comments}}</span>{{else}}
@@ -9,7 +13,7 @@
         <section class="summary {{.Format}}">{{Html .Summary}}</section>
         <aside class="aside">
             <span class="author"><i class="fa fa-user"></i>{{.Author.Display}}</span>
-            <span class="category"><i class="fa fa-star"></i>{{.Category.Name}}</span>
+            <span class="category"><a href="{{.Category.Link}}"><i class="fa fa-star"></i>{{.Category.Name}}</a></span>
         </aside>
     </article>{{end}}
     <ul id="article-pager" class="pager">{{range .Pager.PageSlice}}
@@ -17,7 +21,18 @@
     </ul>
 </div>
 <div id="article-side" class="right">
-    right
+    <div class="article-side" id="category-side">
+        <h5>文章分类</h5>
+        <ul>{{range .ArticleSide.Categories}}
+            <li><a href="{{.Link}}">{{.Name}}</a><span class="counts msg green">{{.Counts}}</span></li>{{end}}
+        </ul>
+    </div>
+    <div class="article-side" id="popular-side">
+        <h5>热评文章</h5>
+        <ul>{{range .ArticleSide.Popular}}
+            <li><a href="{{.Link}}">{{.Title}}</a><span class="counts msg red">{{.Comments}}</span></li>{{end}}
+        </ul>
+    </div>
 </div>
 <script src="/static/js/marked.js"></script>
 <script>

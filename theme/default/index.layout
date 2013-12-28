@@ -35,5 +35,22 @@
 <div id="main" class="main clear">
     {@Content}
 </div>
+<footer id="footer">
+    <div class="main clear">
+        <span class="left copyright">&copy;2014 傅小黑</span>
+        <span class="git left">
+            <i class="fa fa-github"></i><a href="#">GoInk</a>&nbsp;·&nbsp;<a href="#">GoBlog</a>
+        </span>
+        <span class="rss left">
+            <a href="#"><i class="fa fa-rss"></i>RSS</a>
+        </span>
+        <span class="map left">
+            <a href="#"><i class="fa fa-sitemap"></i>SiteMap</a>
+        </span>
+        <span class="top right">
+            <a href="#" id="go-top"><i class="fa fa-arrow-up"></i>Top</a>
+        </span>
+    </div>
+</footer>
 </body>
 </html>

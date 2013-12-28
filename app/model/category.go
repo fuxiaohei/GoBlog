@@ -3,7 +3,6 @@ package model
 import (
 	"github.com/fuxiaohei/GoBlog/app"
 	"time"
-	"fmt"
 )
 
 type Category struct {
@@ -12,6 +11,10 @@ type Category struct {
 	Slug        string
 	Description string
 	Counts      int
+}
+
+func (this *Category) Link() string {
+	return "/category/" + this.Slug + "/"
 }
 
 type CategoryModel struct {
@@ -135,7 +138,6 @@ func (this *CategoryModel) SaveCategory(id int, name string, slug string, desc s
 func (this *CategoryModel) DeleteCategory(id int, move int) {
 	sql := "UPDATE blog_content SET category_id = ? WHERE category_id = ?"
 	app.Db.Exec(sql, move, id)
-	fmt.Println("move",move,"id",id)
 	this.nocacheCategory(this.GetCategoryById(id))
 	sql = "DELETE FROM blog_meta WHERE id = ?"
 	this.countsDescExpire = 0
@@ -157,6 +159,7 @@ func (this *CategoryModel) reset() {
 		this.categories[ca.Slug] = ca
 		this.idIndex[ca.Id] = ca.Slug
 	}
+	this.countsDescExpire = 0
 }
 
 // create new category model.
