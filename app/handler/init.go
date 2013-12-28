@@ -8,6 +8,10 @@ func Init() {
 	if e != nil {
 		app.Ink.Crash(e)
 	}
+	e = app.Ink.View.NewLayout("theme", "default/index.layout")
+	if e != nil {
+		app.Ink.Crash(e)
+	}
 
 	// login handlers
 	app.Ink.Router.Get("/login.html", Login)
@@ -36,5 +40,10 @@ func Init() {
 	app.Ink.Router.Get("/admin/article", AdminArticle)
 	app.Ink.Router.Get("/admin/article/new", AdminArticleNew)
 	app.Ink.Router.Post("/admin/article/new", AdminArticleNewPost)
-}
+	app.Ink.Router.Get("/admin/article/edit", AdminArticleEdit)
+	app.Ink.Router.Post("/admin/article/edit", AdminArticleEditPost)
 
+	// article handler
+	app.Ink.Router.Get("/", Article)
+	app.Ink.Router.Get("/article", Article)
+}

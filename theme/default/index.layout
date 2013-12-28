@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>GoBlog</title>
+    <link rel="shortcut icon" href="/static/favicon.ico">
+    <link rel="stylesheet" href="/static/css/style.css"/>
+    <script src="/static/js/jquery-2.0.3.min.js"></script>
+</head>
+<body>
+<header id="header">
+    <div id="header-color" class="clear">
+        <span class="left red"></span>
+        <span class="left orange"></span>
+        <span class="left green"></span>
+        <span class="left blue"></span>
+    </div>
+    <div class="main clear">
+        <div id="site-title" class="left">
+            <h1><a href="/">GoBlog</a></h1>
+            <span class="sub-title">Go博客程序</span>
+        </div>
+        <nav id="nav" class="right">
+            <ul>
+                <li><a href="/article/">文章</a></li>
+                <li><a href="/archive/">归档</a></li>
+                <li><a href="/about/">关于</a></li>
+                <li><a href="/friends/">好友</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<div id="main" class="main clear">
+    {@Content}
+</div>
+</body>
+</html>

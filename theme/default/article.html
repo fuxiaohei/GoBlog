@@ -1,0 +1,47 @@
+<div id="article-list" class="left">{{range .Articles}}
+    <article class="article clear">
+        <header class="header clear">{{if gt .Comments 0}}
+            <span class="comment left msg red"><i class="fa fa-comment"></i>{{.Comments}}</span>{{else}}
+            <span class="prefix left"></span>{{end}}
+            <span class="right publish">{{DateInt64 .CreateTime "MM.DD"}}</span>
+            <h3 class="title"><a href="{{.Link}}">{{.Title}}</a></h3>
+        </header>
+        <section class="summary {{.Format}}">{{Html .Summary}}</section>
+        <aside class="aside">
+            <span class="author"><i class="fa fa-user"></i>{{.Author.Display}}</span>
+            <span class="category"><i class="fa fa-star"></i>{{.Category.Name}}</span>
+        </aside>
+    </article>{{end}}
+    <ul id="article-pager" class="pager">{{range .Pager.PageSlice}}
+        <li class="item{{if eq $.Pager.Current .}} current{{end}}"><a href="{{$.PageUrl}}/{{.}}/">{{.}}</a></li>{{end}}
+    </ul>
+</div>
+<div id="article-side" class="right">
+    right
+</div>
+<script src="/static/js/marked.js"></script>
+<script>
+    $(document).ready(function () {
+        var loadPrettify = false;
+        $('.md').each(function () {
+            var $this = $(this);
+            var content = marked($this.text().replace("[break]",""));
+            if (content.indexOf("</pre>") >= 1) {
+                loadPrettify = true;
+            }
+            $this.html(content);
+        });
+        if (loadPrettify) {
+            $("<link>")
+                    .attr({ rel: "stylesheet",
+                        type: "text/css",
+                        href: "/static/js/prettify/prettify.css"
+                    })
+                    .appendTo("head");
+            $(".md pre").addClass("prettyprint").addClass("linenums");
+            $.getScript("/static/js/prettify/prettify.js",function(){
+                prettyPrint();
+            });
+        }
+    });
+</script>

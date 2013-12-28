@@ -1,0 +1,9 @@
+#header-color{background-color:#444}#header-color .left{height:4px}
+#header-color .red{background-color:#d44950;width:22%}
+#header-color .orange{background-color:#f0ad4e;width:16%}
+#header-color .green{background-color:#5cb85c;width:20%}
+#header-color .blue{background-color:#428bca;width:24%}
+#header{height:60px;line-height:54px;border-bottom:1px solid #bbb;background-color:#fff;box-shadow:0 0 6px #ddd}
+#site-title h1{line-height:54px;display:inline-block;font-size:24px}#site-title h1 a{color:#444}#site-title h1 a:hover{text-shadow:0 0 1px #666}
+#site-title .sub-title{color:#888;margin-left:16px;display:inline-block;vertical-align:top}
+#nav{margin-right:-12px}#nav li{float:left;margin-left:24px}#nav li a{font-size:15px;color:#444;padding:0 12px;display:block}#nav li a:hover{border-bottom:4px solid #428bca}

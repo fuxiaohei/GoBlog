@@ -11,8 +11,7 @@
         <p class="item">
             <label for="category">选择分类</label>
             <select class="select" name="category" id="category">{{range .Categories}}
-                <option value="{{.Id}}">{{.Name}}</option>
-                {{end}}
+                <option value="{{.Id}}">{{.Name}}</option>{{end}}
             </select>
         </p>
         <p class="item">
@@ -35,7 +34,7 @@
         </p>
         <p class="item">
             <label for="feed">订阅状态</label>
-            <select class="select" name="comment" id="feed">
+            <select class="select" name="feed" id="feed">
                 <option value="1">开启</option>
                 <option value="0">关闭</option>
             </select>
@@ -72,7 +71,7 @@
             success: function (json) {
                 if(json.res){
                     alert("保存完成");
-                    window.location.href = "/admin/article/edit/"+json.id+"/";
+                    window.location.href = "/admin/article/";
                 }else{
                     alert(json.msg);
                 }

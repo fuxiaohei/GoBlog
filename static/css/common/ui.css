@@ -30,3 +30,5 @@ a.btn:hover{color:#fafafa}
 .pager .item{display:inline-block;margin-right:12px}.pager .item a{padding:2px 6px;margin:0 3px;border-radius:2px;background-color:#428bca;color:#fafafa;margin:0}
 .pager .item.current a{background-color:#d44950;color:#fafafa}
 pre,code{font-family:Consolas,"Courier New",Arial}
+pre{margin:6px 0}
+blockquote{background-color:#f0f0f0;border-left:4px solid #ddd;padding:6px 12px;margin:6px 0}

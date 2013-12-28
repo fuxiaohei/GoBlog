@@ -14,7 +14,7 @@
             <tr>
                 <td>{{.Id}}</td>
                 <td>{{if eq .Status "publish"}}
-                    <a href="/article/{{.Id}}/{{.Slug}}.html" target="_blank" class="title" title="/article/{{.Id}}/{{.Slug}}.html">{{.Title}}<i class="fa fa-external-link"></i></a>{{else}}
+                    <a href="{{.Link}}" target="_blank" class="title" title="/article/{{.Id}}/{{.Slug}}.html">{{.Title}}<i class="fa fa-external-link"></i></a>{{else}}
                     {{.Title}}<span class="msg gray draft">草稿</span>{{end}}
                 </td>
                 <td class="create-time">{{DateInt64 .CreateTime "MM.DD HH:mm"}}</td>

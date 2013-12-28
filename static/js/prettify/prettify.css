@@ -1,81 +1,81 @@
-/* Tomorrow Night Eighties Theme */
+/* Tomorrow Theme */
 /* Original theme - https://github.com/chriskempson/tomorrow-theme */
 /* Pretty printing styles. Used with prettify.js. */
 /* SPAN elements with the classes below are added by prettyprint. */
 /* plain text */
 .pln {
-    color: #cccccc;
+    color: #4d4d4c;
 }
 
 @media screen {
     /* string content */
     .str {
-        color: #99cc99;
+        color: #718c00;
     }
 
     /* a keyword */
     .kwd {
-        color: #f7565d;
+        color: #8959a8;
     }
 
     /* a comment */
     .com {
-        color: #999999;
+        color: #8e908c;
     }
 
     /* a type name */
     .typ {
-        color: #428BCA;
+        color: #4271ae;
     }
 
     /* a literal value */
     .lit {
-        color: #f99157;
+        color: #f5871f;
     }
 
     /* punctuation */
     .pun {
-        color: #d6eeff;
+        color: #4d4d4c;
     }
 
     /* lisp open bracket */
     .opn {
-        color: #cccccc;
+        color: #4d4d4c;
     }
 
     /* lisp close bracket */
     .clo {
-        color: #cccccc;
+        color: #4d4d4c;
     }
 
     /* a markup tag name */
     .tag {
-        color: #f2777a;
+        color: #c82829;
     }
 
     /* a markup attribute name */
     .atn {
-        color: #f99157;
+        color: #f5871f;
     }
 
     /* a markup attribute value */
     .atv {
-        color: #66cccc;
+        color: #3e999f;
     }
 
     /* a declaration */
     .dec {
-        color: #f99157;
+        color: #f5871f;
     }
 
     /* a variable name */
     .var {
-        color: #f2777a;
+        color: #c82829;
     }
 
     /* a function name */
     .fun {
-        color: #6699cc;
+        color: #4271ae;
     }
 }
 /* Use higher contrast and text-weight for printable form. */
@@ -122,8 +122,8 @@
 }
 /* Style */
 pre.prettyprint {
-    background: #2d2d2d;
-    font-family: font-family: Consolas,"Courier New",Arial;
+    background: white;
+    font-family: Menlo, "Bitstream Vera Sans Mono", "DejaVu Sans Mono", Monaco, Consolas, monospace;
     font-size: 12px;
     line-height: 1.5;
     border: 1px solid #cccccc;

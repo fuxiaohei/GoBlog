@@ -1,0 +1,38 @@
+<article class="article-single article main960 clear" id="article-{{.Article.Id}}">{{with .Article}}
+    <header class="header clear">
+        <span class="prefix left"></span>
+        <span class="right publish">{{DateInt64 .CreateTime "MM.DD"}}</span>
+        <h3 class="title"><a href="/article/{{.Id}}/{{.Slug}}.html">{{.Title}}</a></h3>
+    </header>
+    <aside class="aside">
+        <span class="author"><i class="fa fa-user"></i>{{.Author.Display}}</span>
+        <span class="category"><i class="fa fa-star"></i>{{.Category.Name}}</span>
+    </aside>
+    <section class="content {{.Format}}">{{Html .Content}}</section>
+{{end}}</article>
+<script src="/static/js/marked.js"></script>
+<script>
+    $(document).ready(function () {
+        var loadPrettify = false;
+        $('.md').each(function () {
+            var $this = $(this);
+            var content = marked($this.text().replace("[break]",""));
+            if (content.indexOf("</pre>") >= 1) {
+                loadPrettify = true;
+            }
+            $this.html(content);
+        });
+        if (loadPrettify) {
+            $("<link>")
+                    .attr({ rel: "stylesheet",
+                        type: "text/css",
+                        href: "/static/js/prettify/prettify.css"
+                    })
+                    .appendTo("head");
+            $(".md pre").addClass("prettyprint").addClass("linenums");
+            $.getScript("/static/js/prettify/prettify.js",function(){
+                prettyPrint();
+            });
+        }
+    });
+</script>

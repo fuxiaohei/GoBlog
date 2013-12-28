@@ -1,0 +1,72 @@
+@import "../common/mixin";
+#article-list {
+  width: 75%;
+}
+
+.article {
+  .prefix{
+    border-left:4px solid @Blue1;
+    margin-right: 18px;
+    height: 30px;
+    margin-top: 8px;
+  }
+  .comment{
+    font-family: Verdana, Tahoma, '微软雅黑', '宋体', sans-serif;
+    margin-top: 8px;
+    margin-right: 12px;
+    .fa{
+      margin-right: 3px;
+    }
+  }
+  .publish{
+    font-size: 21px;
+    color: @Gray3;
+    font-family: Verdana, Tahoma, '微软雅黑', '宋体', sans-serif;
+    margin-top: 8px;
+  }
+  .summary{
+    line-height: 30px;
+    margin: 8px 0;
+  }
+  .aside{
+    span{
+      margin-right: 18px;
+      color: @Black2;
+      .fa{
+        color: @Black3;
+      }
+    }
+  }
+  padding-bottom: 12px;
+  border-bottom: 1px solid @Gray2;
+  margin-bottom: 18px;
+  .content.md,.summary.md{
+    h1{
+      font-size: 1.6em;
+    }
+    h2{
+      font-size: 1.4em;
+    }
+    h3{
+      font-size: 1.2em;
+    }
+    h4,h6,h5{
+      font-size: 1em;
+    }
+    h1,h2,h3,h4,h5,h6{
+      font-weight: bold;
+    }
+  }
+}
+
+.article-single{
+  .header,.aside{
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid @Gray3;
+  }
+}
+
+#article-side {
+  width: 22%;
+}
