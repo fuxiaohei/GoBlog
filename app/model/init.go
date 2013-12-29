@@ -6,6 +6,7 @@ var (
 	TagM *TagModel
 	UserM *UserModel
 	SessionM *SessionModel
+	CommentM *CommentModel
 )
 
 // init models
@@ -15,4 +16,5 @@ func Init() {
 	TagM = NewTagModel()
 	UserM = NewUserModel()
 	SessionM = NewSessionModel()
+	CommentM = NewCommentModel()
 }

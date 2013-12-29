@@ -473,3 +473,14 @@ blockquote{background-color:#f0f0f0;border-left:4px solid #ddd;padding:6px 12px;
 .article-side ul{margin:0 12px}.article-side ul li{margin-bottom:12px;list-style:inside disc}
 #category-side a{color:#5cb85c;margin-right:12px}#category-side a:hover{color:#398439}
 #popular-side a{margin-right:12px}
+#comment-container>h4{margin-bottom:12px}
+.comment-item .avatar{width:44px;height:44px;background-color:#fff;border:1px solid #ccc;border-radius:4px;padding:2px;margin-right:12px}
+.comment-item .meta{margin-top:6px;padding-top:6px;border-top:1px solid #ddd;margin-left:62px;color:#888}.comment-item .meta>*{margin-right:12px}
+.comment-item .meta:hover .reply{display:inline !important}
+.comment-item .meta:hover .author{padding:2px 6px;margin:0 3px;border-radius:2px;background-color:#428bca;color:#fafafa}
+.comment-item .publish{font-family:Verdana,Tahoma,'微软雅黑','宋体',sans-serif}
+.comment-item .reply{color:#888}
+.comment-child{margin-top:8px;margin-left:60px}.comment-child:hover .reply{opacity:1}
+.comment-child .avatar{width:32px;height:32px;background-color:#fff;border:1px solid #ccc;border-radius:4px;padding:1px;margin-right:12px;margin-top:4px}
+.comment-child .parent{margin-right:12px;color:#666}
+.comment-child .reply{text-align:center;margin-left:6px;color:#888;opacity:0;font-size:12px}

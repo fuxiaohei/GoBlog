@@ -1,0 +1,76 @@
+@import "../common/mixin";
+@import "../common/ui";
+
+#comment-container {
+  > h4 {
+    margin-bottom: 12px;
+  }
+}
+
+.comment-item {
+  .avatar {
+    width: 44px;
+    height: 44px;
+    background-color: @White0;
+    border: 1px solid @Gray2;
+    border-radius: 4px;
+    padding: 2px;
+    margin-right: 12px;
+  }
+  .meta {
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px solid @Gray3;
+    margin-left: 62px;
+    > * {
+      margin-right: 12px;
+    }
+    color: @Black3;
+    &:hover{
+      .reply {
+        display: inline !important;
+      }
+      .author{
+        .msg;
+        .msg.blue;
+      }
+    }
+  }
+  .publish {
+    font-family: Verdana, Tahoma, '微软雅黑', '宋体', sans-serif;
+  }
+  .reply{
+    color: @Black3;
+  }
+}
+
+.comment-child{
+  margin-top: 8px;
+  &:hover{
+    .reply{
+      opacity: 1;
+    }
+  }
+  .avatar{
+    width: 32px;
+    height: 32px;
+    background-color: @White0;
+    border: 1px solid @Gray2;
+    border-radius: 4px;
+    padding: 1px;
+    margin-right: 12px;
+    margin-top: 4px;
+  }
+  .parent{
+    margin-right: 12px;
+    color: @Black2;
+  }
+  margin-left: 60px;
+  .reply{
+    text-align: center;
+    margin-left: 6px;
+    color: @Black3;
+    opacity: 0;
+    font-size: 12px;
+  }
+}

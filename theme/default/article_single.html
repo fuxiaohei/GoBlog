@@ -6,10 +6,30 @@
     </header>
     <aside class="aside">
         <span class="author"><i class="fa fa-user"></i>{{.Author.Display}}</span>
-        <span class="category"><i class="fa fa-star"></i>{{.Category.Name}}</span>
+        <span class="category"><a href="{{.Category.Link}}"><i class="fa fa-star"></i>{{.Category.Name}}</a></span>
+        <span class="view"><i class="fa fa-eye"></i>{{.Views}} 次浏览</span>
     </aside>
     <section class="content {{.Format}}">{{Html .Content}}</section>
 {{end}}</article>
+<div id="comment-container" class="main960 clear">
+    {{if gt .Article.Comments 0}}<h4>已有 {{.Article.Comments}} 条评论</h4>{{end}}
+    <div id="comment-list">
+        <div class="comment-item clear">
+            <img class="avatar left" src="http://www.ileyar.com/avatar/d46ec2107238fd6fe447c03653c99a30.jpg" alt=""/>
+            <section class="content">手写体这么好看的，昨天发了一张写了几个字的图片在空间里，被吐槽惨了。。 如果有个人在我生日的时候录视频给我，我估计会感动哭的。不对，也许只是悄悄给我寄一个礼物然后打电话说声生日快乐，我就会。 这个歌，下了我一跳。</section>
+            <p class="meta">
+                <a class="author" href="#"><i class="fa fa-user"></i>咚门</a>
+                <span class="publish">11.22 12:58</span>
+                <a class="reply hide" href="#"><i class="fa fa-reply"></i>回复</a>
+            </p>
+            <div class="comment-child clear">
+                <a class="right reply" href="#"><i class="fa fa-reply"></i>回复</a>
+                <img class="avatar left" src="http://www.ileyar.com/avatar/b4d4b6424ad45b29e48609784a040fef.jpg" alt=""/>
+                <section class="content"><span class="parent">@Layer</span>我来回复只有一个原因，就是视频！视频！视频！可以私下给我看看嘛，你又不是不知道我邮箱什么的，网盘私密分享也可以哦，放心，绝不外传。</section>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="/static/js/marked.js"></script>
 <script>
     $(document).ready(function () {
