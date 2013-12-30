@@ -8,6 +8,10 @@
 }
 
 .comment-item {
+  >#comment-form{
+    margin-left: 62px;
+    margin-top: 18px;
+  }
   .avatar {
     width: 44px;
     height: 44px;
@@ -73,4 +77,34 @@
     opacity: 0;
     font-size: 12px;
   }
+}
+
+#comment-list{
+  margin-bottom: 24px;
+}
+
+#comment-form{
+  .form-meta{
+    margin-right: 24px;
+    .fa{
+      display: inline-block;
+      font-size: 18px;
+      width: 18px;
+      text-align: center;
+      color: @Black2;
+    }
+    .ipt{
+      width: 180px;
+    }
+  }
+  .content{
+    width: 54%;
+    height: 133px;
+    resize: none;
+    margin-right: 18px;
+  }
+}
+
+#comment-submit,#comment-no-reply{
+  width: 100px;
 }

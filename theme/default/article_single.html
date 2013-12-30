@@ -29,8 +29,28 @@
             </div>
         </div>
     </div>
+    <form id="comment-form" class="form clear" action="#">
+        <div class="form-meta left">
+            <p class="item">
+                <label for="author"><i class="fa fa-user"></i></label>
+                <input id="author" class="ipt" type="text" name="author" required="required"/>
+            </p>
+            <p class="item">
+                <label for="email"><i class="fa fa-envelope"></i></label>
+                <input id="email" class="ipt" type="email" name="email" required="required"/>
+            </p>
+            <p class="item">
+                <label for="site"><i class="fa fa-link"></i></label>
+                <input id="site" class="ipt" type="url" name="site"/>
+            </p>
+        </div>
+        <textarea class="ipt left content" name="content" id="content"></textarea>
+        <button class="btn left item hide green" id="comment-no-reply" type="button">取消回复</button>
+        <button class="btn left" id="comment-submit">提 交</button>
+    </form>
 </div>
 <script src="/static/js/marked.js"></script>
+<script src="/static/js/ajax-comment.js"></script>
 <script>
     $(document).ready(function () {
         var loadPrettify = false;
@@ -54,5 +74,6 @@
                 prettyPrint();
             });
         }
+        Comment.InitReplyEvent();
     });
 </script>
