@@ -477,3 +477,13 @@ blockquote{background-color:#f0f0f0;border-left:4px solid #ddd;padding:6px 12px;
 #article-table .opt{width:168px}#article-table .opt a{opacity:0;margin-right:8px}
 #article-table .msg.draft{margin-left:8px}
 #article-pager{margin-top:18px}
+.comment-item{margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #ddd}.comment-item .avatar{width:38px;height:38px;border:1px solid #ccc;padding:2px;background:#fff;margin-right:12px}
+.comment-item .author{margin-left:0}
+.comment-item .author-link{color:#f0f0f0;margin:0 4px}
+.comment-item .meta{margin-bottom:6px}.comment-item .meta>*{margin-right:12px}
+.comment-item .create-time{font-family:Verdana,Tahoma,'微软雅黑','宋体',sans-serif;color:#888}
+.comment-item .relate-content{color:#666}
+.comment-item .content-link{margin:0 4px;color:#666}
+.comment-item .opt{opacity:0;font-size:12px}
+.comment-item:hover .opt{opacity:1}
+#comment-list-container>h5{margin-bottom:12px}

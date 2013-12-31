@@ -43,6 +43,9 @@ func Init() {
 	app.Ink.Router.Get("/admin/article/edit", AdminArticleEdit)
 	app.Ink.Router.Post("/admin/article/edit", AdminArticleEditPost)
 
+	// admin comment handler
+	app.Ink.Router.Get("/admin/comment",AdminComment)
+
 	// article handler
 	app.Ink.Router.Get("/", Article)
 	app.Ink.Router.Get("/article", Article)

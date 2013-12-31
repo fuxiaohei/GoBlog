@@ -21,7 +21,7 @@
                 <a class="author" href="#"><i class="fa fa-user"></i>${Author}</a>
                 <span class="publish">${CreateTime}</span>
                 {@if Status != "approved"}
-                <span class="spam msg red">审核中</span>
+                <span class="spam msg red">审核中，刷新不可见</span>
                 {@/if}
                 <a class="reply hide" href="#" rel="${Id}"><i class="fa fa-reply"></i>回复</a>
             </p>
@@ -32,7 +32,7 @@
                 <a class="right reply" href="#" rel="${Id}"><i class="fa fa-reply"></i>回复</a>
                 <img class="avatar left" src="${Avatar}" alt="${Author}" title="${Author}"/>
                 <section class="content"><span class="parent"></span>$${Content}{@if Status != "approved"}
-                <span class="spam msg red">审核中</span>
+                <span class="spam msg red">审核中，刷新不可见</span>
                 {@/if}</section>
         </div>
     </script>
@@ -52,7 +52,7 @@
                 <input id="site" class="ipt" type="url" name="site"/>
             </p>
         </div>
-        <textarea class="ipt left content" name="content" id="content"></textarea>
+        <textarea class="ipt left content" name="content" id="content" required="required"></textarea>
         <button class="btn left item hide green" id="comment-no-reply" type="button">取消回复</button>
         <button class="btn left" id="comment-submit">提 交</button>
         <input type="hidden" name="article" value="{{.Article.Id}}"/>

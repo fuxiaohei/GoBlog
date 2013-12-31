@@ -76,7 +76,7 @@ func (this *CommentModel) GetAllOfContent(contentId int, noDraft bool) []*Commen
 	return this.pagedCache[key]
 }
 
-func (this *CommentModel) SaveComment(c *Comment) *Comment {
+func (this *CommentModel) CreateComment(c *Comment) *Comment {
 	sql := "INSERT INTO blog_comment(author,email,site,avatar,create_time,content,content_id,user_id,pid,is_admin,type,status) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)"
 	c.CreateTime = utils.Now()
 	res, _ := app.Db.Exec(sql, c.Author, c.Email, c.Site, c.Avatar, c.CreateTime, c.Content, c.ContentId, c.UserId, c.Pid, false, "comment", "spam")
@@ -84,6 +84,7 @@ func (this *CommentModel) SaveComment(c *Comment) *Comment {
 		return nil
 	}
 	c.Id = res.LastInsertId
+	this.nocachePaged()
 	return c
 }
 

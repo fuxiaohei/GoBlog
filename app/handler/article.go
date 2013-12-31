@@ -25,11 +25,11 @@ func Article(context *Core.Context) interface{} {
 	}
 	article, pager := model.ArticleM.GetPaged(page, 4, true)
 	context.Render("theme:default/article.html", map[string]interface{}{
-		"Articles":    article,
-		"Pager":       pager,
-		"PageUrl":     "/article/page",
-		"ArticleSide": articleSide(),
-	})
+			"Articles":    article,
+			"Pager":       pager,
+			"PageUrl":     "/article/page",
+			"ArticleSide": articleSide(),
+		})
 	return nil
 }
 
@@ -55,8 +55,8 @@ func ArticleSingle(context *Core.Context) interface{} {
 		return nil
 	}
 	context.Render("theme:default/article_single.html", map[string]interface{}{
-		"Article": article,
-	})
+			"Article": article,
+		})
 	model.ArticleM.IncreaseView(article.Id)
 	return nil
 }
@@ -96,12 +96,12 @@ func ArticleCategory(context *Core.Context) interface{} {
 	}
 	article, pager := model.ArticleM.GetCategoryPaged(category.Id, page, 4, true)
 	context.Render("theme:default/article.html", map[string]interface{}{
-		"Articles":    article,
-		"Pager":       pager,
-		"PageUrl":     category.Link() + "page/",
-		"Category":    category,
-		"ArticleSide": articleSide(),
-	})
+			"Articles":    article,
+			"Pager":       pager,
+			"PageUrl":     category.Link()+"page/",
+			"Category":    category,
+			"ArticleSide": articleSide(),
+		})
 	return nil
 }
 
@@ -117,8 +117,16 @@ func ArticleCommentPost(context *Core.Context) interface{} {
 		context.Status = 400
 		return nil
 	}
-	c := new(model.Comment)
 	data := context.Input()
+	msg, ok := validateCommentData(data)
+	if !ok {
+		context.Json(map[string]interface{}{
+			"res": true,
+			"msg": msg,
+		})
+		return nil
+	}
+	c := new(model.Comment)
 	c.Author = data["author"]
 	c.Email = data["email"]
 	c.Site = data["site"]
@@ -127,12 +135,32 @@ func ArticleCommentPost(context *Core.Context) interface{} {
 	c.Pid, _ = strconv.Atoi(data["pid"])
 	c.Avatar = utils.Gravatar(c.Email, "50")
 	c.UserId = 0
-	c = model.CommentM.SaveComment(c)
+	c = model.CommentM.CreateComment(c)
 	if c != nil {
 		context.Json(map[string]interface{}{
 			"res":     true,
 			"comment": c,
 		})
+		return nil
 	}
+	context.Json(map[string]interface{}{
+		"res": true,
+		"msg": "评论失败",
+	})
 	return nil
+}
+
+func validateCommentData(data map[string]string) (string, bool) {
+	if !utils.IsEmail(data["email"]) {
+		return "邮箱错误", false
+	}
+	if len(data["site"]) > 0 {
+		if !utils.IsURL(data["site"]) {
+			return "网址错误", false
+		}
+	}
+	if len(data["content"]) < 3 {
+		return "内容至少三个字", false
+	}
+	return "", true
 }

@@ -1,0 +1,54 @@
+@import "../common/mixin";
+
+.comment-item {
+  .avatar {
+    width: 38px;
+    height: 38px;
+    border: 1px solid @Gray2;
+    padding: 2px;
+    background: @White0;
+    margin-right: 12px;
+  }
+  .author {
+    margin-left: 0;
+  }
+  .author-link {
+    color: @White3;
+    margin: 0 4px;
+  }
+  .meta {
+    > * {
+      margin-right: 12px;
+    }
+    margin-bottom: 6px;
+  }
+  .create-time {
+    font-family: Verdana, Tahoma, '微软雅黑', '宋体', sans-serif;
+    color: @Black3;
+  }
+  .relate-content {
+    color: @Black2;
+  }
+  .content-link {
+    margin: 0 4px;
+    color: @Black2;
+  }
+  .opt {
+    opacity: 0;
+    font-size: 12px;
+  }
+  &:hover {
+    .opt {
+      opacity: 1;
+    }
+  }
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid @Gray3;
+}
+
+#comment-list-container {
+  > h5 {
+    margin-bottom: 12px;
+  }
+}
