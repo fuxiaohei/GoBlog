@@ -1,12 +1,12 @@
 package model
 
 var (
-	ArticleM *ArticleModel
+	ArticleM  *ArticleModel
 	CategoryM *CategoryModel
-	TagM *TagModel
-	UserM *UserModel
-	SessionM *SessionModel
-	CommentM *CommentModel
+	TagM      *TagModel
+	UserM     *UserModel
+	SessionM  *SessionModel
+	CommentM  *CommentModel
 )
 
 // init models

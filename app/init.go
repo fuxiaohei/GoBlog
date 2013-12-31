@@ -1,10 +1,10 @@
 package app
 
 import (
+	"github.com/fuxiaohei/GoBlog/app/utils"
 	"github.com/fuxiaohei/GoInk"
 	GoInkDb "github.com/fuxiaohei/GoInk/Db"
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/fuxiaohei/GoBlog/app/utils"
 	"os"
 )
 

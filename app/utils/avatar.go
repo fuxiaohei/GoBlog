@@ -8,7 +8,7 @@ import (
 // generate gravatar link by email.
 func Gravatar(email string, size string) string {
 	u := "http://1.gravatar.com/avatar/"
-	u += encodeAvatarEmail(email)+"?s=" + size
+	u += encodeAvatarEmail(email) + "?s=" + size
 	return u
 }
 

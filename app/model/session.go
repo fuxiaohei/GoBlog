@@ -1,10 +1,10 @@
 package model
 
 import (
-	"github.com/fuxiaohei/GoBlog/app"
-	"time"
-	"github.com/fuxiaohei/GoBlog/app/utils"
 	"fmt"
+	"github.com/fuxiaohei/GoBlog/app"
+	"github.com/fuxiaohei/GoBlog/app/utils"
+	"time"
 )
 
 type Session struct {
@@ -104,5 +104,3 @@ func NewSessionModel() *SessionModel {
 	go s.reset()
 	return s
 }
-
-

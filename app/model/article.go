@@ -47,7 +47,7 @@ type ArticleModel struct {
 	idIndex    map[int]string
 	pagedCache map[string][]*Article
 	pagerCache map[string]int
-	viewIndex map[int]int
+	viewIndex  map[int]int
 }
 
 // cache one article in model.
@@ -113,7 +113,7 @@ func (this *ArticleModel) GetPaged(page, size int, noDraft bool) ([]*Article, *P
 	if this.pagedCache[key] == nil {
 		sql := "SELECT * FROM blog_content WHERE type = ?"
 		args := []interface{}{"article"}
-		limit := (page-1) * size
+		limit := (page - 1) * size
 		if noDraft {
 			sql += " AND status != ?"
 			args = append(args, "draft")
@@ -149,7 +149,7 @@ func (this *ArticleModel) GetCategoryPaged(categoryId, page, size int, noDraft b
 	if this.pagedCache[key] == nil {
 		sql := "SELECT * FROM blog_content WHERE type = ? AND category_id = ?"
 		args := []interface{}{"article", categoryId}
-		limit := (page-1) * size
+		limit := (page - 1) * size
 		if noDraft {
 			sql += " AND status != ?"
 			args = append(args, "draft")
@@ -230,7 +230,7 @@ func (this *ArticleModel) IncreaseView(articleId int) {
 	if article == nil {
 		return
 	}
-	article.Views+=1
+	article.Views += 1
 	this.viewIndex[article.Id] = article.Views
 }
 
@@ -243,9 +243,9 @@ func (this *ArticleModel) startViewTimer() {
 		this.viewIndex = make(map[int]int)
 		fmt.Println("[Model.Article] sync article views")
 	}
-	time.AfterFunc(time.Duration(1) * time.Minute, func() {
-			this.startViewTimer()
-		})
+	time.AfterFunc(time.Duration(1)*time.Minute, func() {
+		this.startViewTimer()
+	})
 }
 
 func NewArticleModel() *ArticleModel {

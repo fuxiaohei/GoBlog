@@ -1,8 +1,8 @@
 package model
 
 import (
-	"github.com/fuxiaohei/GoBlog/app"
 	"errors"
+	"github.com/fuxiaohei/GoBlog/app"
 	"github.com/fuxiaohei/GoBlog/app/utils"
 )
 
@@ -22,7 +22,7 @@ type User struct {
 }
 
 type UserModel struct {
-	users map[int]*User
+	users      map[int]*User
 	loginIndex map[string]int
 }
 
@@ -67,7 +67,7 @@ func (this *UserModel) GetUserById(id int) *User {
 	// cache it
 	if u.Id == id {
 		this.cacheUser(u)
-	}else {
+	} else {
 		u = nil
 	}
 	return u
@@ -89,7 +89,7 @@ func (this *UserModel) GetUserByLogin(login string) *User {
 	// cache it
 	if u.Login == login {
 		this.cacheUser(u)
-	}else {
+	} else {
 		u = nil
 	}
 	return u

@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-func AdminComment(context *Core.Context) interface {} {
+func AdminComment(context *Core.Context) interface{} {
 	page := 1
 	if context.Param(2) == "page" {
 		page, _ = strconv.Atoi(context.Param(3))
@@ -14,9 +14,8 @@ func AdminComment(context *Core.Context) interface {} {
 		}
 	}
 	context.Render("admin:admin/comment.html", map[string]interface{}{
-			"Title":     "评论",
-			"IsComment": true,
-		})
+		"Title":     "评论",
+		"IsComment": true,
+	})
 	return nil
 }
-

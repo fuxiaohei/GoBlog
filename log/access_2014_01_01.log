@@ -29,3 +29,5 @@
 2014-01-01T00:19:09+08:00 [LOG] GET 200 /admin/comment/ -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER
 2014-01-01T00:20:25+08:00 [LOG] GET 200 /admin/comment/ -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER
 2014-01-01T00:20:52+08:00 [LOG] GET 200 /admin/comment/ -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER
+2014-01-01T00:29:48+08:00 [LOG] GET 200 /admin/article/ -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER
+2014-01-01T00:29:49+08:00 [LOG] GET 200 /admin/node/ -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER

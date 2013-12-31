@@ -7,7 +7,6 @@ import (
 	"time"
 )
 
-
 // Format unix time int64 to string
 func DateInt64(ti int64, format string) string {
 	t := time.Unix(int64(ti), 0)
