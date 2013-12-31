@@ -592,3 +592,6 @@ C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/serv
 C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1167 (0x4888a0)
 C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/proc.c:1394 (0x415aa0)
 
+2013-12-31T12:16:14+08:00 [LOG] POST 404 /article/3/template-engine-class.html -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER
+2013-12-31T12:16:39+08:00 [LOG] POST 404 /article/3/template-engine-class.html -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER
+2013-12-31T12:17:40+08:00 [LOG] POST 404 /article/3/template-engine-class.html -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER

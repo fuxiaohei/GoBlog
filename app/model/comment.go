@@ -1,14 +1,16 @@
 package model
 
 import (
-	"github.com/fuxiaohei/GoBlog/app"
 	"fmt"
+	"github.com/fuxiaohei/GoBlog/app"
+	"github.com/fuxiaohei/GoBlog/app/utils"
+	//"github.com/fuxiaohei/GoInk/Db"
 )
 
 type Comment struct {
 	Id         int
 	Author     string
-	Email      string
+	Email      string `json:"-"`
 	Site       string
 	Avatar     string
 	CreateTime int64
@@ -21,9 +23,10 @@ type Comment struct {
 }
 
 type CommentModel struct {
-	comments map[int]*Comment
+	comments   map[int]*Comment
 	pagedCache map[string][]*Comment
 	pagerCache map[string]int
+	emailCount map[string]int
 }
 
 func (this *CommentModel) GetCommentById(id int) *Comment {
@@ -53,12 +56,11 @@ func (this *CommentModel) nocachePaged() {
 	this.pagerCache = make(map[string]int)
 }
 
-
 func (this *CommentModel) GetAllOfContent(contentId int, noDraft bool) []*Comment {
 	key := fmt.Sprintf("content-%d-draft-%t", contentId, noDraft)
-	if this.pagedCache[key] == nil {
+	if len(this.pagedCache[key]) < 1 {
 		sql := "SELECT * FROM blog_comment WHERE type = ? AND content_id = ?"
-		args := []interface {}{"comment", contentId}
+		args := []interface{}{"comment", contentId}
 		if noDraft {
 			sql += " AND status = ?"
 			args = append(args, "approved")
@@ -74,8 +76,18 @@ func (this *CommentModel) GetAllOfContent(contentId int, noDraft bool) []*Commen
 	return this.pagedCache[key]
 }
 
+func (this *CommentModel) SaveComment(c *Comment) *Comment {
+	sql := "INSERT INTO blog_comment(author,email,site,avatar,create_time,content,content_id,user_id,pid,is_admin,type,status) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)"
+	c.CreateTime = utils.Now()
+	res, _ := app.Db.Exec(sql, c.Author, c.Email, c.Site, c.Avatar, c.CreateTime, c.Content, c.ContentId, c.UserId, c.Pid, false, "comment", "spam")
+	if res.LastInsertId < 1 {
+		return nil
+	}
+	c.Id = res.LastInsertId
+	return c
+}
 
-func NewCommentModel()*CommentModel{
+func NewCommentModel() *CommentModel {
 	c := new(CommentModel)
 	c.comments = make(map[int]*Comment)
 	c.nocachePaged()

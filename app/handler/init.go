@@ -46,5 +46,6 @@ func Init() {
 	// article handler
 	app.Ink.Router.Get("/", Article)
 	app.Ink.Router.Get("/article", Article)
+	app.Ink.Router.Post("/article", ArticleCommentPost)
 	app.Ink.Router.Get("/category", ArticleCategory)
 }

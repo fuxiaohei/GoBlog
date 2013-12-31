@@ -8,6 +8,7 @@
 }
 
 .comment-item {
+  margin-bottom: 18px;
   >#comment-form{
     margin-left: 62px;
     margin-top: 18px;
@@ -34,10 +35,6 @@
       .reply {
         display: inline !important;
       }
-      .author{
-        .msg;
-        .msg.blue;
-      }
     }
   }
   .publish {
@@ -46,27 +43,39 @@
   .reply{
     color: @Black3;
   }
+  .author{
+    .msg;
+    .msg.blue;
+  }
 }
 
 .comment-child{
-  margin-top: 8px;
+  >#comment-form{
+    margin-top: 18px;
+    textarea{
+      margin-bottom: 12px;
+    }
+    .btn{
+      margin-right: 12px;
+    }
+  }
+  margin-top: 12px;
   &:hover{
-    .reply{
+    > .reply{
       opacity: 1;
     }
   }
   .avatar{
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     background-color: @White0;
     border: 1px solid @Gray2;
     border-radius: 4px;
     padding: 1px;
     margin-right: 12px;
-    margin-top: 4px;
   }
   .parent{
-    margin-right: 12px;
+    margin-right: 8px;
     color: @Black2;
   }
   margin-left: 60px;
@@ -77,7 +86,17 @@
     opacity: 0;
     font-size: 12px;
   }
+  .comment-child{
+    margin-left: 46px;
+  }
+  .spam{
+    margin-left: 12px;
+  }
+  .content{
+    min-height: 34px;
+  }
 }
+
 
 #comment-list{
   margin-bottom: 24px;

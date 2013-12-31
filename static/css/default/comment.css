@@ -33,17 +33,22 @@ pre,code{font-family:Consolas,"Courier New",Arial}
 pre{margin:6px 0}
 blockquote{background-color:#f0f0f0;border-left:4px solid #ddd;padding:6px 12px;margin:6px 0}
 #comment-container>h4{margin-bottom:12px}
-.comment-item>#comment-form{margin-left:62px;margin-top:18px}
+.comment-item{margin-bottom:18px}.comment-item>#comment-form{margin-left:62px;margin-top:18px}
 .comment-item .avatar{width:44px;height:44px;background-color:#fff;border:1px solid #ccc;border-radius:4px;padding:2px;margin-right:12px}
 .comment-item .meta{margin-top:6px;padding-top:6px;border-top:1px solid #ddd;margin-left:62px;color:#888}.comment-item .meta>*{margin-right:12px}
 .comment-item .meta:hover .reply{display:inline !important}
-.comment-item .meta:hover .author{padding:2px 6px;margin:0 3px;border-radius:2px;background-color:#428bca;color:#fafafa}
 .comment-item .publish{font-family:Verdana,Tahoma,'微软雅黑','宋体',sans-serif}
 .comment-item .reply{color:#888}
-.comment-child{margin-top:8px;margin-left:60px}.comment-child:hover .reply{opacity:1}
-.comment-child .avatar{width:32px;height:32px;background-color:#fff;border:1px solid #ccc;border-radius:4px;padding:1px;margin-right:12px;margin-top:4px}
-.comment-child .parent{margin-right:12px;color:#666}
+.comment-item .author{padding:2px 6px;margin:0 3px;border-radius:2px;background-color:#428bca;color:#fafafa}
+.comment-child{margin-top:12px;margin-left:60px}.comment-child>#comment-form{margin-top:18px}.comment-child>#comment-form textarea{margin-bottom:12px}
+.comment-child>#comment-form .btn{margin-right:12px}
+.comment-child:hover>.reply{opacity:1}
+.comment-child .avatar{width:30px;height:30px;background-color:#fff;border:1px solid #ccc;border-radius:4px;padding:1px;margin-right:12px}
+.comment-child .parent{margin-right:8px;color:#666}
 .comment-child .reply{text-align:center;margin-left:6px;color:#888;opacity:0;font-size:12px}
+.comment-child .comment-child{margin-left:46px}
+.comment-child .spam{margin-left:12px}
+.comment-child .content{min-height:34px}
 #comment-list{margin-bottom:24px}
 #comment-form .form-meta{margin-right:24px}#comment-form .form-meta .fa{display:inline-block;font-size:18px;width:18px;text-align:center;color:#666}
 #comment-form .form-meta .ipt{width:180px}

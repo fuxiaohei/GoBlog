@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/fuxiaohei/GoBlog/app"
 	"strconv"
+	"time"
 )
 
 // article object
@@ -46,6 +47,7 @@ type ArticleModel struct {
 	idIndex    map[int]string
 	pagedCache map[string][]*Article
 	pagerCache map[string]int
+	viewIndex map[int]int
 }
 
 // cache one article in model.
@@ -68,7 +70,7 @@ func (this *ArticleModel) nocacheArticle(a *Article) {
 
 // get one article by slug string.
 func (this *ArticleModel) GetArticleBySlug(slug string) *Article {
-	a := this.article["slug"]
+	a := this.article[slug]
 	if a == nil {
 		sql := "SELECT * FROM blog_content WHERE type = ? AND slug = ?"
 		res, _ := app.Db.Query(sql, "article", slug)
@@ -111,12 +113,12 @@ func (this *ArticleModel) GetPaged(page, size int, noDraft bool) ([]*Article, *P
 	if this.pagedCache[key] == nil {
 		sql := "SELECT * FROM blog_content WHERE type = ?"
 		args := []interface{}{"article"}
-		limit := (page - 1) * size
+		limit := (page-1) * size
 		if noDraft {
 			sql += " AND status != ?"
 			args = append(args, "draft")
 		}
-		sql += " ORDER BY id DESC LIMIT "+fmt.Sprintf("%d,%d", limit, size)
+		sql += " ORDER BY id DESC LIMIT " + fmt.Sprintf("%d,%d", limit, size)
 		res, e := app.Db.Query(sql, args...)
 		if len(res.Data) > 0 && e == nil {
 			articles := make([]*Article, 0)
@@ -147,12 +149,12 @@ func (this *ArticleModel) GetCategoryPaged(categoryId, page, size int, noDraft b
 	if this.pagedCache[key] == nil {
 		sql := "SELECT * FROM blog_content WHERE type = ? AND category_id = ?"
 		args := []interface{}{"article", categoryId}
-		limit := (page - 1) * size
+		limit := (page-1) * size
 		if noDraft {
 			sql += " AND status != ?"
 			args = append(args, "draft")
 		}
-		sql += " ORDER BY id DESC LIMIT "+fmt.Sprintf("%d,%d", limit, size)
+		sql += " ORDER BY id DESC LIMIT " + fmt.Sprintf("%d,%d", limit, size)
 		res, e := app.Db.Query(sql, args...)
 		if len(res.Data) > 0 && e == nil {
 			articles := make([]*Article, 0)
@@ -223,10 +225,35 @@ func (this *ArticleModel) CreateArticle(article *Article) *Article {
 	return nil
 }
 
+func (this *ArticleModel) IncreaseView(articleId int) {
+	article := this.GetArticleById(articleId)
+	if article == nil {
+		return
+	}
+	article.Views+=1
+	this.viewIndex[article.Id] = article.Views
+}
+
+func (this *ArticleModel) startViewTimer() {
+	if len(this.viewIndex) > 0 {
+		sql := "UPDATE blog_content SET views = ? WHERE id = ?"
+		for id, views := range this.viewIndex {
+			app.Db.Exec(sql, views, id)
+		}
+		this.viewIndex = make(map[int]int)
+		fmt.Println("[Model.Article] sync article views")
+	}
+	time.AfterFunc(time.Duration(1) * time.Minute, func() {
+			this.startViewTimer()
+		})
+}
+
 func NewArticleModel() *ArticleModel {
 	articleM := new(ArticleModel)
 	articleM.article = make(map[string]*Article)
 	articleM.idIndex = make(map[int]string)
+	articleM.viewIndex = make(map[int]int)
 	articleM.nocachePaged()
+	go articleM.startViewTimer()
 	return articleM
 }
