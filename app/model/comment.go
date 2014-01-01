@@ -134,6 +134,22 @@ func (this *CommentModel) GetAllOfContent(contentId int, noDraft bool) []*Commen
 	return this.pagedCache[key]
 }
 
+func (this *CommentModel) GetRecentComments(size int) []*Comment {
+	key := fmt.Sprintf("recent-%d", size)
+	if this.pagedCache[key] == nil {
+		sql := "SELECT * FROM blog_comment WHERE type = ? AND status = ? AND pid = 0 AND is_admin = 0 ORDER BY create_time DESC LIMIT ?"
+		res, e := app.Db.Query(sql, "comment", "approved", size)
+		if e != nil {
+			return nil
+		}
+		comments := make([]*Comment, 0)
+		res.All(&comments)
+		this.pagedCache[key] = comments
+		this.cacheComment(comments...)
+	}
+	return this.pagedCache[key]
+}
+
 func (this *CommentModel) CreateComment(c *Comment) *Comment {
 	sql := "INSERT INTO blog_comment(author,email,site,avatar,create_time,content,content_id,user_id,pid,is_admin,type,status) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)"
 	var status string
@@ -142,7 +158,7 @@ func (this *CommentModel) CreateComment(c *Comment) *Comment {
 	}else {
 		status = this.getEmailStatus(c.Email)
 	}
-	res, _ := app.Db.Exec(sql, c.Author, c.Email, c.Site, c.Avatar, utils.Now(), c.Content, c.ContentId, c.UserId, c.Pid, false, "comment", status)
+	res, _ := app.Db.Exec(sql, c.Author, c.Email, c.Site, c.Avatar, utils.Now(), c.Content, c.ContentId, c.UserId, c.Pid, c.IsAdmin, "comment", status)
 	this.Reset()
 	if res.LastInsertId < 1 {
 		return nil

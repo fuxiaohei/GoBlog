@@ -35,4 +35,5 @@ func Init() {
 	Ink.View.NewFunc("DateString", utils.DateString)
 	Ink.View.NewFunc("DateTime", utils.DateTime)
 	Ink.View.NewFunc("Now", utils.Now)
+	Ink.View.NewFunc("Html2str", utils.Html2str)
 }

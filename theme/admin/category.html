@@ -34,13 +34,6 @@
 </form>
 <script>
     $(document).ready(function(){
-        $('#category-table-form').on("submit",function(){
-            var category = $('input[name=category]:checked').val();
-            if(category == $('#move').val()){
-                alert("不能移动到自己");
-                return false;
-            }
-            return confirm("删除将不可恢复!");
-        });
+       initCategoryTable();
     });
 </script>

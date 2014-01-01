@@ -49,6 +49,9 @@
     .msg;
     .msg.blue;
   }
+  .content{
+    margin-left: 62px;
+  }
 }
 
 .comment-child{
@@ -128,4 +131,15 @@
 
 #comment-submit,#comment-no-reply{
   width: 100px;
+}
+
+.comment-item.admin,.comment-child.admin{
+  &:before{
+    content:" ";
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background-color: @Red1;
+    position: absolute;
+  }
 }

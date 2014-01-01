@@ -25,11 +25,11 @@ func Article(context *Core.Context) interface{} {
 	}
 	article, pager := model.ArticleM.GetPaged(page, 4, true)
 	context.Render("theme:default/article.html", map[string]interface{}{
-		"Articles":    article,
-		"Pager":       pager,
-		"PageUrl":     "/article/page",
-		"ArticleSide": articleSide(),
-	})
+			"Articles":    article,
+			"Pager":       pager,
+			"PageUrl":     "/article/page",
+			"ArticleSide": articleSide(),
+		})
 	return nil
 }
 
@@ -55,8 +55,8 @@ func ArticleSingle(context *Core.Context) interface{} {
 		return nil
 	}
 	context.Render("theme:default/article_single.html", map[string]interface{}{
-		"Article": article,
-	})
+			"Article": article,
+		})
 	model.ArticleM.IncreaseView(article.Id)
 	return nil
 }
@@ -96,12 +96,12 @@ func ArticleCategory(context *Core.Context) interface{} {
 	}
 	article, pager := model.ArticleM.GetCategoryPaged(category.Id, page, 4, true)
 	context.Render("theme:default/article.html", map[string]interface{}{
-		"Articles":    article,
-		"Pager":       pager,
-		"PageUrl":     category.Link() + "page/",
-		"Category":    category,
-		"ArticleSide": articleSide(),
-	})
+			"Articles":    article,
+			"Pager":       pager,
+			"PageUrl":     category.Link()+"page/",
+			"Category":    category,
+			"ArticleSide": articleSide(),
+		})
 	return nil
 }
 
@@ -109,6 +109,7 @@ func articleSide() map[string]interface{} {
 	return map[string]interface{}{
 		"Categories": model.CategoryM.GetCountsDesc(3600),
 		"Popular":    model.ArticleM.GetPopular(4),
+		"Comments":model.CommentM.GetRecentComments(4),
 	}
 }
 

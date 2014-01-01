@@ -70,6 +70,9 @@ Comment.InitCommentList = function () {
                 var $html;
                 if (item.Pid < 1) {
                     $html = $($itemTemplate.render(item));
+                    if(item.IsAdmin){
+                        $html.addClass("admin");
+                    }
                     if (childHtml["c-" + item.Id]) {
                         $html.append(childHtml["c-" + item.Id].reverse())
                             .find("> .comment-child > .content > .parent").text("@" + item.Author);
@@ -77,6 +80,9 @@ Comment.InitCommentList = function () {
                     topHtml.push($html);
                 } else {
                     $html = $($childTemplate.render(item));
+                    if(item.IsAdmin){
+                        $html.addClass("admin");
+                    }
                     if (childHtml["c-" + item.Id]) {
                         $html.append(childHtml["c-" + item.Id].reverse())
                             .find("> .comment-child > .content > .parent").text("@" + item.Author);

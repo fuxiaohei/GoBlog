@@ -1,6 +1,6 @@
 <div id="comment-list-container" class="main960">
     <h5>所有评论</h5>{{range .Comments}}
-    <div class="comment-item clear" id="comment-{{.Id}}">
+    <div class="comment-item clear{{if .IsAdmin}} admin{{end}}" id="comment-{{.Id}}">
         <img class="avatar left" src="{{.Avatar}}" alt="{{.Author}}" title="{{.Author}}"/>
         <p class="meta">
             <span class="msg author {{if eq .Status "approved"}}blue{{else}}gray{{end}}">{{.Author}}{{if .Site}}
@@ -21,52 +21,15 @@
     <ul id="comment-pager" class="pager">{{range .Pager.PageSlice}}
         <li class="item{{if eq $.Pager.Current .}} current{{end}}"><a href="/admin/comment/page/{{.}}">{{.}}</a></li>{{end}}
     </ul>
+    <form id="comment-reply-form" class="clear hide" action="/admin/comment/" method="post">
+        <textarea class="ipt left content" name="content" id="content" required="required"></textarea>
+        <button class="btn blue" id="comment-reply-submit">回复</button>
+        <button class="btn green" id="comment-reply-hide" type="button">取消</button>
+        <input type="hidden" id="comment-parent" name="pid" value="0"/>
+    </form>
 </div>
 <script>
     $(document).ready(function () {
-        $('#comment-list-container').on("click", ".approve",function (e) {
-            e.preventDefault();
-            var id = $(this).attr("rel");
-            $.post("/admin/comment/status", {"id": id, "status": "approved"}, function (json) {
-                if (json.res) {
-                    var $c = $('#comment-' + id);
-                    $c.find(".author").removeClass("gray").addClass("blue");
-                    $c.find(".approve").remove();
-                } else {
-                    if (json.msg) {
-                        alert(json.msg);
-                    }
-                }
-            });
-        }).on("click", ".spam",function (e) {
-                    e.preventDefault();
-                    var id = $(this).attr("rel");
-                    $.post("/admin/comment/status", {"id": id, "status": "spam"}, function (json) {
-                        if (json.res) {
-                            var $c = $('#comment-' + id);
-                            $c.find(".author").removeClass("blue").addClass("gray");
-                            $c.find(".spam").remove();
-                        } else {
-                            if (json.msg) {
-                                alert(json.msg);
-                            }
-                        }
-                    });
-                }).on("click", ".del", function (e) {
-                    if(!confirm("删除评论将使回复无效？确认继续？")){
-                        return false;
-                    }
-                    e.preventDefault();
-                    var id = $(this).attr("rel");
-                    $.post("/admin/comment/delete", {"id": id}, function (json) {
-                        if (json.res) {
-                            $('#comment-' + id).remove();
-                        } else {
-                            if (json.msg) {
-                                alert(json.msg);
-                            }
-                        }
-                    });
-                });
+        initCommentList();
     });
 </script>

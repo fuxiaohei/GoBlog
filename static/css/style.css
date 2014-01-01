@@ -473,6 +473,8 @@ blockquote{background-color:#f0f0f0;border-left:4px solid #ddd;padding:6px 12px;
 .article-side ul{margin:0 12px}.article-side ul li{margin-bottom:12px;list-style:inside disc}
 #category-side a{color:#5cb85c;margin-right:12px}#category-side a:hover{color:#398439}
 #popular-side a{margin-right:12px}
+#comment-side ul{margin:8px 0}
+#comment-side li{list-style:none;padding-bottom:8px;margin-bottom:8px;border-bottom:1px dashed #ddd}#comment-side li .author{margin-right:8px}
 #comment-container>h4{margin-bottom:12px}
 .comment-item{margin-bottom:18px}.comment-item>#comment-form{margin-left:62px;margin-top:18px}
 .comment-item .avatar{width:44px;height:44px;background-color:#fff;border:1px solid #ccc;border-radius:4px;padding:2px;margin-right:12px}
@@ -482,6 +484,7 @@ blockquote{background-color:#f0f0f0;border-left:4px solid #ddd;padding:6px 12px;
 .comment-item .publish{font-family:Verdana,Tahoma,'微软雅黑','宋体',sans-serif}
 .comment-item .reply{color:#888}
 .comment-item .author{padding:2px 6px;margin:0 3px;border-radius:2px;background-color:#428bca;color:#fafafa}
+.comment-item .content{margin-left:62px}
 .comment-child{margin-top:12px;margin-left:60px}.comment-child>#comment-form{margin-top:18px}.comment-child>#comment-form textarea{margin-bottom:12px}
 .comment-child>#comment-form .btn{margin-right:12px}
 .comment-child:hover>.reply{opacity:1}
@@ -496,3 +499,4 @@ blockquote{background-color:#f0f0f0;border-left:4px solid #ddd;padding:6px 12px;
 #comment-form .form-meta .ipt{width:180px}
 #comment-form .content{width:54%;height:133px;resize:none;margin-right:18px}
 #comment-submit,#comment-no-reply{width:100px}
+.comment-item.admin:before,.comment-child.admin:before{content:" ";width:8px;height:8px;border-radius:2px;background-color:#d44950;position:absolute}

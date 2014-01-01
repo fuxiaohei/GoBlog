@@ -4,6 +4,8 @@ import (
 	"github.com/fuxiaohei/GoInk/Core"
 	"strconv"
 	"github.com/fuxiaohei/GoBlog/app/model"
+	"github.com/fuxiaohei/GoBlog/app/utils"
+	"strings"
 )
 
 func AdminComment(context *Core.Context) interface{} {
@@ -38,6 +40,37 @@ func AdminCommentStatusPost(context *Core.Context) interface {} {
 	model.ArticleM.CountComments()
 	context.Json(map[string]interface {}{
 		"res":true,
+	})
+	return nil
+}
+
+func AdminCommentReplyPost(context *Core.Context) interface {} {
+	pid := context.Int("pid")
+	pComment := model.CommentM.GetCommentById(pid)
+	if pComment == nil {
+		context.Json(map[string]interface {}{
+			"res":false,
+			"msg":"回复失败",
+		})
+		return nil
+	}
+	uid, _ := strconv.Atoi(context.Cookie("admin-user"))
+	user := model.UserM.GetUserById(uid)
+	data := context.Input()
+	c := new(model.Comment)
+	c.Author = user.Display
+	c.Email = user.Email
+	c.Site = user.Site
+	c.Content = strings.Replace(data["content"], "\n", "<br/>", -1)
+	c.ContentId = pComment.ContentId
+	c.Pid = pid
+	c.Avatar = utils.Gravatar(c.Email, "50")
+	c.UserId = user.Id
+	c.IsAdmin = true
+	c = model.CommentM.CreateComment(c)
+	context.Json(map[string]interface {}{
+		"res":true,
+		"comment":c,
 	})
 	return nil
 }

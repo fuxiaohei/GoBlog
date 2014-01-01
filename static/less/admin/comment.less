@@ -1,4 +1,5 @@
 @import "../common/mixin";
+@import "../common/ui";
 
 .comment-item {
   .avatar {
@@ -52,10 +53,41 @@
   .parent, .parent-invalid {
     margin-right: 8px;
   }
+  .comment-reply{
+    margin-left: 56px;
+    padding: 6px 12px;
+    background: @White3;
+    .reply-author{
+      margin-right: 12px;
+      font-weight: bold;
+    }
+  }
+  .content{
+    margin-left: 56px;
+  }
+}
+
+.comment-item.admin{
+  .author{
+    .msg.red;
+  }
 }
 
 #comment-list-container {
   > h5 {
     margin-bottom: 12px;
+  }
+}
+
+#comment-reply-form{
+  margin-top: 12px;
+  margin-left: 56px;
+    textarea{
+      width: 500px;
+      height: 120px;
+      margin-right: 12px;
+    }
+  button{
+    margin-right: 12px;
   }
 }
