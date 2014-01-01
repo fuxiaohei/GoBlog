@@ -49,14 +49,14 @@ func (this *Comment) Parent() *Comment {
 }
 
 type CommentModel struct {
-	comments   map[int]*Comment
+	commentsCache   map[int]*Comment
 	pagedCache map[string][]*Comment
 	pagerCache map[string]int
-	emailCount map[string]int
+	emailCountCache map[string]int
 }
 
 func (this *CommentModel) GetCommentById(id int) *Comment {
-	if this.comments[id] == nil {
+	if this.commentsCache[id] == nil {
 		sql := "SELECT * FROM blog_comment WHERE type = ? AND id = ?"
 		res, _ := app.Db.Query(sql, "comment", id)
 		c := new(Comment)
@@ -66,20 +66,13 @@ func (this *CommentModel) GetCommentById(id int) *Comment {
 		}
 		this.cacheComment(c)
 	}
-	return this.comments[id]
+	return this.commentsCache[id]
 }
 
-func (this *CommentModel) cacheComment(c *Comment) {
-	this.comments[c.Id] = c
-}
-
-func (this *CommentModel) nocacheComment(c *Comment) {
-	delete(this.comments, c.Id)
-}
-
-func (this *CommentModel) nocachePaged() {
-	this.pagedCache = make(map[string][]*Comment)
-	this.pagerCache = make(map[string]int)
+func (this *CommentModel) cacheComment(comments... *Comment) {
+	for _, c := range comments {
+		this.commentsCache[c.Id] = c
+	}
 }
 
 // get paged comments.
@@ -99,6 +92,7 @@ func (this *CommentModel) GetPaged(page, size int, onlySpam bool) ([]*Comment, *
 			comments := make([]*Comment, 0)
 			res.All(&comments)
 			this.pagedCache[key] = comments
+			this.cacheComment(comments...)
 		}
 	}
 	pagerKey := fmt.Sprintf("counter-spam-%t", onlySpam)
@@ -134,6 +128,7 @@ func (this *CommentModel) GetAllOfContent(contentId int, noDraft bool) []*Commen
 			comments := make([]*Comment, 0)
 			res.All(&comments)
 			this.pagedCache[key] = comments
+			this.cacheComment(comments...)
 		}
 	}
 	return this.pagedCache[key]
@@ -141,28 +136,33 @@ func (this *CommentModel) GetAllOfContent(contentId int, noDraft bool) []*Commen
 
 func (this *CommentModel) CreateComment(c *Comment) *Comment {
 	sql := "INSERT INTO blog_comment(author,email,site,avatar,create_time,content,content_id,user_id,pid,is_admin,type,status) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)"
-	c.CreateTime = utils.Now()
 	var status string
 	if c.IsAdmin {
 		status = "approved"
 	}else {
 		status = this.getEmailStatus(c.Email)
 	}
-	c.Status = status
-	res, _ := app.Db.Exec(sql, c.Author, c.Email, c.Site, c.Avatar, c.CreateTime, c.Content, c.ContentId, c.UserId, c.Pid, false, "comment", c.Status)
+	res, _ := app.Db.Exec(sql, c.Author, c.Email, c.Site, c.Avatar, utils.Now(), c.Content, c.ContentId, c.UserId, c.Pid, false, "comment", status)
+	this.Reset()
 	if res.LastInsertId < 1 {
 		return nil
 	}
-	c.Id = res.LastInsertId
-	this.nocachePaged()
-	return c
+	return this.GetCommentById(res.LastInsertId)
 }
 
 func (this *CommentModel) getEmailStatus(email string) string {
+	_, ok := this.emailCountCache[email]
+	if ok {
+		if this.emailCountCache[email] > 0 {
+			return "approved"
+		}
+		return "spam"
+	}
 	sql := "SELECT count(*) AS c FROM blog_comment WHERE email = ? AND type = ? AND status = ?"
 	res, _ := app.Db.Query(sql, email, "comment", "approved")
 	if len(res.Data) > 0 {
 		all, _ := strconv.Atoi(res.Data[0]["c"])
+		this.emailCountCache[email] = all
 		if all > 0 {
 			return "approved"
 		}
@@ -174,28 +174,30 @@ func (this *CommentModel) getEmailStatus(email string) string {
 func (this *CommentModel) DeleteComment(id int) {
 	sql := " DELETE FROM blog_comment WHERE id = ?"
 	app.Db.Exec(sql, id)
-	this.reset()
+	this.Reset()
 }
 
 func (this *CommentModel) DeleteCommentsInContent(contentId int) {
 	sql := "DELETE FROM blog_comment WHERE content_id = ?"
 	app.Db.Exec(sql, contentId)
-	this.reset()
+	this.Reset()
 }
 
 func (this *CommentModel) ChangeCommentStatus(id int, status string) {
 	sql := "UPDATE blog_comment SET status = ? WHERE id = ?"
 	app.Db.Exec(sql, status, id)
-	this.reset()
+	this.Reset()
 }
 
-func (this *CommentModel) reset() {
-	this.nocachePaged()
-	this.comments = make(map[int]*Comment)
+func (this *CommentModel) Reset() {
+	this.pagedCache = make(map[string][]*Comment)
+	this.pagerCache = make(map[string]int)
+	this.commentsCache = make(map[int]*Comment)
+	this.emailCountCache = make(map[string]int)
 }
 
 func NewCommentModel() *CommentModel {
 	c := new(CommentModel)
-	c.reset()
+	c.Reset()
 	return c
 }

@@ -22,43 +22,40 @@ type User struct {
 }
 
 type UserModel struct {
-	users      map[int]*User
-	loginIndex map[string]int
+	usersCache      map[int]*User
+	loginIndexCache map[string]int
 }
 
 // get all users.
 // its result is cached.
 func (this *UserModel) GetAllUser() map[int]*User {
-	if len(this.users) > 0 {
-		return this.users
+	if len(this.usersCache) > 0 {
+		return this.usersCache
 	}
 	sql := "SELECT * FROM blog_user"
 	result, _ := app.Db.Query(sql)
 	users := make([]*User, 0)
 	result.All(&users)
-	this.users = make(map[int]*User)
-	for _, u := range users {
-		this.users[u.Id] = u
-	}
-	return this.users
+	this.cacheUser(users...)
+	return this.usersCache
 }
 
 // generate an index for login/id pair.
 func (this *UserModel) generateLoginIndex() {
-	if len(this.users) < 1 {
+	if len(this.usersCache) < 1 {
 		return
 	}
-	this.loginIndex = make(map[string]int)
-	for _, u := range this.users {
-		this.loginIndex[u.Login] = u.Id
+	this.loginIndexCache = make(map[string]int)
+	for _, u := range this.usersCache {
+		this.loginIndexCache[u.Login] = u.Id
 	}
 }
 
 // get one user by id.
 // if no cached, query from db and cache it.
 func (this *UserModel) GetUserById(id int) *User {
-	if this.users[id] != nil {
-		return this.users[id]
+	if this.usersCache[id] != nil {
+		return this.usersCache[id]
 	}
 	sql := "SELECT * FROM blog_user WHERE id = ?"
 	res, _ := app.Db.Query(sql, id)
@@ -77,7 +74,7 @@ func (this *UserModel) GetUserById(id int) *User {
 // if no cached, query from db and cache it.
 func (this *UserModel) GetUserByLogin(login string) *User {
 	// get from login index map
-	id := this.loginIndex[login]
+	id := this.loginIndexCache[login]
 	if id > 0 {
 		return this.GetUserById(id)
 	}
@@ -97,22 +94,14 @@ func (this *UserModel) GetUserByLogin(login string) *User {
 
 // cache user struct.
 // put into map and login index map.
-func (this *UserModel) cacheUser(u *User) {
-	if u == nil {
-		return
+func (this *UserModel) cacheUser(users... *User) {
+	for _,u := range users{
+		if u == nil {
+			return
+		}
+		this.usersCache[u.Id] = u
+		this.loginIndexCache[u.Login] = u.Id
 	}
-	this.users[u.Id] = u
-	this.loginIndex[u.Login] = u.Id
-}
-
-// no cache user struct.
-// delete in map and index slice.
-func (this *UserModel) nocacheUser(u *User) {
-	if u == nil {
-		return
-	}
-	delete(this.users, u.Id)
-	delete(this.loginIndex, u.Login)
 }
 
 // save user profile.
@@ -120,10 +109,10 @@ func (this *UserModel) nocacheUser(u *User) {
 // save user data to db in routine.
 // return the updated user struct
 func (this *UserModel) SaveProfile(id int, login string, display string, email string, site string, avatar string) *User {
-	this.nocacheUser(this.GetUserById(id))
 	// save to db
 	sql := "UPDATE blog_user SET login = ?,display = ?,email = ?,site = ?,avatar = ? WHERE id = ?"
 	app.Db.Exec(sql, login, display, email, site, avatar, id)
+	this.Reset()
 	return this.GetUserById(id)
 }
 
@@ -140,12 +129,13 @@ func (this *UserModel) SavePassword(id int, old string, new string) error {
 	user.Password = utils.Sha1(new)
 	sql := "UPDATE blog_user SET password = ? WHERE id = ?"
 	app.Db.Exec(sql, user.Password, id)
+	this.Reset()
 	return nil
 }
 
-func (this *UserModel) reset() {
-	this.users = make(map[int]*User)
-	this.loginIndex = make(map[string]int)
+func (this *UserModel) Reset() {
+	this.usersCache = make(map[int]*User)
+	this.loginIndexCache = make(map[string]int)
 	this.GetAllUser()
 	this.generateLoginIndex()
 }
@@ -154,6 +144,6 @@ func (this *UserModel) reset() {
 // load all user data for caching.
 func NewUserModel() *UserModel {
 	userM := new(UserModel)
-	go userM.reset()
+	userM.Reset()
 	return userM
 }

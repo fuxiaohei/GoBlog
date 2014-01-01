@@ -9,11 +9,11 @@ import (
 
 func AdminCategory(context *Core.Context) interface{} {
 	context.Render("admin:admin/category.html", map[string]interface{}{
-		"Title":      "分类",
-		"IsMeta":     true,
-		"IsCategory": true,
-		"Categories": model.CategoryM.GetAll(),
-	})
+			"Title":      "分类",
+			"IsMeta":     true,
+			"IsCategory": true,
+			"Categories": model.CategoryM.GetAll(),
+		})
 	return nil
 }
 
@@ -24,11 +24,11 @@ func AdminCategoryEdit(context *Core.Context) interface{} {
 		return nil
 	}
 	context.Render("admin:admin/category_edit.html", map[string]interface{}{
-		"Title":      "分类",
-		"IsMeta":     true,
-		"IsCategory": true,
-		"Category":   model.CategoryM.GetCategoryById(cid),
-	})
+			"Title":      "分类",
+			"IsMeta":     true,
+			"IsCategory": true,
+			"Category":   model.CategoryM.GetCategoryById(cid),
+		})
 	return nil
 }
 
@@ -41,8 +41,8 @@ func AdminCategoryEditPost(context *Core.Context) interface{} {
 	data := context.Input()
 	// check slug exist
 	c := model.CategoryM.GetCategoryBySlug(data["slug"])
-	if c.Id != cid {
-		context.Redirect(context.Referer + "?err=1")
+	if c == nil || c.Id != cid {
+		context.Redirect(context.Referer+"?err=1")
 		return nil
 	}
 	model.CategoryM.SaveCategory(cid, data["name"], data["slug"], data["desc"])
@@ -53,10 +53,10 @@ func AdminCategoryEditPost(context *Core.Context) interface{} {
 
 func AdminCategoryNew(context *Core.Context) interface{} {
 	context.Render("admin:admin/category_new.html", map[string]interface{}{
-		"Title":      "分类",
-		"IsMeta":     true,
-		"IsCategory": true,
-	})
+			"Title":      "分类",
+			"IsMeta":     true,
+			"IsCategory": true,
+		})
 	return nil
 }
 
@@ -64,7 +64,7 @@ func AdminCategoryNewPost(context *Core.Context) interface{} {
 	data := context.Input()
 	c := model.CategoryM.GetCategoryBySlug(data["slug"])
 	if c != nil {
-		context.Redirect(context.Referer + "?err=1")
+		context.Redirect(context.Referer+"?err=1")
 		return nil
 	}
 	c = model.CategoryM.CreateCategory(data["name"], data["slug"], data["desc"])
@@ -82,6 +82,7 @@ func AdminCategoryDelete(context *Core.Context) interface{} {
 	category, _ := strconv.Atoi(data["category"])
 	move, _ := strconv.Atoi(data["move"])
 	model.CategoryM.DeleteCategory(category, move)
+	go model.ArticleM.Reset()
 	context.Redirect("/admin/category/?move=1")
 	app.Ink.Listener.EmitAll("mode.category.move", category, move)
 	return nil
