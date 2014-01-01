@@ -135,12 +135,14 @@ func ArticleCommentPost(context *Core.Context) interface{} {
 	c.Pid, _ = strconv.Atoi(data["pid"])
 	c.Avatar = utils.Gravatar(c.Email, "50")
 	c.UserId = 0
+	c.IsAdmin = false
 	c = model.CommentM.CreateComment(c)
 	if c != nil {
 		context.Json(map[string]interface{}{
 			"res":     true,
 			"comment": c,
 		})
+		model.ArticleM.CountComments()
 		return nil
 	}
 	context.Json(map[string]interface{}{

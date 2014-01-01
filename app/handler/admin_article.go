@@ -18,19 +18,19 @@ func AdminArticle(context *Core.Context) interface{} {
 	}
 	articles, pager := model.ArticleM.GetPaged(page, 10, false)
 	context.Render("admin:admin/article.html", map[string]interface{}{
-		"Title":     "文章",
-		"IsArticle": true,
-		"Articles":  articles,
-		"Pager":     pager,
-	})
+			"Title":     "文章",
+			"IsArticle": true,
+			"Articles":  articles,
+			"Pager":     pager,
+		})
 	return nil
 }
 
 func AdminArticleNew(context *Core.Context) interface{} {
 	context.Render("admin:admin/article_new.html", map[string]interface{}{
-		"Title":      "写文章",
-		"Categories": model.CategoryM.GetAll(),
-	})
+			"Title":      "写文章",
+			"Categories": model.CategoryM.GetAll(),
+		})
 	return nil
 }
 
@@ -84,11 +84,11 @@ func AdminArticleEdit(context *Core.Context) interface{} {
 		return nil
 	}
 	context.Render("admin:admin/article_edit.html", map[string]interface{}{
-		"Title":      "修改文章",
-		"IsArticle":  true,
-		"Article":    article,
-		"Categories": model.CategoryM.GetAll(),
-	})
+			"Title":      "修改文章",
+			"IsArticle":  true,
+			"Article":    article,
+			"Categories": model.CategoryM.GetAll(),
+		})
 	return nil
 }
 
@@ -131,5 +131,22 @@ func AdminArticleEditPost(context *Core.Context) interface{} {
 		"res": false,
 		"msg": "保存失败",
 	})
+	return nil
+}
+
+func AdminArticleDelete(context *Core.Context) interface {} {
+	id, _ := strconv.Atoi(context.Param(3))
+	article := model.ArticleM.GetArticleById(id)
+	if article == nil {
+		context.Redirect("/admin/article/")
+		return nil
+	}
+	// delete comments
+	model.CommentM.DeleteCommentsInContent(article.Id)
+	// delete article
+	model.ArticleM.DeleteArticle(article.Id)
+	// update category counts
+	model.CategoryM.CountArticle()
+	context.Redirect(context.Referer)
 	return nil
 }

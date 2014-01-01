@@ -481,9 +481,11 @@ blockquote{background-color:#f0f0f0;border-left:4px solid #ddd;padding:6px 12px;
 .comment-item .author{margin-left:0}
 .comment-item .author-link{color:#f0f0f0;margin:0 4px}
 .comment-item .meta{margin-bottom:6px}.comment-item .meta>*{margin-right:12px}
-.comment-item .create-time{font-family:Verdana,Tahoma,'微软雅黑','宋体',sans-serif;color:#888}
+.comment-item .create-time,.comment-item .email{font-family:Verdana,Tahoma,'微软雅黑','宋体',sans-serif;color:#888}
 .comment-item .relate-content{color:#666}
 .comment-item .content-link{margin:0 4px;color:#666}
 .comment-item .opt{opacity:0;font-size:12px}
 .comment-item:hover .opt{opacity:1}
+.comment-item .parent{font-size:12px;color:#888}
+.comment-item .parent,.comment-item .parent-invalid{margin-right:8px}
 #comment-list-container>h5{margin-bottom:12px}

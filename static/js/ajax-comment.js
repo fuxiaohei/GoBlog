@@ -41,7 +41,12 @@ Comment.InitFormEvent = function () {
                     html = juicer($('#comment-child-template').html(), c);
                     var $html = $(html);
                     $html.find(".parent").remove();
-                    $('#comment-' + c.Pid).find(">section").after($html);
+                    var $p = $('#comment-' + c.Pid);
+                    if($p.hasClass("comment-item")){
+                        $p.find(">p.meta").after($html);
+                    }else{
+                        $p.find(">section").after($html);
+                    }
                 } else {
                     html = juicer($('#comment-item-template').html(), c);
                     $('#comment-list').append(html);

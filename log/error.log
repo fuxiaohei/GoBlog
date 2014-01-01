@@ -595,3 +595,39 @@ C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/proc.
 2013-12-31T12:16:14+08:00 [LOG] POST 404 /article/3/template-engine-class.html -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER
 2013-12-31T12:16:39+08:00 [LOG] POST 404 /article/3/template-engine-class.html -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER
 2013-12-31T12:17:40+08:00 [LOG] POST 404 /article/3/template-engine-class.html -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER
+2014-01-01T11:35:32+08:00 [ERROR] 503 /admin/comment/ -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER template: comment.html:6: unexpected "}" in operand; missing space? D:/GOPATH/src/github.com/fuxiaohei/GoInk/app.go:70 (0x433ea7)
+	com/fuxiaohei/GoInk.func.002: this.Logger.Error("[ERROR]", http.StatusServiceUnavailable, context.Url, "--", context.Ip, context.UserAgent, e, string(debug.Stack()))
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/panic.c:248 (0x411a18)
+D:/GOPATH/src/github.com/fuxiaohei/GoInk/Core/context.go:196 (0x4733c9)
+	com/fuxiaohei/GoInk/Core.(*Context).Render: panic(e)
+D:/GOPATH/src/github.com/fuxiaohei/GoBlog/app/handler/admin_comment.go:23 (0x42eccb)
+	com/fuxiaohei/GoBlog/app/handler.AdminComment: })
+D:/GOPATH/src/github.com/fuxiaohei/GoInk/app.go:138 (0x434e33)
+	com/fuxiaohei/GoInk.func.004: result := fn(context)
+D:/GOPATH/src/github.com/fuxiaohei/GoInk/app.go:86 (0x434a10)
+	com/fuxiaohei/GoInk.func.003: this.dispatchFunc(context)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1220 (0x496c6d)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1496 (0x497cef)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1597 (0x498312)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1167 (0x496960)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/proc.c:1394 (0x415aa0)
+
+2014-01-01T12:02:37+08:00 [ERROR] 503 /admin/comment/page/1 -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER template: comment.html:9:89: executing "comment.html" at <.CommentNode>: CommentNode is not a field of struct type *model.Comment D:/GOPATH/src/github.com/fuxiaohei/GoInk/app.go:70 (0x4340c7)
+	com/fuxiaohei/GoInk.func.002: this.Logger.Error("[ERROR]", http.StatusServiceUnavailable, context.Url, "--", context.Ip, context.UserAgent, e, string(debug.Stack()))
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/panic.c:248 (0x411a18)
+D:/GOPATH/src/github.com/fuxiaohei/GoInk/Core/context.go:196 (0x4735e9)
+	com/fuxiaohei/GoInk/Core.(*Context).Render: panic(e)
+D:/GOPATH/src/github.com/fuxiaohei/GoBlog/app/handler/admin_comment.go:23 (0x42eeeb)
+	com/fuxiaohei/GoBlog/app/handler.AdminComment: })
+D:/GOPATH/src/github.com/fuxiaohei/GoInk/app.go:138 (0x435053)
+	com/fuxiaohei/GoInk.func.004: result := fn(context)
+D:/GOPATH/src/github.com/fuxiaohei/GoInk/app.go:86 (0x434c30)
+	com/fuxiaohei/GoInk.func.003: this.dispatchFunc(context)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1220 (0x496e8d)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1496 (0x497f0f)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1597 (0x498532)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/net/http/server.go:1167 (0x496b80)
+C:/Users/ADMINI~1/AppData/Local/Temp/2/bindist550409343/go/src/pkg/runtime/proc.c:1394 (0x415aa0)
+
+2014-01-01T14:22:16+08:00 [LOG] POST 404 /admin/comment/status -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER
+2014-01-01T14:25:17+08:00 [LOG] POST 404 /admin/comment/status -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER

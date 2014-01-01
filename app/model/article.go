@@ -86,6 +86,9 @@ func (this *ArticleModel) GetArticleBySlug(slug string) *Article {
 
 // get one article by given id.
 func (this *ArticleModel) GetArticleById(id int) *Article {
+	if id < 1 {
+		return nil
+	}
 	slug := this.idIndex[id]
 	if slug != "" {
 		return this.GetArticleBySlug(slug)
@@ -113,7 +116,7 @@ func (this *ArticleModel) GetPaged(page, size int, noDraft bool) ([]*Article, *P
 	if this.pagedCache[key] == nil {
 		sql := "SELECT * FROM blog_content WHERE type = ?"
 		args := []interface{}{"article"}
-		limit := (page - 1) * size
+		limit := (page-1) * size
 		if noDraft {
 			sql += " AND status != ?"
 			args = append(args, "draft")
@@ -149,7 +152,7 @@ func (this *ArticleModel) GetCategoryPaged(categoryId, page, size int, noDraft b
 	if this.pagedCache[key] == nil {
 		sql := "SELECT * FROM blog_content WHERE type = ? AND category_id = ?"
 		args := []interface{}{"article", categoryId}
-		limit := (page - 1) * size
+		limit := (page-1) * size
 		if noDraft {
 			sql += " AND status != ?"
 			args = append(args, "draft")
@@ -225,6 +228,15 @@ func (this *ArticleModel) CreateArticle(article *Article) *Article {
 	return nil
 }
 
+func (this *ArticleModel) DeleteArticle(id int) {
+	article := this.GetArticleById(id)
+	this.nocacheArticle(article)
+	// delete article
+	sql := "DELETE FROM blog_content WHERE id = ?"
+	app.Db.Exec(sql, id)
+	this.nocachePaged()
+}
+
 func (this *ArticleModel) IncreaseView(articleId int) {
 	article := this.GetArticleById(articleId)
 	if article == nil {
@@ -243,17 +255,27 @@ func (this *ArticleModel) startViewTimer() {
 		this.viewIndex = make(map[int]int)
 		fmt.Println("[Model.Article] sync article views")
 	}
-	time.AfterFunc(time.Duration(1)*time.Minute, func() {
-		this.startViewTimer()
-	})
+	time.AfterFunc(time.Duration(1) * time.Minute, func() {
+			this.startViewTimer()
+		})
+}
+
+func (this *ArticleModel) CountComments() {
+	sql := "UPDATE blog_content SET comments = ( SELECT count(*) FROM blog_comment WHERE blog_comment.content_id = blog_content.id AND blog_comment.status = 'approved' )"
+	app.Db.Exec(sql)
+	this.reset()
+}
+
+func (this *ArticleModel) reset() {
+	this.article = make(map[string]*Article)
+	this.idIndex = make(map[int]string)
+	this.viewIndex = make(map[int]int)
+	this.nocachePaged()
 }
 
 func NewArticleModel() *ArticleModel {
 	articleM := new(ArticleModel)
-	articleM.article = make(map[string]*Article)
-	articleM.idIndex = make(map[int]string)
-	articleM.viewIndex = make(map[int]int)
-	articleM.nocachePaged()
+	articleM.reset()
 	go articleM.startViewTimer()
 	return articleM
 }
