@@ -50,6 +50,9 @@ func Init() {
 	app.Ink.Router.Post("/admin/comment/status", AdminCommentStatusPost)
 	app.Ink.Router.Post("/admin/comment/delete", AdminCommentDeletePost)
 
+	// admin setting handler
+	app.Ink.Router.Get("/admin/setting", AdminSetting)
+
 	// article handler
 	app.Ink.Router.Get("/", Article)
 	app.Ink.Router.Get("/article", Article)

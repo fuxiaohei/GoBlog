@@ -1,5 +1,7 @@
 package model
 
+import "github.com/fuxiaohei/GoBlog/app"
+
 var (
 	ArticleM  *ArticleModel
 	CategoryM *CategoryModel
@@ -7,6 +9,7 @@ var (
 	UserM     *UserModel
 	SessionM  *SessionModel
 	CommentM  *CommentModel
+	SettingM *SettingModel
 )
 
 // init models
@@ -17,4 +20,8 @@ func Init() {
 	UserM = NewUserModel()
 	SessionM = NewSessionModel()
 	CommentM = NewCommentModel()
+	SettingM = NewSettingModel()
+
+	// do some more
+	app.Ink.View.NewFunc("Setting", SettingM.GetItem)
 }

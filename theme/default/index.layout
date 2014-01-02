@@ -4,8 +4,10 @@
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>GoBlog</title>
+    <title>{{Setting "blogTitle"}}</title>
     <link rel="shortcut icon" href="/static/favicon.ico">
+    <meta name="keywords" content="{{Setting "blogKeywords"}}"/>
+    <meta name="description" content="{{Setting "blogDescription"}}"/>
     <link rel="stylesheet" href="/static/css/style.css"/>
     <script src="/static/js/jquery-2.0.3.min.js"></script>
 </head>
@@ -19,8 +21,8 @@
     </div>
     <div class="main clear">
         <div id="site-title" class="left">
-            <h1><a href="/">GoBlog</a></h1>
-            <span class="sub-title">Go博客程序</span>
+            <h1><a href="/">{{Setting "blogTitle"}}</a></h1>
+            <span class="sub-title">{{Setting "blogSubTitle"}}</span>
         </div>
         <nav id="nav" class="right">
             <ul>

@@ -8,6 +8,18 @@ import (
 	"strings"
 )
 
+func getListSize(key string, def int) int {
+	size, _ := strconv.Atoi(model.SettingM.GetItem(key))
+	if size < 1 {
+		size = def
+		model.SettingM.SaveSetting(map[string]string{
+			"key":key,
+			"value":strconv.Itoa(def),
+		})
+	}
+	return size
+}
+
 func Article(context *Core.Context) interface{} {
 	if context.Ext == ".html" && context.Param(2) != "" {
 		if context.IsAjax {
@@ -23,7 +35,7 @@ func Article(context *Core.Context) interface{} {
 			page = 1
 		}
 	}
-	article, pager := model.ArticleM.GetPaged(page, 4, true)
+	article, pager := model.ArticleM.GetPaged(page, getListSize("blogListSize", 4), true)
 	context.Render("theme:default/article.html", map[string]interface{}{
 			"Articles":    article,
 			"Pager":       pager,
@@ -94,7 +106,7 @@ func ArticleCategory(context *Core.Context) interface{} {
 			page = 1
 		}
 	}
-	article, pager := model.ArticleM.GetCategoryPaged(category.Id, page, 4, true)
+	article, pager := model.ArticleM.GetCategoryPaged(category.Id, page, getListSize("blogListSize", 4), true)
 	context.Render("theme:default/article.html", map[string]interface{}{
 			"Articles":    article,
 			"Pager":       pager,
@@ -107,9 +119,9 @@ func ArticleCategory(context *Core.Context) interface{} {
 
 func articleSide() map[string]interface{} {
 	return map[string]interface{}{
-		"Categories": model.CategoryM.GetCountsDesc(3600),
-		"Popular":    model.ArticleM.GetPopular(4),
-		"Comments":model.CommentM.GetRecentComments(4),
+		"Categories": model.CategoryM.GetCountsDesc(),
+		"Popular":    model.ArticleM.GetPopular(getListSize("blogPopularSize", 4)),
+		"Comments":model.CommentM.GetRecentComments(getListSize("recentCommentSize", 4)),
 	}
 }
 

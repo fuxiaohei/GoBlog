@@ -46,7 +46,7 @@ func (this *CategoryModel) GetAll() []*Category {
 // the expire time means how long to cache the ordered result.
 // if the last create time + expire time is less than now, create new result.
 // so that it is afford to be affected when counts changed.
-func (this *CategoryModel) GetCountsDesc(expire int64) []*Category {
+func (this *CategoryModel) GetCountsDesc() []*Category {
 	if len(this.countsDescResult) > 0 {
 		return this.countsDescResult
 	}
