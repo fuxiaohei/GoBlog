@@ -14,6 +14,40 @@ a{text-decoration:none;color:#428bca}a:hover{color:#2a6496}
 .block{display:block}
 .abs{position:absolute}
 .rel{position:relative}
+.main{width:1170px}
+.main960{width:960px}
+.main,.main960{margin-left:auto;margin-right:auto}
+h1{font-size:30px;line-height:60px}
+h2{font-size:24px;line-height:48px}
+h3{font-size:21px;line-height:42px}
+h4{font-size:18px;line-height:36px}
+h5{font-size:16px;line-height:32px}
+h6{font-size:14px;line-height:28px}
+.form .item{margin-bottom:1.5em}
+.form .full{width:100%;box-sizing:border-box}
+.ipt,.select{padding:8px 12px;border:1px solid #bbb;outline:none;background-color:#fff;border-radius:2px}.ipt:focus,.select:focus{border-color:#428bca}
+.btn{height:35px;padding:0 1.5em;background-color:#428bca;color:#fafafa;border:none;line-height:35px;border-radius:2px}.btn:hover{background-color:#5697d0;cursor:pointer}
+.btn.red{background-color:#d44950}.btn.red:hover{background-color:#d95e64}
+.btn.green{background-color:#5cb85c}.btn.green:hover{background-color:#6ec06e}
+.btn.full{text-align:center}
+a.btn:hover{color:#fafafa}
+.chk{margin-top:5px}
+.chk-text{margin-left:1em}
+.msg{padding:2px 6px;margin:0 3px;border-radius:2px}
+.msg.blue{background-color:#428bca;color:#fafafa}
+.msg.red{background-color:#d44950;color:#fafafa}
+.msg.green{background-color:#5cb85c;color:#fafafa}
+.msg.gray{background-color:#888;color:#fafafa}
+.fa{margin-right:6px}
+.table th,.table td{padding:6px 0}
+.table thead tr{border-bottom:1px solid #ccc}
+.table th{text-align:left}
+.table tbody tr{border-bottom:1px dashed #ddd}
+.pager .item{display:inline-block;margin-right:12px}.pager .item a{padding:2px 6px;margin:0 3px;border-radius:2px;background-color:#428bca;color:#fafafa;margin:0}
+.pager .item.current a{background-color:#d44950;color:#fafafa}
+pre,code{font-family:Consolas,"Courier New",Arial}
+pre{margin:6px 0}
+blockquote{background-color:#f0f0f0;border-left:4px solid #ddd;padding:6px 12px;margin:6px 0}
 @font-face{font-family:'FontAwesome';src:url('../fonts/fontawesome-webfont.eot?v=4.0.3');src:url('../fonts/fontawesome-webfont.eot?#iefix&v=4.0.3') format('embedded-opentype'),url('../fonts/fontawesome-webfont.woff?v=4.0.3') format('woff'),url('../fonts/fontawesome-webfont.ttf?v=4.0.3') format('truetype'),url('../fonts/fontawesome-webfont.svg?v=4.0.3#fontawesomeregular') format('svg');font-weight:normal;font-style:normal}.fa{display:inline-block;font-family:FontAwesome;font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 .fa-lg{font-size:1.3333333333333333em;line-height:.75em;vertical-align:-15%}
 .fa-2x{font-size:2em}
@@ -443,40 +477,6 @@ a{text-decoration:none;color:#428bca}a:hover{color:#2a6496}
 #article-table .opt{width:168px}#article-table .opt a{opacity:0;margin-right:8px}
 #article-table .msg.draft{margin-left:8px}
 #article-pager{margin-top:18px}
-.main{width:1170px}
-.main960{width:960px}
-.main,.main960{margin-left:auto;margin-right:auto}
-h1{font-size:30px;line-height:60px}
-h2{font-size:24px;line-height:48px}
-h3{font-size:21px;line-height:42px}
-h4{font-size:18px;line-height:36px}
-h5{font-size:16px;line-height:32px}
-h6{font-size:14px;line-height:28px}
-.form .item{margin-bottom:1.5em}
-.form .full{width:100%;box-sizing:border-box}
-.ipt,.select{padding:8px 12px;border:1px solid #bbb;outline:none;background-color:#fff;border-radius:2px}.ipt:focus,.select:focus{border-color:#428bca}
-.btn{height:35px;padding:0 1.5em;background-color:#428bca;color:#fafafa;border:none;line-height:35px;border-radius:2px}.btn:hover{background-color:#5697d0;cursor:pointer}
-.btn.red{background-color:#d44950}.btn.red:hover{background-color:#d95e64}
-.btn.green{background-color:#5cb85c}.btn.green:hover{background-color:#6ec06e}
-.btn.full{text-align:center}
-a.btn:hover{color:#fafafa}
-.chk{margin-top:5px}
-.chk-text{margin-left:1em}
-.msg{padding:2px 6px;margin:0 3px;border-radius:2px}
-.msg.blue{background-color:#428bca;color:#fafafa}
-.msg.red{background-color:#d44950;color:#fafafa}
-.msg.green{background-color:#5cb85c;color:#fafafa}
-.msg.gray{background-color:#888;color:#fafafa}
-.fa{margin-right:6px}
-.table th,.table td{padding:6px 0}
-.table thead tr{border-bottom:1px solid #ccc}
-.table th{text-align:left}
-.table tbody tr{border-bottom:1px dashed #ddd}
-.pager .item{display:inline-block;margin-right:12px}.pager .item a{padding:2px 6px;margin:0 3px;border-radius:2px;background-color:#428bca;color:#fafafa;margin:0}
-.pager .item.current a{background-color:#d44950;color:#fafafa}
-pre,code{font-family:Consolas,"Courier New",Arial}
-pre{margin:6px 0}
-blockquote{background-color:#f0f0f0;border-left:4px solid #ddd;padding:6px 12px;margin:6px 0}
 .comment-item{margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #ddd}.comment-item .avatar{width:38px;height:38px;border:1px solid #ccc;padding:2px;background:#fff;margin-right:12px}
 .comment-item .author{margin-left:0}
 .comment-item .author-link{color:#f0f0f0;margin:0 4px}
@@ -494,3 +494,6 @@ blockquote{background-color:#f0f0f0;border-left:4px solid #ddd;padding:6px 12px;
 #comment-list-container>h5{margin-bottom:12px}
 #comment-reply-form{margin-top:12px;margin-left:56px}#comment-reply-form textarea{width:500px;height:120px;margin-right:12px}
 #comment-reply-form button{margin-right:12px}
+#setting-form{width:600px;margin:auto}#setting-form label{width:5em;margin-right:2em;display:inline-block;font-weight:bold}
+#setting-form input.ipt{width:450px}
+#setting-form input.ipt.number{width:55px;margin-right:20px}

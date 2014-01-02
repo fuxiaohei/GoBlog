@@ -2,7 +2,6 @@ package model
 
 import (
 	"github.com/fuxiaohei/GoBlog/app"
-	"fmt"
 )
 
 type SettingModel struct {
@@ -29,12 +28,12 @@ func (this *SettingModel) cacheSetting(settings... map[string]string) {
 }
 
 func (this *SettingModel) SaveSetting(settings... map[string]string) {
-	sqlUpdate := "UPDATE blog_setting SET key = ? AND value = ?"
+	sqlUpdate := "UPDATE blog_setting SET value = ? WHERE key = ?"
 	sqlInsert := "INSERT INTO blog_setting(key,value) VALUES(?,?)"
 	for _, s := range settings {
 		_, ok := this.settingCache[s["key"]]
 		if ok {
-			app.Db.Exec(sqlUpdate, s["key"], s["value"])
+			app.Db.Exec(sqlUpdate, s["value"], s["key"])
 		}else {
 			app.Db.Exec(sqlInsert, s["key"], s["value"])
 		}
@@ -49,7 +48,6 @@ func (this *SettingModel) GetItem(key string) string {
 func (this *SettingModel) Reset() {
 	this.settingCache = make(map[string]string)
 	this.GetAll()
-	fmt.Println(this.settingCache)
 }
 
 func NewSettingModel() *SettingModel {

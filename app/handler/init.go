@@ -52,6 +52,7 @@ func Init() {
 
 	// admin setting handler
 	app.Ink.Router.Get("/admin/setting", AdminSetting)
+	app.Ink.Router.Post("/admin/setting", AdminSettingPost)
 
 	// article handler
 	app.Ink.Router.Get("/", Article)
