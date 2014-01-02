@@ -459,7 +459,7 @@ blockquote{background-color:#f0f0f0;border-left:4px solid #ddd;padding:6px 12px;
 .article{padding-bottom:12px;border-bottom:1px solid #ccc;margin-bottom:18px}.article .prefix{border-left:4px solid #428bca;margin-right:18px;height:30px;margin-top:8px}
 .article .comment{font-family:Verdana,Tahoma,'微软雅黑','宋体',sans-serif;margin-top:8px;margin-right:18px}.article .comment .fa{margin-right:4px}
 .article .publish{font-size:21px;color:#ddd;font-family:Verdana,Tahoma,'微软雅黑','宋体',sans-serif;margin-top:8px}
-.article .summary{line-height:30px;margin:8px 0}
+.article .summary{margin:8px 0}
 .article .aside span{margin-right:18px;color:#888}.article .aside span a{color:#888}.article .aside span a:hover{color:#398439}
 .article .content.md h1,.article .summary.md h1{font-size:1.6em}
 .article .content.md h2,.article .summary.md h2{font-size:1.4em}
