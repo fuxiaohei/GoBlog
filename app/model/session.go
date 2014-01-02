@@ -1,10 +1,10 @@
 package model
 
 import (
-	"github.com/fuxiaohei/GoBlog/app"
-	"time"
-	"github.com/fuxiaohei/GoBlog/app/utils"
 	"fmt"
+	"github.com/fuxiaohei/GoBlog/app"
+	"github.com/fuxiaohei/GoBlog/app/utils"
+	"time"
 )
 
 type Session struct {
@@ -89,7 +89,7 @@ func (this *SessionModel) Recycle() {
 	}
 }
 
-func (this *SessionModel) reset() {
+func (this *SessionModel) Reset() {
 	this.sessions = make(map[string]*Session)
 	sessions := this.GetAvailableSessions()
 	this.sessions = make(map[string]*Session)
@@ -101,8 +101,6 @@ func (this *SessionModel) reset() {
 // create new session model.
 func NewSessionModel() *SessionModel {
 	s := new(SessionModel)
-	go s.reset()
+	s.Reset()
 	return s
 }
-
-

@@ -42,9 +42,21 @@ func Init() {
 	app.Ink.Router.Post("/admin/article/new", AdminArticleNewPost)
 	app.Ink.Router.Get("/admin/article/edit", AdminArticleEdit)
 	app.Ink.Router.Post("/admin/article/edit", AdminArticleEditPost)
+	app.Ink.Router.Get("/admin/article/delete", AdminArticleDelete)
+
+	// admin comment handler
+	app.Ink.Router.Get("/admin/comment", AdminComment)
+	app.Ink.Router.Post("/admin/comment", AdminCommentReplyPost)
+	app.Ink.Router.Post("/admin/comment/status", AdminCommentStatusPost)
+	app.Ink.Router.Post("/admin/comment/delete", AdminCommentDeletePost)
+
+	// admin setting handler
+	app.Ink.Router.Get("/admin/setting", AdminSetting)
+	app.Ink.Router.Post("/admin/setting", AdminSettingPost)
 
 	// article handler
 	app.Ink.Router.Get("/", Article)
 	app.Ink.Router.Get("/article", Article)
+	app.Ink.Router.Post("/article", ArticleCommentPost)
 	app.Ink.Router.Get("/category", ArticleCategory)
 }

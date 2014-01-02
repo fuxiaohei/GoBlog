@@ -1,25 +1,25 @@
 package handler
 
 import (
-	"github.com/fuxiaohei/GoInk/Core"
-	"strconv"
+	"github.com/fuxiaohei/GoBlog/app"
 	"github.com/fuxiaohei/GoBlog/app/model"
 	"github.com/fuxiaohei/GoBlog/app/utils"
-	"github.com/fuxiaohei/GoBlog/app"
+	"github.com/fuxiaohei/GoInk/Core"
+	"strconv"
 )
 
-func AdminProfile(context *Core.Context) interface {} {
+func AdminProfile(context *Core.Context) interface{} {
 	uid, _ := strconv.Atoi(context.Cookie("admin-user"))
-	context.Render("admin:admin/profile.html", map[string]interface {}{
-			"IsProfile":true,
-			"User":model.UserM.GetUserById(uid),
-			"Title":"个人资料",
-			"Update":context.String("update"),
-		})
+	context.Render("admin:admin/profile.html", map[string]interface{}{
+		"IsProfile": true,
+		"User":      model.UserM.GetUserById(uid),
+		"Title":     "个人资料",
+		"Update":    context.String("update"),
+	})
 	return nil
 }
 
-func AdminProfilePost(context *Core.Context) interface {} {
+func AdminProfilePost(context *Core.Context) interface{} {
 	data := context.Input()
 	uid, _ := strconv.Atoi(context.Cookie("admin-user"))
 	model.UserM.SaveProfile(uid, data["login"], data["display"], data["email"], data["site"], utils.Gravatar(data["email"], "180"))
@@ -28,18 +28,18 @@ func AdminProfilePost(context *Core.Context) interface {} {
 	return nil
 }
 
-func AdminPassword(context *Core.Context) interface {} {
-	context.Render("admin:admin/password.html", map[string]interface {}{
-			"IsProfile":true,
-			"IsPasswprd":true,
-			"Title":"修改密码",
-			"Update":context.String("update"),
-			"Error":context.String("error"),
-		})
+func AdminPassword(context *Core.Context) interface{} {
+	context.Render("admin:admin/password.html", map[string]interface{}{
+		"IsProfile":  true,
+		"IsPasswprd": true,
+		"Title":      "修改密码",
+		"Update":     context.String("update"),
+		"Error":      context.String("error"),
+	})
 	return nil
 }
 
-func AdminPasswordPost(context *Core.Context) interface {} {
+func AdminPasswordPost(context *Core.Context) interface{} {
 	data := context.Input()
 	if data["new"] != data["confirm"] {
 		context.Redirect("/admin/password?error=1")

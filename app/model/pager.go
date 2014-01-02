@@ -17,15 +17,15 @@ func newPager(page, size, total int) *Pager {
 	p.Current = page
 	p.Size = size
 	p.Total = total
-	p.Pages = total/size
+	p.Pages = total / size
 	if total%size > 0 {
-		p.Pages +=1
+		p.Pages += 1
 	}
 	p.PageSlice = make([]int, p.Pages)
 	for i := 1; i <= p.Pages; i++ {
 		p.PageSlice[i-1] = i
 	}
-	p.Begin = (page-1) * size
+	p.Begin = (page - 1) * size
 	if p.Begin < 1 {
 		p.Begin = 1
 	}

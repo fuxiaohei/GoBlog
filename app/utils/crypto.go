@@ -1,9 +1,9 @@
 package utils
 
 import (
+	"crypto/sha1"
 	"fmt"
 	"io"
-	"crypto/sha1"
 )
 
 func Sha1(raw string) string {

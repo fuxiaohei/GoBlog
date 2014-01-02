@@ -50,32 +50,6 @@
 <script src="/static/js/prettify/prettify.js"></script>
 <script>
     $(document).ready(function () {
-        $("#content").markdown({
-            autofocus: false,
-            savable: false,
-            onPreview: function (e) {
-                var content = marked(e.getContent(), {
-                    breaks: true
-                });
-                if (content.indexOf("</pre>") >= 1) {
-                    setTimeout(function () {
-                        $(".md-preview pre").addClass("prettyprint").addClass("linenums");
-                        prettyPrint();
-                    }, 200);
-                }
-                return content;
-            }
-        }).autosize({"append": "\n"});
-        $('#article-form').ajaxForm({
-            dataType: "json",
-            success: function (json) {
-                if(json.res){
-                    alert("保存完成");
-                    window.location.href = "/admin/article/";
-                }else{
-                    alert(json.msg);
-                }
-            }
-        })
+        initArticleForm();
     });
 </script>

@@ -1,10 +1,10 @@
 package app
 
 import (
+	"github.com/fuxiaohei/GoBlog/app/utils"
 	"github.com/fuxiaohei/GoInk"
 	GoInkDb "github.com/fuxiaohei/GoInk/Db"
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/fuxiaohei/GoBlog/app/utils"
 	"os"
 )
 
@@ -35,4 +35,5 @@ func Init() {
 	Ink.View.NewFunc("DateString", utils.DateString)
 	Ink.View.NewFunc("DateTime", utils.DateTime)
 	Ink.View.NewFunc("Now", utils.Now)
+	Ink.View.NewFunc("Html2str", utils.Html2str)
 }

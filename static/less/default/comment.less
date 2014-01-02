@@ -8,6 +8,11 @@
 }
 
 .comment-item {
+  margin-bottom: 18px;
+  >#comment-form{
+    margin-left: 62px;
+    margin-top: 18px;
+  }
   .avatar {
     width: 44px;
     height: 44px;
@@ -18,7 +23,6 @@
     margin-right: 12px;
   }
   .meta {
-    margin-top: 6px;
     padding-top: 6px;
     border-top: 1px solid @Gray3;
     margin-left: 62px;
@@ -30,10 +34,9 @@
       .reply {
         display: inline !important;
       }
-      .author{
-        .msg;
-        .msg.blue;
-      }
+    }
+    .author{
+      margin-left: 0;
     }
   }
   .publish {
@@ -42,27 +45,42 @@
   .reply{
     color: @Black3;
   }
+  .author{
+    .msg;
+    .msg.blue;
+  }
+  .content{
+    margin-left: 62px;
+  }
 }
 
 .comment-child{
-  margin-top: 8px;
+  >#comment-form{
+    margin-top: 18px;
+    textarea{
+      margin-bottom: 12px;
+    }
+    .btn{
+      margin-right: 12px;
+    }
+  }
+  margin-top: 12px;
   &:hover{
-    .reply{
+    > .reply{
       opacity: 1;
     }
   }
   .avatar{
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     background-color: @White0;
     border: 1px solid @Gray2;
     border-radius: 4px;
     padding: 1px;
     margin-right: 12px;
-    margin-top: 4px;
   }
   .parent{
-    margin-right: 12px;
+    margin-right: 8px;
     color: @Black2;
   }
   margin-left: 60px;
@@ -72,5 +90,56 @@
     color: @Black3;
     opacity: 0;
     font-size: 12px;
+  }
+  .comment-child{
+    margin-left: 46px;
+  }
+  .spam{
+    margin-left: 12px;
+  }
+  .content{
+    min-height: 34px;
+  }
+}
+
+
+#comment-list{
+  margin-bottom: 24px;
+}
+
+#comment-form{
+  .form-meta{
+    margin-right: 24px;
+    .fa{
+      display: inline-block;
+      font-size: 18px;
+      width: 18px;
+      text-align: center;
+      color: @Black2;
+    }
+    .ipt{
+      width: 180px;
+    }
+  }
+  .content{
+    width: 54%;
+    height: 133px;
+    resize: none;
+    margin-right: 18px;
+  }
+}
+
+#comment-submit,#comment-no-reply{
+  width: 100px;
+}
+
+.comment-item.admin,.comment-child.admin{
+  &:before{
+    content:" ";
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background-color: @Red1;
+    position: absolute;
   }
 }

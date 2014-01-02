@@ -12,7 +12,7 @@ type Tag struct {
 }
 
 type TagModel struct {
-	tags map[string]*Tag
+	tags    map[string]*Tag
 	idIndex map[int]string
 }
 
@@ -127,6 +127,6 @@ func (this *TagModel) reset() {
 // create new tag model.
 func NewTagModel() *TagModel {
 	t := new(TagModel)
- 	go t.reset()
+	go t.reset()
 	return t
 }

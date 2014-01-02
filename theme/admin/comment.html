@@ -1,0 +1,35 @@
+<div id="comment-list-container" class="main960">
+    <h5>所有评论</h5>{{range .Comments}}
+    <div class="comment-item clear{{if .IsAdmin}} admin{{end}}" id="comment-{{.Id}}">
+        <img class="avatar left" src="{{.Avatar}}" alt="{{.Author}}" title="{{.Author}}"/>
+        <p class="meta">
+            <span class="msg author {{if eq .Status "approved"}}blue{{else}}gray{{end}}">{{.Author}}{{if .Site}}
+            <a class="author-link fa fa-external-link-square" href="{{.Site}}" target="_blank"></a>{{end}}</span>
+            <span class="email">{{.Email}}</span>
+            <span class="create-time">{{DateInt64 .CreateTime "MM.DD HH:mm"}}</span>{{if .ContentNode}}
+            <span class="relate-content">@{{.ContentNode.Title}} {{if .ContentNode.Link}}<a class="content-link fa fa-external-link" href="{{.ContentNode.Link}}" target="_blank"></a>{{end}}</span>{{end}}
+            <span class="opt">
+                <a class="reply msg blue" href="#" rel="{{.Id}}"><i class="fa fa-reply"></i>回复</a>{{if eq .Status "approved"}}
+                <a class="spam msg gray" href="#" rel="{{.Id}}"><i class="fa fa-thumbs-o-down"></i>收回</a>{{else}}
+                <a class="approve msg green" href="#" rel="{{.Id}}"><i class="fa fa-thumbs-o-up"></i>审核</a>{{end}}
+                <a class="del msg red" href="#" rel="{{.Id}}"><i class="fa fa-times"></i>删除</a>
+            </span>
+        </p>
+        <section class="content">{{if gt .Pid 0}}{{if .Parent}}
+            <span class="parent">@{{.Parent.Author}}</span>{{else}}<span class="msg gray parent-invalid">@无效</span>{{end}}{{end}}{{Html .Content}}</section>
+    </div>{{end}}
+    <ul id="comment-pager" class="pager">{{range .Pager.PageSlice}}
+        <li class="item{{if eq $.Pager.Current .}} current{{end}}"><a href="/admin/comment/page/{{.}}">{{.}}</a></li>{{end}}
+    </ul>
+    <form id="comment-reply-form" class="clear hide" action="/admin/comment/" method="post">
+        <textarea class="ipt left content" name="content" id="content" required="required"></textarea>
+        <button class="btn blue" id="comment-reply-submit">回复</button>
+        <button class="btn green" id="comment-reply-hide" type="button">取消</button>
+        <input type="hidden" id="comment-parent" name="pid" value="0"/>
+    </form>
+</div>
+<script>
+    $(document).ready(function () {
+        initCommentList();
+    });
+</script>

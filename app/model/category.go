@@ -2,7 +2,6 @@ package model
 
 import (
 	"github.com/fuxiaohei/GoBlog/app"
-	"time"
 )
 
 type Category struct {
@@ -14,23 +13,22 @@ type Category struct {
 }
 
 func (this *Category) Link() string {
-	return "/category/" + this.Slug + "/"
+	return "/category/"+this.Slug + "/"
 }
 
 type CategoryModel struct {
-	categories       map[string]*Category
-	idIndex          map[int]string
+	categoriesCache       map[string]*Category
+	idIndexCache          map[int]string
 	countsDescResult []*Category
-	countsDescExpire int64
 }
 
 // get all categories. no ordered.
 func (this *CategoryModel) GetAll() []*Category {
 	// get from memory cache.
-	if len(this.categories) > 0 {
-		c := make([]*Category, len(this.categories))
+	if len(this.categoriesCache) > 0 {
+		c := make([]*Category, len(this.categoriesCache))
 		i := 0
-		for _, ca := range this.categories {
+		for _, ca := range this.categoriesCache {
 			c[i] = ca
 			i++
 		}
@@ -40,6 +38,7 @@ func (this *CategoryModel) GetAll() []*Category {
 	res, _ := app.Db.Query(sql, "category")
 	c := make([]*Category, 0)
 	res.All(&c)
+	this.cacheCategory(c...)
 	return c
 }
 
@@ -47,23 +46,21 @@ func (this *CategoryModel) GetAll() []*Category {
 // the expire time means how long to cache the ordered result.
 // if the last create time + expire time is less than now, create new result.
 // so that it is afford to be affected when counts changed.
-func (this *CategoryModel) GetCountsDesc(expire int64) []*Category {
-	now := time.Now().Unix()
-	if this.countsDescExpire+expire > now {
+func (this *CategoryModel) GetCountsDesc() []*Category {
+	if len(this.countsDescResult) > 0 {
 		return this.countsDescResult
 	}
 	sql := "SELECT * FROM blog_meta WHERE type = ? ORDER BY counts DESC"
 	res, _ := app.Db.Query(sql, "category")
 	c := make([]*Category, 0)
 	res.All(&c)
-	this.countsDescExpire = now
 	this.countsDescResult = c
 	return c
 }
 
 // get one category by slug string.
 func (this *CategoryModel) GetCategoryBySlug(slug string) *Category {
-	c := this.categories[slug]
+	c := this.categoriesCache[slug]
 	if c != nil {
 		return c
 	}
@@ -80,7 +77,7 @@ func (this *CategoryModel) GetCategoryBySlug(slug string) *Category {
 
 // get one category by id int.
 func (this *CategoryModel) GetCategoryById(id int) *Category {
-	slug := this.idIndex[id]
+	slug := this.idIndexCache[id]
 	if slug != "" {
 		return this.GetCategoryBySlug(slug)
 	}
@@ -96,21 +93,14 @@ func (this *CategoryModel) GetCategoryById(id int) *Category {
 }
 
 // cache category if it's not in memory.
-func (this *CategoryModel) cacheCategory(c *Category) {
-	if c == nil {
-		return
+func (this *CategoryModel) cacheCategory(categories... *Category) {
+	for _, c := range categories {
+		if c == nil {
+			return
+		}
+		this.categoriesCache[c.Slug] = c
+		this.idIndexCache[c.Id] = c.Slug
 	}
-	this.categories[c.Slug] = c
-	this.idIndex[c.Id] = c.Slug
-}
-
-// remove one cached category in memory map or index slice.
-func (this *CategoryModel) nocacheCategory(c *Category) {
-	if c == nil {
-		return
-	}
-	delete(this.categories, c.Slug)
-	delete(this.idIndex, c.Id)
 }
 
 // create a new category.
@@ -118,18 +108,17 @@ func (this *CategoryModel) nocacheCategory(c *Category) {
 func (this *CategoryModel) CreateCategory(name string, slug string, desc string) *Category {
 	sql := "INSERT INTO blog_meta(name,slug,description,type) VALUES(?,?,?,?)"
 	res, _ := app.Db.Exec(sql, name, slug, desc, "category")
-	this.countsDescExpire = 0
+	this.Reset()
 	return this.GetCategoryById(res.LastInsertId)
 }
 
 // save a category with new data.
 // cache it right now.
 func (this *CategoryModel) SaveCategory(id int, name string, slug string, desc string) *Category {
-	this.nocacheCategory(this.GetCategoryById(id))
 	// update and re-cache it
 	sql := "UPDATE blog_meta SET name = ?,slug = ?,description = ? WHERE id = ?"
 	app.Db.Exec(sql, name, slug, desc, id)
-	this.countsDescExpire = 0
+	this.Reset()
 	return this.GetCategoryById(id)
 }
 
@@ -138,33 +127,32 @@ func (this *CategoryModel) SaveCategory(id int, name string, slug string, desc s
 func (this *CategoryModel) DeleteCategory(id int, move int) {
 	sql := "UPDATE blog_content SET category_id = ? WHERE category_id = ?"
 	app.Db.Exec(sql, move, id)
-	this.nocacheCategory(this.GetCategoryById(id))
 	sql = "DELETE FROM blog_meta WHERE id = ?"
-	this.countsDescExpire = 0
 	app.Db.Exec(sql, id)
-	go this.CountArticle()
+	this.Reset()
+	this.CountArticle()
 }
 
 func (this *CategoryModel) CountArticle() {
 	sql := "UPDATE blog_meta SET counts = (SELECT count(*) FROM blog_content WHERE blog_content.category_id = blog_meta.id AND blog_content.status = 'publish' AND blog_content.type = 'article')"
 	app.Db.Exec(sql)
-	this.reset()
+	this.Reset()
 }
 
-func (this *CategoryModel) reset() {
-	this.categories = make(map[string]*Category)
-	this.idIndex = make(map[int]string)
+func (this *CategoryModel) Reset() {
+	this.categoriesCache = make(map[string]*Category)
+	this.idIndexCache = make(map[int]string)
 	categories := this.GetAll()
 	for _, ca := range categories {
-		this.categories[ca.Slug] = ca
-		this.idIndex[ca.Id] = ca.Slug
+		this.categoriesCache[ca.Slug] = ca
+		this.idIndexCache[ca.Id] = ca.Slug
 	}
-	this.countsDescExpire = 0
+	this.countsDescResult = make([]*Category, 0)
 }
 
 // create new category model.
 func NewCategoryModel() *CategoryModel {
 	c := new(CategoryModel)
-	go c.reset()
+	go c.Reset()
 	return c
 }

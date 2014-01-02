@@ -17,7 +17,7 @@ func Login(context *Core.Context) interface{} {
 	return nil
 }
 
-func Logout(context *Core.Context) interface {} {
+func Logout(context *Core.Context) interface{} {
 	context.Cookie("admin-user", "", "-3600")
 	context.Cookie("admin-user-token", "", "-3600")
 	context.Redirect("/login.html")
@@ -31,7 +31,7 @@ func LoginPost(context *Core.Context) interface{} {
 	}
 	data, expire := context.Input(), 3600
 	if data["remember"] == "on" {
-		expire = 3600*24 * 3
+		expire = 3600 * 24 * 3
 	}
 	session, err := doLogin(data["login"], data["password"], context, int64(expire))
 	if err != nil {

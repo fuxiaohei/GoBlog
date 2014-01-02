@@ -6,7 +6,7 @@
             <th>标题</th>
             <th>发布时间</th>
             <th>分类</th>
-            <th>评论数</th>
+            <th>评论 / 浏览</th>
             <th class="opt"></th>
         </tr>
         </thead>
@@ -19,8 +19,8 @@
                 </td>
                 <td class="create-time">{{DateInt64 .CreateTime "MM.DD HH:mm"}}</td>
                 <td>{{.Category.Name}}</td>
-                <td><strong class="comment">{{.Comments}}</strong></td>
-                <td class="opt"><a href="/admin/article/edit/{{.Id}}/" class="msg green">编辑</a><a href="/admin/article/delete/{{.Id}}/" class="msg red">删除</a></td>
+                <td><strong class="comment">{{.Comments}} / {{.Views}}</strong></td>
+                <td class="opt"><a href="/admin/article/edit/{{.Id}}/" class="msg edit green">编辑</a><a href="/admin/article/delete/{{.Id}}/" class="msg delete red">删除</a></td>
             </tr>
         {{end}}
         </tbody>
@@ -29,3 +29,8 @@
         <li class="item{{if eq $.Pager.Current .}} current{{end}}"><a href="/admin/article/page/{{.}}">{{.}}</a></li>{{end}}
     </ul>
 </div>
+<script>
+    $(document).ready(function(){
+        initArticleTable();
+    });
+</script>

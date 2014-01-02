@@ -1,4 +1,0 @@
-2013-12-18T23:12:27+08:00 [LOG] GET 200 / -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER
-2013-12-18T23:12:31+08:00 [LOG] GET 200 /favicon.ico -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER
-2013-12-18T23:59:46+08:00 [LOG] GET 200 / -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER
-2013-12-18T23:59:47+08:00 [LOG] GET 200 /favicon.ico -- 127.0.0.1 Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36 LBBROWSER

@@ -1,17 +1,17 @@
 package handler
 
 import (
-	"github.com/fuxiaohei/GoInk/Core"
-	"strings"
 	"github.com/fuxiaohei/GoBlog/app/model"
+	"github.com/fuxiaohei/GoInk/Core"
 	"strconv"
+	"strings"
 )
 
-func Admin(context *Core.Context) interface {} {
-	context.Render("admin:admin/dashboard.html", map[string]interface {}{
-			"IsDashboard":true,
-			"Title":"控制台",
-		})
+func Admin(context *Core.Context) interface{} {
+	context.Render("admin:admin/dashboard.html", map[string]interface{}{
+		"IsDashboard": true,
+		"Title":       "控制台",
+	})
 	return nil
 }
 

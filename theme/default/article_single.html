@@ -13,24 +13,56 @@
 {{end}}</article>
 <div id="comment-container" class="main960 clear">
     {{if gt .Article.Comments 0}}<h4>已有 {{.Article.Comments}} 条评论</h4>{{end}}
-    <div id="comment-list">
-        <div class="comment-item clear">
-            <img class="avatar left" src="http://www.ileyar.com/avatar/d46ec2107238fd6fe447c03653c99a30.jpg" alt=""/>
-            <section class="content">手写体这么好看的，昨天发了一张写了几个字的图片在空间里，被吐槽惨了。。 如果有个人在我生日的时候录视频给我，我估计会感动哭的。不对，也许只是悄悄给我寄一个礼物然后打电话说声生日快乐，我就会。 这个歌，下了我一跳。</section>
+    <script type="text/juicer" id="comment-item-template">
+        <div class="comment-item clear" id="comment-${Id}">
+            <img class="avatar left" src="${Avatar}" alt="${Author}" title="${Author}"/>
+            <section class="content">$${Content}</section>
             <p class="meta">
-                <a class="author" href="#"><i class="fa fa-user"></i>咚门</a>
-                <span class="publish">11.22 12:58</span>
-                <a class="reply hide" href="#"><i class="fa fa-reply"></i>回复</a>
+                <a class="author" href="#"><i class="fa fa-user"></i>${Author}</a>
+                <span class="publish">${CreateTime}</span>
+                {@if Status != "approved"}
+                <span class="spam msg red">审核中，刷新不可见</span>
+                {@/if}
+                <a class="reply hide" href="#" rel="${Id}"><i class="fa fa-reply"></i>回复</a>
             </p>
-            <div class="comment-child clear">
-                <a class="right reply" href="#"><i class="fa fa-reply"></i>回复</a>
-                <img class="avatar left" src="http://www.ileyar.com/avatar/b4d4b6424ad45b29e48609784a040fef.jpg" alt=""/>
-                <section class="content"><span class="parent">@Layer</span>我来回复只有一个原因，就是视频！视频！视频！可以私下给我看看嘛，你又不是不知道我邮箱什么的，网盘私密分享也可以哦，放心，绝不外传。</section>
-            </div>
         </div>
-    </div>
+    </script>
+    <script type="text/juicer" id="comment-child-template">
+        <div class="comment-child clear" id="comment-${Id}">
+                <a class="right reply" href="#" rel="${Id}"><i class="fa fa-reply"></i>回复</a>
+                <img class="avatar left" src="${Avatar}" alt="${Author}" title="${Author}"/>
+                <section class="content"><span class="parent"></span>$${Content}{@if Status != "approved"}
+                <span class="spam msg red">审核中，刷新不可见</span>
+                {@/if}</section>
+        </div>
+    </script>
+    <div id="comment-list"></div>
+    <form id="comment-form" class="form clear" action="#" method="post">
+        <div class="form-meta left">
+            <p class="item">
+                <label for="author"><i class="fa fa-user"></i></label>
+                <input id="author" class="ipt" type="text" name="author" required="required"/>
+            </p>
+            <p class="item">
+                <label for="email"><i class="fa fa-envelope"></i></label>
+                <input id="email" class="ipt" type="email" name="email" required="required"/>
+            </p>
+            <p class="item">
+                <label for="site"><i class="fa fa-link"></i></label>
+                <input id="site" class="ipt" type="url" name="site"/>
+            </p>
+        </div>
+        <textarea class="ipt left content" name="content" id="content" required="required"></textarea>
+        <button class="btn left item hide green" id="comment-no-reply" type="button">取消回复</button>
+        <button class="btn left" id="comment-submit">提 交</button>
+        <input type="hidden" name="article" value="{{.Article.Id}}"/>
+        <input type="hidden" name="pid" id="comment-parent" value="0"/>
+    </form>
 </div>
 <script src="/static/js/marked.js"></script>
+<script src="/static/js/juicer.min.js"></script>
+<script src="/static/js/jquery.form.min.js"></script>
+<script src="/static/js/ajax-comment.js"></script>
 <script>
     $(document).ready(function () {
         var loadPrettify = false;
@@ -54,5 +86,8 @@
                 prettyPrint();
             });
         }
+        Comment.InitCommentList();
+        Comment.InitReplyEvent();
+        Comment.InitFormEvent();
     });
 </script>
