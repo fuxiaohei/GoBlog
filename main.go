@@ -1,6 +1,6 @@
 package main
 
-import "git.oschina.net/fuxiaohei/GoBlog.git/app"
+import "github.com/fuxiaohei/GoBlog/app"
 
 func main() {
 	app.Cmd()

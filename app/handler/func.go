@@ -1,6 +1,6 @@
 package handler
 
-import "git.oschina.net/fuxiaohei/GoBlog.git/GoInk"
+import "github.com/fuxiaohei/GoBlog/GoInk"
 
 type jsonContext struct {
 	context *GoInk.Context

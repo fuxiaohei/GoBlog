@@ -2,7 +2,7 @@ package app
 
 import (
 	"os"
-	"git.oschina.net/fuxiaohei/GoBlog.git/app/cmd"
+	"github.com/fuxiaohei/GoBlog/app/cmd"
 )
 
 func Cmd() {

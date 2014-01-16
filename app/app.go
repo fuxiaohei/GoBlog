@@ -2,10 +2,10 @@ package app
 
 import (
 	"fmt"
-	"git.oschina.net/fuxiaohei/GoBlog.git/GoInk"
-	"git.oschina.net/fuxiaohei/GoBlog.git/app/handler"
-	"git.oschina.net/fuxiaohei/GoBlog.git/app/model"
-	"git.oschina.net/fuxiaohei/GoBlog.git/app/utils"
+	"github.com/fuxiaohei/GoBlog/GoInk"
+	"github.com/fuxiaohei/GoBlog/app/handler"
+	"github.com/fuxiaohei/GoBlog/app/model"
+	"github.com/fuxiaohei/GoBlog/app/utils"
 	"net/http"
 	"os"
 	"path"

@@ -3,10 +3,10 @@ package cmd
 import (
 	"os"
 	"time"
-	"git.oschina.net/fuxiaohei/GoBlog.git/app/utils"
+	"github.com/fuxiaohei/GoBlog/app/utils"
 	"path"
 	"github.com/Unknwon/cae/zip"
-	"git.oschina.net/fuxiaohei/GoBlog.git/GoInk"
+	"github.com/fuxiaohei/GoBlog/GoInk"
 	"path/filepath"
 )
 

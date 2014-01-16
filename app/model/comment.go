@@ -1,7 +1,7 @@
 package model
 
 import (
-	"git.oschina.net/fuxiaohei/GoBlog.git/app/utils"
+	"github.com/fuxiaohei/GoBlog/app/utils"
 	"sort"
 )
 

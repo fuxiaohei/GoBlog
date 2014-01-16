@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"git.oschina.net/fuxiaohei/GoBlog.git/GoInk"
-	"git.oschina.net/fuxiaohei/GoBlog.git/app/model"
-	"git.oschina.net/fuxiaohei/GoBlog.git/app/utils"
+	"github.com/fuxiaohei/GoBlog/GoInk"
+	"github.com/fuxiaohei/GoBlog/app/model"
+	"github.com/fuxiaohei/GoBlog/app/utils"
 	"strconv"
 	"strings"
 )
