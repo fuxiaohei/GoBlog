@@ -1,9 +1,0 @@
-.md-editor{display:block;border:none}.md-editor .btn-group{display:inline-block;padding-right:8px;margin-right:8px;border-right:1px solid #ddd}.md-editor .btn-group:last-child{border-right:none}
-.md-editor>.md-header,.md-editor .md-footer{display:block;padding:6px 4px;background:transparent;border-top:1px solid #ddd;border-bottom:1px solid #ddd}
-.md-editor>.md-preview{background:#fafafa;border-bottom:1px solid #ddd;min-height:10px;padding:6px 12px}
-.md-editor .md-btn{display:inline-block;width:24px;height:24px;text-align:center;border:1px solid transparent;background-color:transparent;margin-right:6px;color:#888}.md-editor .md-btn:hover{color:#444;cursor:pointer;border:1px solid #bbb;background-color:#fff;border-radius:2px}
-.md-editor .md-btn:last-child{margin-right:0}
-.md-editor .md-btn .fa{text-align:center;margin-right:0;line-height:23px}
-.md-editor .md-btn[disabled]:hover{color:#888;border:1px solid transparent;cursor:default}
-.md-editor>textarea{font-family:"Ubuntu","Microsoft YaHei","Verdana","Tahoma",Arial,sans-serif;font-size:13px;outline:0;outline:thin dotted \9;margin:0;display:block;padding:6px 12px;width:100%;border:none;border-bottom:1px solid #ddd;border-radius:0;box-shadow:none;background:#fafafa}.md-editor>textarea:focus{box-shadow:none;background:transparent}
-.md-editor.active{border-color:#fafafa;outline:0}

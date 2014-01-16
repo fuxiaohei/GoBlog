@@ -1,0 +1,36 @@
+@import "common";
+
+.cmd {
+  margin: 24px 48px
+}
+
+.cmd-header {
+  .bottom-line(12px);
+}
+
+#backup-btn{
+  margin: 10px 0 0 30px;
+}
+
+.cmd-list li{
+  .bottom-line(12px);
+}
+
+#backup-list{
+  li{
+    list-style: disc inside;
+    >span,>a{
+      margin-right: 16px;
+    }
+    font-family: Verdana, Tahoma, '微软雅黑', '宋体', sans-serif;
+    .del{
+      color: @red1;
+      opacity: 0;
+    }
+    &:hover{
+      .del{
+        opacity: 1;
+      }
+    }
+  }
+}

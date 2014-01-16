@@ -1,6 +1,264 @@
-@import "common/common";
-@import "font-awesome/font-awesome";
+@import "common";
 
-@import "default/header";
-@import "default/article";
-@import "default/comment";
+html,body{
+  background: url("../img/bg.png") repeat;
+}
+
+#header{
+  background: url("../img/header.gif") repeat #4c7298;
+  min-width: 120px;
+  padding: 30px 0;
+  color: @white1;
+}
+
+#header-img{
+  width: 96px;
+  height: 96px;
+  background-color: @white0;
+  border: 1px solid @gray1;
+  .border-radius(50px);
+}
+
+#header-h{
+  padding-top: 24px;
+  a{
+    color: @white0;
+    font-weight: bold;
+  }
+  font-size: 32px;
+}
+
+#nav{
+  height: 54px;
+  background-color: @white1;
+  .box-shadow(0,0,2px,@gray0);
+  border-bottom: 1px solid @gray1;
+  li{
+    line-height: 50px;
+    padding: 0 18px;
+    a{
+      font-size: 16px;
+      color: @black1;
+      padding: 0 32px;
+      display: block;
+      &:hover{
+        border-bottom: 4px solid @blue1;
+      }
+    }
+  }
+}
+
+#main{
+  margin: 30px auto;
+}
+
+#footer{
+  color: @gray1;
+  background-color: #1c2429;
+  padding: 24px 0;
+  p{
+    margin-bottom: 9px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    a{
+      color: @gray1;
+      margin: 0 16px;
+      &:hover{
+        color: @white1;
+      }
+      .fa{
+        margin-right: 8px;
+      }
+    }
+  }
+}
+
+#article-container{
+  .meta{
+    width: 108px;
+    line-height: 24px;
+    .fa{
+      margin-right: 8px;
+    }
+    .comments,.views,.time{
+      font-family: Verdana, Tahoma, '微软雅黑', '宋体', sans-serif;
+    }
+    .time{
+      color: @white0;
+    }
+    a{
+      color: @white0;
+      &:hover{
+        color: @white0;
+      }
+    }
+  }
+  .main{
+    width: 812px;
+  }
+  h3.title{
+    padding: 8px 16px;
+    background-color: #4c7298;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    a{
+      color: @gray3;
+      &:hover{
+        color: @white0;
+      }
+    }
+  }
+  .content{
+    background-color: @white0;
+    border:1px solid @gray1;
+    border-top: none;
+    padding: 18px 24px 24px;
+  }
+  .info{
+    margin-bottom: 0;
+    background-color: @white1;
+    border:1px solid @gray1;
+    border-top: none;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    .fa{
+      margin-right: 8px;
+    }
+    .share .fa{
+      margin-right: 0;
+    }
+    /*
+    .weibo .fa:hover{
+      color: @red1;
+    }*/
+    >*{
+      padding: 6px 18px;
+    }
+    > span{
+      border-right: 1px solid @gray1;
+    }
+    .right{
+      border-left: 1px solid @gray1;
+      border-right: none;
+    }
+    color: @black3;
+    .read{
+      color: @black3;
+      &:hover{
+        background-color: @blue1;
+        color: @white1;
+      }
+    }
+    .time,.views span{
+      font-family: Verdana, Tahoma, '微软雅黑', '宋体', sans-serif;
+    }
+  }
+  article{
+    margin-bottom: 48px;
+  }
+}
+
+#comment{
+  margin-top: -24px;
+  border: 1px solid @gray1;
+  .border-radius(2px);
+  padding:24px;
+  background: @white0;
+}
+
+#comment-form{
+  width: 80%;
+  margin: auto;
+  .c-info{
+    width: 26%;
+    .ipt{
+      width: 100%;
+      box-sizing: border-box;
+    }
+  }
+  .c-content{
+    width: 70%;
+  }
+  .c-avatar{
+    width: 48px;
+    height: 48px;
+    padding: 2px;
+    border: 1px solid @gray1;
+    .border-radius(2px);
+  }
+  .reply-md{
+    margin-bottom: 16px;
+    font-size: 12px;
+    line-height: 20px;
+    color: @black2;
+  }
+  .cancel-reply{
+    border: none;
+    &:hover{
+      cursor: pointer;
+    }
+    margin-left: 18px;
+    display: none;
+  }
+}
+
+#comment-content{
+  width: 100%;
+  box-sizing: border-box;
+  height: 180px;
+  resize: none;
+}
+
+#comment-list{
+  .c-avatar{
+    width: 48px;
+    height: 48px;
+    padding: 2px;
+    border: 1px solid @gray1;
+    .border-radius(2px);
+    margin-right: 18px;
+  }
+  .comment{
+    .bottom-line(18px);
+  }
+  .c-meta{
+    > *{
+      margin-right: 16px;
+    }
+  }
+  .c-time{
+    color: @black3;
+    font-family: Verdana, Tahoma, '微软雅黑', '宋体', sans-serif;
+    .fa{
+      margin-right: 6px;
+    }
+  }
+  .c-reply{
+    color: @black3;
+    &:hover{
+      color: @black1;
+    }
+  }
+  .c-author{
+    font-size: 13px;
+  }
+  .c-author.admin{
+    .lbl-red;
+  }
+  .c-p-md{
+    margin-top: 12px;
+    font-size: 12px;
+    line-height: 20px;
+    color: @black2;
+  }
+  .c-section{
+    max-width: 830px;
+  }
+  .c-check{
+    font-size: 13px;
+    color: @red1;
+    .fa{
+      margin-right: 6px;
+    }
+  }
+}

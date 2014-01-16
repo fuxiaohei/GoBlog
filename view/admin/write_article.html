@@ -1,0 +1,74 @@
+<style>
+    @import "/static/css/codemirror.css";
+    @import "/static/css/highlight.css";
+</style>
+<form id="article-form" class="form clear container" action="#" method="post">
+    <div class="left grid-1-2">
+        <input class="ipt title" id="title" type="text" required="required" name="title" placeholder="文章标题"/>
+        <textarea name="content" id="content" class="ipt">撰写文章内容，支持`markdown`语法高亮</textarea>
+    </div>
+    <div class="left grid-1-2">
+        <div class="preview markdown"></div>
+    </div>
+    <div class="form-vertical left">
+        <button class="btn btn-green left" type="button" id="attach-show">添加附件</button>
+        <p class="item">
+            <span for="slug">固定链接</span>&nbsp;&nbsp;&nbsp;
+            <input id="slug" class="ipt" type="text" name="slug" required="required" placeholder="文章的唯一链接"/>
+        </p>
+        <p class="item">
+            <span>标签</span>&nbsp;&nbsp;
+            <input id="tag" class="ipt" type="text" name="tag" placeholder="文章的标签"/>
+        </p>
+        <p class="item">
+            <span>保存状态</span>&nbsp;&nbsp;
+            <select name="status" id="status">
+                <option value="publish">公开</option>
+                <option value="draft">草稿</option>
+            </select>
+        </p>
+        <p class="item">
+            <span>允许评论</span>&nbsp;&nbsp;
+            <select name="comment" id="is-comment">
+                <option value="1">允许</option>
+                <option value="0">关闭</option>
+            </select>
+        </p>
+    </div>
+    <p class="submit text-right" id="article-submit">
+        <button class="btn btn-blue">保存文章</button>
+    </p>
+</form>
+<form class="form hide" id="attach-form" action="/admin/files/upload/" enctype="multipart/form-data" method="post">
+    <input id="attach-upload" type="file" name="file"/>
+</form>
+<script src="/static/lib/codemirror.min.js"></script>
+<script src="/static/lib/codemirror-mode.min.js"></script>
+<script src="/static/lib/marked.min.js"></script>
+<script src="/static/lib/highlight.min.js"></script>
+<script src="/static/js/upload.js"></script>
+<script>
+    $(function () {
+        var editor = CodeMirror.fromTextArea(document.getElementById("content"), {
+            mode: 'markdown',
+            lineNumbers: true,
+            theme: "default",
+            extraKeys: {"Enter": "newlineAndIndentContinueMarkdownList"}
+        });
+        editor.on("change", function () {
+            var str = editor.getValue();
+            $('.preview').html(marked(str)).find("pre code").each(function (i, e) {
+                hljs.highlightBlock(e);
+            });
+        });
+        $('#article-form').ajaxForm(function (json) {
+            if (json.res) {
+                alert("已保存");
+                window.location.href = "/admin/articles/";
+            } else {
+                alert(json.msg);
+            }
+        });
+        initUpload("#article-submit");
+    });
+</script>

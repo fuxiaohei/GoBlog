@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>备份 - Fxh.Go</title>
+    <link rel="stylesheet" href="/static/css/cmd.css"/>
+    <link rel="stylesheet" href="http://cdn.staticfile.org/font-awesome/4.0.3/css/font-awesome.min.css"/>
+    <script src="http://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<body class="cmd">
+{@Content}
+<p class="back"><a href="javascript:history.back()">Back</a></p>
+</body>
+</html>

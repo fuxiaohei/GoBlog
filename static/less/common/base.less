@@ -1,0 +1,111 @@
+@import "var";
+
+// ------------- basic ui -------------------
+html, body {
+  font-family: Ubuntu, Consolas, "Microsoft YaHei", Verdana, Tahoma, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 30px;
+  color: @black1;
+  background-color: @white1;
+}
+
+a {
+  text-decoration: none;
+  color: @blue1;
+  &:hover {
+    color: @blue2;
+  }
+}
+
+p {
+  margin-bottom: 18px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  padding: 12px 0;
+}
+
+h1 {
+  font-size: 28px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+h3 {
+  font-size: 21px;
+}
+
+h4 {
+  font-size: 19px;
+}
+
+h5 {
+  font-size: 16px;
+}
+
+h6 {
+  font-size: 14px;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.clear:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0
+}
+
+.vertical-middle {
+  vertical-align: middle;
+}
+
+.inline {
+  display: inline;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.block {
+  display: block;
+}
+
+.fade-out {
+  opacity: 0;
+}
+
+.hide {
+  display: none !important;
+}

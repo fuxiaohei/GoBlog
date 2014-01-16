@@ -1,0 +1,32 @@
+@import "var";
+
+.pager {
+  .item {
+    padding: 2px 8px;
+    margin: 0 6px;
+    color: @black1;
+    display: inline-block;
+    line-height: 20px;
+    a {
+      color: @black1;
+    }
+    &:hover {
+      background-color: @blue1;
+      .border-radius(2px);
+      a {
+        color: @white0;
+      }
+    }
+  }
+  .current {
+    background-color: @black2;
+    color: @white1;
+    .border-radius(2px);
+    a {
+      color: @white1;
+    }
+    &:hover {
+      background-color: @blue1;
+    }
+  }
+}

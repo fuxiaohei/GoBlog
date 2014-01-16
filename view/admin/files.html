@@ -1,0 +1,40 @@
+<ul id="files-list" class="admin container960 pager">
+    <li class="file" id="files-btn-li">
+        <button class="btn btn-green" id="attach-show">添加附件</button>
+    </li>{{range .Files}}
+    <li class="file" id="file-{{.Id}}">
+        <span class="upload-time">{{DateInt64 .UploadTime "MM.DD"}}</span>
+        <span class="size">{{FileSize .Size}}</span>
+        <span class="name">{{.Name}}</span>
+        <a class="link" href="/{{.Url}}" target="_blank" title="/{{.Url}}"><i class="fa fa-external-link-square"></i></a>
+        <a class="del fade-out" href="#" rel="{{.Id}}" title="删除附件"><i class="fa fa-times-circle"></i></a>
+    </li>{{end}}
+    {{range .Pager.PageSlice}}
+    <li class="item{{if eq $.Pager.Current .}} current{{end}}"><a href="/admin/files/?page={{.}}">{{.}}</a></li>{{end}}
+</ul>
+<form class="form hide" id="attach-form" action="/admin/files/upload/" enctype="multipart/form-data" method="post">
+    <input id="attach-upload" type="file" name="file"/>
+</form>
+<script src="/static/js/upload.js"></script>
+<script>
+    $(function () {
+        initUpload("#attach-show");
+        $(".del").on("click", function () {
+            if (confirm("删除附件相关链接会失效!")) {
+                var id = $(this).attr("rel");
+                $.ajax({
+                    "method": "delete",
+                    "url": "/admin/files/?id=" + id,
+                    "success": function (json) {
+                        if(json.res){
+                            $('#file-'+id).remove();
+                        }else{
+                            alert(json.msg);
+                        }
+                    }
+                });
+            }
+            return false;
+        })
+    });
+</script>

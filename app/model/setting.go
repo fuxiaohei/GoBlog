@@ -1,57 +1,32 @@
 package model
 
-import (
-	"github.com/fuxiaohei/GoBlog/app"
-)
+import "strings"
 
-type SettingModel struct {
-	settingCache map[string]string
+var settings map[string]string
+
+func GetSetting(key string) string {
+	return settings[key]
 }
 
-func (this *SettingModel) GetAll() map[string]string {
-	if len(this.settingCache) > 0 {
-		return this.settingCache
-	}
-	sql := "SELECT * FROM blog_setting"
-	res, e := app.Db.Query(sql)
-	if e != nil {
-		return nil
-	}
-	this.cacheSetting(res.Data...)
-	return this.settingCache
-}
-
-func (this *SettingModel) cacheSetting(settings... map[string]string) {
-	for _, s := range settings {
-		this.settingCache[s["key"]] = s["value"]
-	}
-}
-
-func (this *SettingModel) SaveSetting(settings... map[string]string) {
-	sqlUpdate := "UPDATE blog_setting SET value = ? WHERE key = ?"
-	sqlInsert := "INSERT INTO blog_setting(key,value) VALUES(?,?)"
-	for _, s := range settings {
-		_, ok := this.settingCache[s["key"]]
-		if ok {
-			app.Db.Exec(sqlUpdate, s["value"], s["key"])
-		}else {
-			app.Db.Exec(sqlInsert, s["key"], s["value"])
+func GetCustomSettings() map[string]string {
+	m := make(map[string]string)
+	for k, v := range settings {
+		if strings.HasPrefix(k, "c_") {
+			m[strings.TrimPrefix(k, "c_")] = v
 		}
 	}
-	this.cacheSetting(settings...)
+	return m
 }
 
-func (this *SettingModel) GetItem(key string) string {
-	return this.settingCache[key]
+func SetSetting(key string, v string) {
+	settings[key] = v
 }
 
-func (this *SettingModel) Reset() {
-	this.settingCache = make(map[string]string)
-	this.GetAll()
+func SyncSettings() {
+	Storage.Set("settings", settings)
 }
 
-func NewSettingModel() *SettingModel {
-	s := new(SettingModel)
-	s.Reset()
-	return s
+func LoadSettings() {
+	settings = make(map[string]string)
+	Storage.Get("settings", &settings)
 }

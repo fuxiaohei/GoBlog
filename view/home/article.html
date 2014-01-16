@@ -1,0 +1,30 @@
+<div id="article-container" class="clear">
+    <article class="clear" id="article-Id">{{with .Article}}
+        <h3 class="title"><a href="{{.Link}}" title="{{.Title}}">{{.Title}}</a></h3>
+        <section class="content markdown">{{Html .Content}}</section>
+        <p class="info clear">
+            <span class="share weibo inline-block"><i class="fa fa-weibo fa-lg"></i></span>{{if .User}}
+            <span class="author inline-block"><i class="fa fa-user"></i>{{.User.Nick}}</span>{{end}}
+            <span class="time inline-block"><i class="fa fa-clock-o"></i>{{DateInt64 .CreateTime "MM.DD"}}</span>{{if .TagString}}
+            <span class="tag inline-block"><i class="fa fa-tags"></i>{{.TagString}}</span>{{end}}
+            <span class="views inline-block right">阅读&nbsp;&nbsp;<span>{{.Hits}}</span>&nbsp;&nbsp;次</span>
+        </p>{{end}}
+    </article>
+    {{Html .CommentHtml}}
+</div>
+<script src="/static/lib/marked.min.js"></script>
+<script>
+    $(document).ready(function(){
+        var $md = $('.markdown');
+        $md.each(function(i,item){
+            $(item).html(marked($(item).html().replace(/&gt;/g,'>')));
+        });
+        var code = $md.find('pre code');
+        if(code.length){
+            $("<link>").attr({ rel: "stylesheet",type: "text/css",href: "/static/css/highlight.css"}).appendTo("head");
+            $.getScript("/static/lib/highlight.min.js",function(){
+               code.each(function(i,item){hljs.highlightBlock(item)});
+            });
+        }
+    });
+</script>

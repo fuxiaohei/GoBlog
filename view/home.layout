@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>{{if .Title}}{{.Title}} - {{end}}{{Setting "site_title"}}</title>
+    <meta name="keywords" content="{{Setting `site_keywords`}}"/>
+    <meta name="description" content="{{Setting `site_description`}}"/>
+    <link rel="stylesheet" href="/static/css/style.css"/>
+    <link rel="stylesheet" href="http://cdn.staticfile.org/font-awesome/4.0.3/css/font-awesome.min.css"/>
+    <link rel="alternate" type="application/rss+xml" title="{{Setting `site_title`}} - RSS 2.0" href="/rss.xml"/>
+    <script src="http://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<body>
+<header id="header" class="clear">
+    <div class="container960 text-center">
+        <img src="/static/img/site.png" alt="site" id="header-img"/>
+        <h1 id="header-h"><a href="/">{{Setting "site_title"}}</a></h1>
+        <h4 id="header-sub">{{Setting "site_sub_title"}}</h4>
+    </div>
+</header>
+<nav id="nav" class="clear text-center">
+    <ul>
+        <li class="inline-block"><a href="/">文章</a></li>
+        <li class="inline-block"><a href="/about-me.html">关于</a></li>
+        <li class="inline-block"><a href="/friends.html">好友</a></li>
+    </ul>
+</nav>
+<div id="main" class="container960">
+    {@Content}
+</div>
+<footer id="footer" class="text-center">
+    <p>
+        <a class="weibo" href="{{Setting `c_footer_weibo`}}" target="_blank"><i class="fa fa-weibo"></i>Weibo</a>
+        <a class="git" href="{{Setting `c_footer_github`}}" target="_blank"><i class="fa fa-github"></i>GitHub</a>
+        <a class="email" href="{{Setting `c_footer_email`}}" target="_blank"><i class="fa fa-envelope"></i>Email</a>
+        <a class="rss" href="/rss.xml" target="_blank"><i class="fa fa-rss"></i>RSS</a>
+    </p>
+    <span>All content © 2013 FuXiaoHei All rights reserved. Proudly published with Fxh.Go.</span>
+</footer>
+</body>
+</html>

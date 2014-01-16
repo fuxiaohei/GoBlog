@@ -1,96 +1,66 @@
-@charset "utf-8";
-
-@import "mixin";
-
-/*! 重置浏览器的样式 */
-
-/* html全局的规定，去除用户自定义字体、背景的影响，并继承用户字体大小设置，忽略浏览器字体尺寸限制*/
-html, body {
-  color: @Black1;
-  background-color: @White1;
-  font-family: @FontFamily;
-  font-size: @FontSize;
-  line-height: @LineHeight;
-}
-
-/* 去除元素的内外边距 */
-body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td, hr, button, article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
   margin: 0;
-  padding: 0
+  padding: 0;
 }
 
-/* 重设 HTML5 标签，定义为块级元素 */
-article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
-  display: block
+header, footer, section, article, aside, nav, hgroup, address, figure, figcaption, menu, details {
+  display: block;
 }
 
-/* 设置表单元素继承字体要求 */
-button, input, option, select, textarea {
-  font-size: @FontSize;
-  font-family: @FontFamily;
+audio, canvas, video {
+  display: inline-block;
 }
 
-/* 去除表格边距 */
 table {
   border-collapse: collapse;
-  border-spacing: 0
+  border-spacing: 0;
 }
 
-/* 去掉列表前的标识，li 会继承 */
+fieldset, img {
+  border: 0;
+}
+
+address, caption, cite, code, dfn, em, th, var {
+  font-style: normal;
+  font-weight: normal;
+}
+
 ol, ul {
-  list-style: none
+  list-style: none;
 }
 
-/* 统一标题大小和样式 */
+caption, th {
+  text-align: left;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-size: 100%;
   font-weight: normal;
 }
 
-/* 取消链接的样式注册 */
-a {
-  text-decoration: none;
-  color: @Blue1;
-  &:hover{
-    color: @Blue2;
-  }
+q:before, q:after {
+  content: '';
 }
 
-
-/* 浮动清理 */
-.clear:after {
-  visibility: hidden;
-  display: block;
-  font-size: 0;
-  content: " ";
-  clear: both;
-  height: 0
+abbr, acronym {
+  border: 0;
+  font-variant: normal;
 }
 
-/* 隐藏元素 */
-.hide {
-  display: none;
+sup {
+  vertical-align: text-top;
 }
 
-/* 设置内联, 减少浮动带来的bug */
-.left {
-  float: left
+sub {
+  vertical-align: text-bottom;
 }
 
-.right {
-  float: right
+input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
 }
 
-.block{
-  display: block;
-}
-
-/* 设置定位 */
-
-.abs{
-  position: absolute;
-}
-
-.rel{
-  position: relative;
+legend {
+  color: #000;
 }
