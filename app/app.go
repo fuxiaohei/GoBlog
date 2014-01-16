@@ -45,6 +45,10 @@ func Init() {
 	if App.Get("upload_size") == "" {
 		App.Set("upload_size", 1024*1024*10)
 	}
+	if App.Get("upload_dir") == "" {
+		App.Set("upload_dir", "static/upload")
+		os.MkdirAll("static/upload", os.ModePerm)
+	}
 
 	// init temp dir
 	if App.Get("log_dir") == "" {
@@ -176,6 +180,7 @@ func registerHomeHandler() {
 	App.Get("/logout/", handler.Logout)
 
 	App.Get("/article/:id/:slug", handler.Article)
+	App.Get("/page/:id/:slug", handler.Page)
 	App.Get("/p/:page/", handler.Home)
 	App.Post("/comment/:id/", handler.Comment)
 

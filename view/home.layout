@@ -13,7 +13,7 @@
 <body>
 <header id="header" class="clear">
     <div class="container960 text-center">
-        <img src="/static/img/site.png" alt="site" id="header-img"/>
+        <img src="{{Setting `c_home_avatar`}}" alt="site" id="header-img"/>
         <h1 id="header-h"><a href="/">{{Setting "site_title"}}</a></h1>
         <h4 id="header-sub">{{Setting "site_sub_title"}}</h4>
     </div>

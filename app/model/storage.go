@@ -174,6 +174,7 @@ func writeDefaultData() {
 		"c_footer_weibo":"#",
 		"c_footer_github":"#",
 		"c_footer_email":"#",
+		"c_home_avatar":"/static/img/site.png",
 	}
 	Storage.Set("settings", s)
 
