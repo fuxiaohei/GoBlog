@@ -88,6 +88,27 @@ func Article(context *GoInk.Context) {
 	})
 }
 
+func Page(context *GoInk.Context) {
+	id, _ := strconv.Atoi(context.Param("id"))
+	slug := context.Param("slug")
+	article := model.GetContentById(id)
+	if article == nil {
+		context.Redirect("/")
+		return
+	}
+	if article.Slug != slug || article.Type != "page" {
+		context.Redirect("/")
+		return
+	}
+	article.Hits++
+	context.Layout("home")
+	context.Render("home/page", map[string]interface{}{
+		"Title": article.Title,
+		"Page":  article,
+		//"CommentHtml": Comments(context, article),
+	})
+}
+
 func TopPage(context *GoInk.Context) {
 	slug := context.Param("slug")
 	page := model.GetContentBySlug(slug)

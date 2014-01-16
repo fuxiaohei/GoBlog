@@ -43,7 +43,7 @@ func Init() {
 		App.Set("upload_files", uploadFileSuffix)
 	}
 	if App.Get("upload_size") == "" {
-		App.Set("upload_size", 1024*1024 * 10)
+		App.Set("upload_size", 1024*1024*10)
 	}
 	if App.Get("upload_dir") == "" {
 		App.Set("upload_dir", "static/upload")
@@ -97,10 +97,10 @@ func Init() {
 		if App.View().Has("error/error.html") {
 			context.Layout("")
 			context.Render("error/error", map[string]interface{}{
-					"error":   string(context.Body),
-					"stack":   string(debug.Stack()),
-					"context": context,
-				})
+				"error":   string(context.Body),
+				"stack":   string(debug.Stack()),
+				"context": context,
+			})
 		} else {
 			context.Body = append([]byte("<pre>"), context.Body...)
 			context.Body = append(context.Body, []byte("\n")...)
@@ -115,8 +115,8 @@ func Init() {
 		if App.View().Has("error/notfound.html") {
 			context.Layout("")
 			context.Render("error/notfound", map[string]interface{}{
-					"context": context,
-				})
+				"context": context,
+			})
 		}
 		context.End()
 	})
@@ -180,6 +180,7 @@ func registerHomeHandler() {
 	App.Get("/logout/", handler.Logout)
 
 	App.Get("/article/:id/:slug", handler.Article)
+	App.Get("/page/:id/:slug", handler.Page)
 	App.Get("/p/:page/", handler.Home)
 	App.Post("/comment/:id/", handler.Comment)
 
