@@ -57,7 +57,7 @@ func FileUpload(context *GoInk.Context) {
 	ff.Size = int64(len(data))
 	ff.ContentType = h.Header["Content-Type"][0]
 	ff.Author, _ = strconv.Atoi(context.Cookie("token-user"))
-	ff.Url = model.CreateFilePath(context.App().Config().StringOr("app.upload_dir", "static/upload"), ff)
+	ff.Url = model.CreateFilePath(context.App().Get("upload_dir"), ff)
 	e = ioutil.WriteFile(ff.Url, data, os.ModePerm)
 	if e != nil {
 		Json(context, false).Set("msg", e.Error()).End()
