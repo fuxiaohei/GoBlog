@@ -1,0 +1,113 @@
+@import "base";
+
+input,textarea,select,button{
+  font-family: Ubuntu, Consolas, "Microsoft YaHei", Verdana, Tahoma, Arial, sans-serif;
+}
+
+.form {
+  legend {
+    font-size: 18px;
+    margin-bottom: 14px;
+  }
+  label {
+    .inline-block;
+    margin-right: 12px;
+  }
+  .ipt {
+    padding: 8px 12px;
+    border: 1px solid @black3;
+    .border-radius(2px);
+    &:focus {
+      border-color: @blue1;
+    }
+    outline: none;
+    min-width: 180px;
+  }
+  .chk {
+    display: inline-block;
+    margin: 2px 6px 0 0;
+    line-height: normal;
+  }
+  .field {
+    margin-bottom: 24px;
+  }
+  .invalid{
+    margin-right: 12px;
+  }
+  .tip{
+    font-size: 13px;
+    color: @black3;
+    margin-left: 12px;
+  }
+}
+
+.form-vertical {
+  label {
+    display: block;
+    margin-bottom: 8px;
+  }
+  .ipt{
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .invalid{
+    margin-right: 0;
+    margin-top: 6px;
+  }
+}
+
+.form-align {
+  label {
+    .inline-block;
+    min-width: 60px;
+    text-align: right;
+  }
+  .invalid{
+    margin-right: 0;
+    margin-top: 6px;
+  }
+}
+
+.btn{
+  min-width: 120px;
+  height: 36px;
+  background-color: @gray1;
+  color: @black1;
+  .border-radius(2px);
+  outline: none;
+  border: none;
+  &:hover{
+    background-color: @black3;
+    cursor: pointer;
+  }
+  margin: 0;
+}
+
+a.btn{
+  line-height: 36px;
+  color: @white0;
+}
+
+.btn-red{
+  background-color: @red1;
+  &:hover{
+    background-color: @red2;
+  }
+  color: @white1;
+}
+
+.btn-blue{
+  background-color: @blue1;
+  &:hover{
+    background-color: @blue2;
+  }
+  color: @white1;
+}
+
+.btn-green{
+  background-color: @green1;
+  &:hover{
+    background-color: @green2;
+  }
+  color: @white1;
+}

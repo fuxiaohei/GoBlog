@@ -1,22 +1,9 @@
 package main
 
-import (
-	"github.com/fuxiaohei/GoBlog/app"
-	"github.com/fuxiaohei/GoBlog/app/model"
-	"github.com/fuxiaohei/GoBlog/app/handler"
-)
+import "git.oschina.net/fuxiaohei/GoBlog.git/app"
 
 func main() {
-	// init application
+	app.Cmd()
 	app.Init()
-
-	// init model
-	model.Init()
-
-	// init handler
-	handler.Init()
-
-	// run *GoInk.Simple application
-	app.Ink.Run()
+	app.Run()
 }
-

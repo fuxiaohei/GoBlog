@@ -1,0 +1,39 @@
+<div id="article-container" class="clear">{{range .Articles}}
+    <article class="clear" id="article-{{.Id}}">
+        <div class="meta left text-center">
+            <!--<p class="lbl lbl-blue author"><i class="fa fa-user"></i>傅小黑</p>-->{{if gt .CommentNum 0}}
+            <p class="lbl lbl-red comments"><a href="{{.Link}}#comment"><i class="fa fa-comments"></i><strong>{{.CommentNum}} ℃</strong></a></p>{{end}}
+            <p class="lbl lbl-green views"><i class="fa fa-eye"></i><strong>{{.Hits}} ℉</strong></p>
+            <p class="lbl lbl-gray time"><i class="fa fa-clock-o"></i><strong>{{DateInt64 .CreateTime "MM.DD"}}</strong></p>
+        </div>
+        <div class="main right">
+            <h3 class="title"><a href="{{.Link}}" title="{{.Title}}">{{.Title}}</a></h3>
+            <section class="content markdown">{{Html .Summary}}</section>
+            <p class="info clear">
+                <span class="share weibo inline-block"><i class="fa fa-weibo fa-lg"></i></span>{{if .User}}
+                <span class="author inline-block"><i class="fa fa-user"></i>{{.User.Nick}}</span>{{end}}{{if .TagString}}
+                <span class="tag inline-block"><i class="fa fa-tags"></i>{{.TagString}}</span>{{end}}
+                <a class="inline-block read right" href="{{.Link}}"><i class="fa fa-search"></i>继续阅读</a>
+            </p>
+        </div>
+    </article>{{end}}
+    <div class="pager text-center">{{range .Pager.PageSlice}}
+        <a href="/p/{{.}}/" class="item{{if eq $.Pager.Current .}} current{{end}}">{{.}}</a>{{end}}
+    </div>
+</div>
+<script src="/static/lib/marked.min.js"></script>
+<script>
+    $(document).ready(function(){
+        var $md = $('.markdown');
+        $md.each(function(i,item){
+            $(item).html(marked($(item).html().replace(/&gt;/g,'>')));
+        });
+        var code = $md.find('pre code');
+        if(code.length){
+            $("<link>").attr({ rel: "stylesheet",type: "text/css",href: "/static/css/highlight.css"}).appendTo("head");
+            $.getScript("/static/lib/highlight.min.js",function(){
+                code.each(function(i,item){hljs.highlightBlock(item)});
+            });
+        }
+    });
+</script>

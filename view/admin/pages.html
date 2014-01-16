@@ -1,0 +1,36 @@
+<ul id="article-list" class="container960 admin">
+    <li>
+        <a class="lbl lbl-blue" href="/admin/page/write/">添加页面</a>
+    </li>{{range .Pages}}
+    <li>
+        <span class="time">{{DateInt64 .CreateTime "MM.DD"}}</span><h4 class="inline-block title"><a href="{{.Link}}" target="_blank">{{.Title}}</a></h4>{{if ne .Status "publish"}}
+        <span class="lbl status">草稿</span>{{end}}
+        <span class="slug">{{.Slug}}</span>{{if eq .IsComment false}}
+        <span class="is-comment"><i class="fa-comments fa"></i><i class="fa fa-times"></i></span>{{end}}
+        <a class="edit lbl lbl-green" href="/admin/page/{{.Id}}/" rel="{{.Id}}">编辑</a>
+        <a class="del lbl lbl-red" href="/admin/page/{{.Id}}/" rel="{{.Id}}">删除</a>
+    </li>{{end}}
+</ul>
+<ul id="article-pager" class="pager container960">{{range .Pager.PageSlice}}
+    <li class="item{{if eq $.Pager.Current .}} current{{end}}"><a href="/admin/pages/?page={{.}}">{{.}}</a></li>{{end}}
+</ul>
+<script>
+    $(".del").on("click",function(e){
+        e.preventDefault();
+        if(confirm("删除页面将使相关内容失效！确认？")){
+            var id = $(this).attr("rel");
+            $.ajax({
+                "url":"/admin/page/"+id+"/",
+                "method":"delete",
+                "success":function(json){
+                    if(json.res){
+                        alert("已删除");
+                        window.location.reload();
+                    }else{
+                        alert(json.msg);
+                    }
+                }
+            })
+        }
+    });
+</script>

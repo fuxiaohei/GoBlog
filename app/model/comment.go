@@ -1,219 +1,219 @@
 package model
 
 import (
-	"fmt"
-	"github.com/fuxiaohei/GoBlog/app"
-	"github.com/fuxiaohei/GoBlog/app/utils"
-	//"github.com/fuxiaohei/GoInk/Db"
-	"strconv"
+	"git.oschina.net/fuxiaohei/GoBlog.git/app/utils"
+	"sort"
 )
+
+var (
+	readers       map[string]*Reader
+	comments      map[int]*Comment
+	commentsIndex []int
+	commentMaxId  int
+)
+
+type Reader struct {
+	Author   string
+	Email    string
+	Url      string
+	Active   bool
+	Comments int
+	Rank     int
+}
+
+func (r *Reader) Inc() {
+	r.Rank++
+	if r.Rank > 1 {
+		r.Active = true
+	}
+}
+
+func (r *Reader) Dec() {
+	r.Rank--
+	if r.Rank < 1 {
+		r.Active = false
+	}
+}
 
 type Comment struct {
 	Id         int
 	Author     string
-	Email      string `json:"-"`
-	Site       string
+	Email      string
+	Url        string
 	Avatar     string
-	CreateTime int64
 	Content    string
-	ContentId  int
-	UserId     int
+	CreateTime int64
+	Cid        int
 	Pid        int
-	IsAdmin    bool
 	Status     string
+	Ip         string
+	UserAgent  string
+	IsAdmin    bool
 }
 
-type CommentContent struct{
-	Title string
-	Link  string
+func (c *Comment) ParentMd() string {
+	if c.Pid < 1 {
+		return ""
+	}
+	co := GetCommentById(c.Pid)
+	if co == nil {
+		return "> 已失效"
+	}
+	str := "> @"+co.Author + "\n\n"
+	str += "> "+co.Content + "\n"
+	return str
 }
 
-func (this *Comment) ContentNode() *CommentContent {
-	article := ArticleM.GetArticleById(this.ContentId)
-	if article != nil {
-		c := new(CommentContent)
-		c.Title = article.Title
-		if article.Status == "publish" {
-			c.Link = article.Link()
+func (c *Comment) ToJson() map[string]interface{} {
+	m := make(map[string]interface{})
+	m["id"] = c.Id
+	m["author"] = c.Author
+	//m["email"] = c.Email
+	m["url"] = c.Url
+	m["avatar"] = c.Avatar
+	m["content"] = c.Content
+	m["create_time"] = c.CreateTime
+	m["pid"] = c.Pid
+	m["status"] = c.Status
+	m["ip"] = c.Ip
+	m["user_agent"] = c.UserAgent
+	m["parent_md"] = c.ParentMd()
+	return m
+}
+
+func (c *Comment) IsValid() bool {
+	if c.Status != "approved" {
+		return false
+	}
+	if c.Pid > 0 {
+		if GetCommentById(c.Pid) == nil {
+			return false
 		}
-		return c
+	}
+	return true
+}
+
+func (c *Comment) GetReader() *Reader {
+	for _, r := range readers {
+		if r.Email == c.Email {
+			return r
+		}
 	}
 	return nil
 }
 
-func (this *Comment) Parent() *Comment {
-	if this.Pid < 1 {
-		return nil
-	}
-	return CommentM.GetCommentById(this.Pid)
+func (c *Comment) GetContent() *Content {
+	return GetContentById(c.Cid)
 }
 
-type CommentModel struct {
-	commentsCache   map[int]*Comment
-	pagedCache map[string][]*Comment
-	pagerCache map[string]int
-	emailCountCache map[string]int
+func CreateReader(c *Comment) {
+	r := new(Reader)
+	r.Author = c.Author
+	r.Email = c.Email
+	r.Url = c.Url
+	r.Active = false
+	r.Comments = 1
+	r.Rank = 0
+	readers[r.Email] = r
+	go SyncReaders()
 }
 
-func (this *CommentModel) GetCommentById(id int) *Comment {
-	if this.commentsCache[id] == nil {
-		sql := "SELECT * FROM blog_comment WHERE type = ? AND id = ?"
-		res, _ := app.Db.Query(sql, "comment", id)
-		c := new(Comment)
-		res.One(c)
-		if c.Id < 1 {
-			return nil
-		}
-		this.cacheComment(c)
+func CreateComment(cid int, c *Comment) {
+	commentMaxId += Storage.TimeInc(4)
+	c.Id = commentMaxId
+	c.CreateTime = utils.Now()
+	c.Status = "check"
+	c.Cid = cid
+	if c.Url == "" {
+		c.Url = "#"
 	}
-	return this.commentsCache[id]
-}
-
-func (this *CommentModel) cacheComment(comments... *Comment) {
-	for _, c := range comments {
-		this.commentsCache[c.Id] = c
-	}
-}
-
-// get paged comments.
-func (this *CommentModel) GetPaged(page, size int, onlySpam bool) ([]*Comment, *Pager) {
-	key := fmt.Sprintf("%d-%d-spam-%t", page, size, onlySpam)
-	if this.pagedCache[key] == nil {
-		sql := "SELECT * FROM blog_comment WHERE type = ?"
-		args := []interface{}{"comment"}
-		limit := (page-1) * size
-		if onlySpam {
-			sql += " AND status = ?"
-			args = append(args, "spam")
-		}
-		sql += " ORDER BY id DESC LIMIT " + fmt.Sprintf("%d,%d", limit, size)
-		res, e := app.Db.Query(sql, args...)
-		if len(res.Data) > 0 && e == nil {
-			comments := make([]*Comment, 0)
-			res.All(&comments)
-			this.pagedCache[key] = comments
-			this.cacheComment(comments...)
-		}
-	}
-	pagerKey := fmt.Sprintf("counter-spam-%t", onlySpam)
-	if this.pagerCache[pagerKey] == 0 {
-		sql := "SELECT count(*) AS c FROM blog_comment WHERE type = ?"
-		args := []interface{}{"comment"}
-		if onlySpam {
-			sql += " AND status = ?"
-			args = append(args, "spam")
-		}
-		res, e := app.Db.Query(sql, args...)
-		if e != nil {
-			return nil, nil
-		}
-		all, _ := strconv.Atoi(res.Data[0]["c"])
-		this.pagerCache[pagerKey] = all
-	}
-	return this.pagedCache[key], newPager(page, size, this.pagerCache[pagerKey])
-}
-
-func (this *CommentModel) GetAllOfContent(contentId int, noDraft bool) []*Comment {
-	key := fmt.Sprintf("content-%d-spam-%t", contentId, noDraft)
-	if len(this.pagedCache[key]) < 1 {
-		sql := "SELECT * FROM blog_comment WHERE type = ? AND content_id = ?"
-		args := []interface{}{"comment", contentId}
-		if noDraft {
-			sql += " AND status = ?"
-			args = append(args, "approved")
-		}
-		sql += " ORDER BY id ASC"
-		res, e := app.Db.Query(sql, args...)
-		if len(res.Data) > 0 && e == nil {
-			comments := make([]*Comment, 0)
-			res.All(&comments)
-			this.pagedCache[key] = comments
-			this.cacheComment(comments...)
-		}
-	}
-	return this.pagedCache[key]
-}
-
-func (this *CommentModel) GetRecentComments(size int) []*Comment {
-	key := fmt.Sprintf("recent-%d", size)
-	if this.pagedCache[key] == nil {
-		sql := "SELECT * FROM blog_comment WHERE type = ? AND status = ? AND pid = 0 AND is_admin = 0 ORDER BY create_time DESC LIMIT ?"
-		res, e := app.Db.Query(sql, "comment", "approved", size)
-		if e != nil {
-			return nil
-		}
-		comments := make([]*Comment, 0)
-		res.All(&comments)
-		this.pagedCache[key] = comments
-		this.cacheComment(comments...)
-	}
-	return this.pagedCache[key]
-}
-
-func (this *CommentModel) CreateComment(c *Comment) *Comment {
-	sql := "INSERT INTO blog_comment(author,email,site,avatar,create_time,content,content_id,user_id,pid,is_admin,type,status) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)"
-	var status string
 	if c.IsAdmin {
-		status = "approved"
-	}else {
-		status = this.getEmailStatus(c.Email)
-	}
-	res, _ := app.Db.Exec(sql, c.Author, c.Email, c.Site, c.Avatar, utils.Now(), c.Content, c.ContentId, c.UserId, c.Pid, c.IsAdmin, "comment", status)
-	this.Reset()
-	if res.LastInsertId < 1 {
-		return nil
-	}
-	return this.GetCommentById(res.LastInsertId)
-}
-
-func (this *CommentModel) getEmailStatus(email string) string {
-	_, ok := this.emailCountCache[email]
-	if ok {
-		if this.emailCountCache[email] > 0 {
-			return "approved"
+		c.Status = "approved"
+	} else {
+		r := c.GetReader()
+		if r != nil {
+			if r.Active {
+				c.Status = "approved"
+			}
+		} else {
+			CreateReader(c)
 		}
-		return "spam"
 	}
-	sql := "SELECT count(*) AS c FROM blog_comment WHERE email = ? AND type = ? AND status = ?"
-	res, _ := app.Db.Query(sql, email, "comment", "approved")
-	if len(res.Data) > 0 {
-		all, _ := strconv.Atoi(res.Data[0]["c"])
-		this.emailCountCache[email] = all
-		if all > 0 {
-			return "approved"
+	// update comment memory data
+	comments[c.Id] = c
+	commentsIndex = append([]int{c.Id}, commentsIndex...)
+	// append to content
+	content := GetContentById(cid)
+	content.Comments = append(content.Comments, c)
+	go SyncContent(content)
+}
+
+func SaveComment(c *Comment) {
+	cnt := GetContentById(c.Cid)
+	go SyncContent(cnt)
+}
+
+func RemoveComment(cid int, id int) {
+	delete(comments, id)
+	for n, c := range commentsIndex {
+		if c == id {
+			commentsIndex = append(commentsIndex[:n], commentsIndex[n+1:]...)
+			break
 		}
-		return "spam"
 	}
-	return "spam"
+	cnt := GetContentById(cid)
+	if cnt == nil {
+		return
+	}
+	for n, c := range cnt.Comments {
+		if c.Id == id {
+			cnt.Comments = append(cnt.Comments[:n], cnt.Comments[n+1:]...)
+		}
+	}
+	go SyncContent(cnt)
 }
 
-func (this *CommentModel) DeleteComment(id int) {
-	sql := " DELETE FROM blog_comment WHERE id = ?"
-	app.Db.Exec(sql, id)
-	this.Reset()
+func GetCommentById(id int) *Comment {
+	return comments[id]
 }
 
-func (this *CommentModel) DeleteCommentsInContent(contentId int) {
-	sql := "DELETE FROM blog_comment WHERE content_id = ?"
-	app.Db.Exec(sql, contentId)
-	this.Reset()
+func GetCommentList(page, size int) ([]*Comment, *utils.Pager) {
+	index := commentsIndex
+	pager := utils.NewPager(page, size, len(index))
+	comments := make([]*Comment, 0)
+	if page > pager.Pages {
+		return comments, pager
+	}
+	for i := pager.Begin; i <= pager.End; i++ {
+		comments = append(comments, GetCommentById(index[i-1]))
+	}
+	return comments, pager
 }
 
-func (this *CommentModel) ChangeCommentStatus(id int, status string) {
-	sql := "UPDATE blog_comment SET status = ? WHERE id = ?"
-	app.Db.Exec(sql, status, id)
-	this.Reset()
+func SyncReaders() {
+	Storage.Set("readers", readers)
 }
 
-func (this *CommentModel) Reset() {
-	this.pagedCache = make(map[string][]*Comment)
-	this.pagerCache = make(map[string]int)
-	this.commentsCache = make(map[int]*Comment)
-	this.emailCountCache = make(map[string]int)
+func LoadReaders() {
+	readers = make(map[string]*Reader)
+	Storage.Get("readers", &readers)
 }
 
-func NewCommentModel() *CommentModel {
-	c := new(CommentModel)
-	c.Reset()
-	return c
+func LoadComments() {
+	comments = make(map[int]*Comment)
+	commentsIndex = make([]int, 0)
+	commentMaxId = 0
+	for _, c := range contents {
+		if len(c.Comments) < 1 {
+			continue
+		}
+		for _, cm := range c.Comments {
+			comments[cm.Id] = cm
+			commentsIndex = append(commentsIndex, cm.Id)
+			if cm.Id > commentMaxId {
+				commentMaxId = cm.Id
+			}
+		}
+	}
+	sort.Sort(sort.Reverse(sort.IntSlice(commentsIndex)))
 }

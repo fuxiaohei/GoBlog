@@ -1,8 +1,8 @@
 {
 	"mappings": [
 		{
-			"src": "/less",
-			"dest": "/css"
+			"src": "less",
+			"dest": "css"
 		}
 	],
 

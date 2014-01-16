@@ -2,148 +2,127 @@ package model
 
 import (
 	"errors"
-	"github.com/fuxiaohei/GoBlog/app"
-	"github.com/fuxiaohei/GoBlog/app/utils"
+	"git.oschina.net/fuxiaohei/GoBlog.git/app/utils"
+)
+
+var (
+	users     []*User
+	userMaxId int
 )
 
 type User struct {
-	Id         int
-	Login      string
-	Password   string
-	Display    string
-	Email      string
-	Site       string
-	Avatar     string
-	CreateTime int64
-	LoginTime  int64
-	LoginIp    string
-	RoleName   string
-	Status     string
+	Id            int
+	Name          string
+	Password      string
+	Nick          string
+	Email         string
+	Avatar        string
+	Url           string
+	Bio           string
+	CreateTime    int64
+	LastLoginTime int64
+	Role          string
 }
 
-type UserModel struct {
-	usersCache      map[int]*User
-	loginIndexCache map[string]int
+// check user password.
+func (u *User) CheckPassword(pwd string) bool {
+	return utils.Sha1(pwd+"xxxxx") == u.Password
 }
 
-// get all users.
-// its result is cached.
-func (this *UserModel) GetAllUser() map[int]*User {
-	if len(this.usersCache) > 0 {
-		return this.usersCache
+// change user email.
+// check unique.
+func (u *User) ChangeEmail(email string) bool {
+	u2 := GetUserByEmail(u.Email)
+	if u2.Id != u.Id {
+		return false
 	}
-	sql := "SELECT * FROM blog_user"
-	result, _ := app.Db.Query(sql)
-	users := make([]*User, 0)
-	result.All(&users)
-	this.cacheUser(users...)
-	return this.usersCache
+	u.Email = email
+	return true
 }
 
-// generate an index for login/id pair.
-func (this *UserModel) generateLoginIndex() {
-	if len(this.usersCache) < 1 {
-		return
-	}
-	this.loginIndexCache = make(map[string]int)
-	for _, u := range this.usersCache {
-		this.loginIndexCache[u.Login] = u.Id
-	}
+// change user password.
+func (u *User) ChangePassword(pwd string) {
+	u.Password = utils.Sha1(pwd+"xxxxx")
 }
 
-// get one user by id.
-// if no cached, query from db and cache it.
-func (this *UserModel) GetUserById(id int) *User {
-	if this.usersCache[id] != nil {
-		return this.usersCache[id]
-	}
-	sql := "SELECT * FROM blog_user WHERE id = ?"
-	res, _ := app.Db.Query(sql, id)
-	u := new(User)
-	res.One(u)
-	// cache it
-	if u.Id == id {
-		this.cacheUser(u)
-	} else {
-		u = nil
-	}
-	return u
-}
-
-// get one user by login name.
-// if no cached, query from db and cache it.
-func (this *UserModel) GetUserByLogin(login string) *User {
-	// get from login index map
-	id := this.loginIndexCache[login]
-	if id > 0 {
-		return this.GetUserById(id)
-	}
-	// query db
-	sql := "SELECT * FROM blog_user WHERE login = ?"
-	res, _ := app.Db.Query(sql, login)
-	u := new(User)
-	res.One(u)
-	// cache it
-	if u.Login == login {
-		this.cacheUser(u)
-	} else {
-		u = nil
-	}
-	return u
-}
-
-// cache user struct.
-// put into map and login index map.
-func (this *UserModel) cacheUser(users... *User) {
-	for _,u := range users{
-		if u == nil {
-			return
+// get a user by given id.
+func GetUserById(id int) *User {
+	for _, u := range users {
+		if u.Id == id {
+			return u
 		}
-		this.usersCache[u.Id] = u
-		this.loginIndexCache[u.Login] = u.Id
 	}
-}
-
-// save user profile.
-// update memory cache struct immediately.
-// save user data to db in routine.
-// return the updated user struct
-func (this *UserModel) SaveProfile(id int, login string, display string, email string, site string, avatar string) *User {
-	// save to db
-	sql := "UPDATE blog_user SET login = ?,display = ?,email = ?,site = ?,avatar = ? WHERE id = ?"
-	app.Db.Exec(sql, login, display, email, site, avatar, id)
-	this.Reset()
-	return this.GetUserById(id)
-}
-
-// save new password.
-// if no user or wrong old password, return error.
-func (this *UserModel) SavePassword(id int, old string, new string) error {
-	user := this.GetUserById(id)
-	if user == nil {
-		return errors.New("无效的用户")
-	}
-	if user.Password != utils.Sha1(old) {
-		return errors.New("旧密码错误")
-	}
-	user.Password = utils.Sha1(new)
-	sql := "UPDATE blog_user SET password = ? WHERE id = ?"
-	app.Db.Exec(sql, user.Password, id)
-	this.Reset()
 	return nil
 }
 
-func (this *UserModel) Reset() {
-	this.usersCache = make(map[int]*User)
-	this.loginIndexCache = make(map[string]int)
-	this.GetAllUser()
-	this.generateLoginIndex()
+// get a user by given name.
+func GetUserByName(name string) *User {
+	for _, u := range users {
+		if u.Name == name {
+			return u
+		}
+	}
+	return nil
 }
 
-// create new userModel.
-// load all user data for caching.
-func NewUserModel() *UserModel {
-	userM := new(UserModel)
-	userM.Reset()
-	return userM
+// get a user by given email.
+func GetUserByEmail(email string) *User {
+	for _, u := range users {
+		if u.Email == email {
+			return u
+		}
+	}
+	return nil
+}
+
+// get users of given role.
+func GetUsersByRole(role string) []*User {
+	us := make([]*User, 0)
+	for _, u := range users {
+		if u.Role == role {
+			us = append(us, u)
+		}
+	}
+	return us
+}
+
+// create new user.
+func CreateUser(u *User) error {
+	if GetUserByName(u.Email) != nil {
+		return errors.New("email-repeat")
+	}
+	userMaxId += Storage.TimeInc(5)
+	u.Id = userMaxId
+	u.CreateTime = utils.Now()
+	u.LastLoginTime = u.CreateTime
+	users = append(users, u)
+	go SyncUsers()
+	return nil
+}
+
+// remove a user.
+func RemoveUser(u *User) {
+	for i, u2 := range users {
+		if u2.Id == u.Id {
+			users = append(users[:i], users[i+1:]...)
+			break
+		}
+	}
+	go SyncUsers()
+}
+
+// write users to json.
+func SyncUsers() {
+	Storage.Set("users", users)
+}
+
+func LoadUsers() {
+	users = make([]*User, 0)
+	userMaxId = 0
+	Storage.Get("users", &users)
+	for _, u := range users {
+		if u.Id > userMaxId {
+			userMaxId = u.Id
+		}
+	}
 }

@@ -1,0 +1,65 @@
+<form id="profile" class="admin form clear form-align" action="#" method="post" name="profile-form">
+    <div class="avatar grid-1-4 left text-center">
+        <img src="{{.User.Avatar}}" alt="{{.User.Nick}}" class="field"/>
+        <span class="tip field inline-block">头像由 <a href="http://gravatar.com/" target="_blank" rel="no-follow">Gravatar</a> 提供</span>
+        <p class="field">
+            <a class="btn btn-red inline-block" href="/admin/password/">修改密码</a>
+        </p>
+    </div>
+    <div class="info right grid-3-4">
+        <p class="field">
+            <label for="user">登录名</label>
+            <input id="user" type="text" name="user" value="{{.User.Name}}" required="required" class="ipt"/>
+            <span class="tip">登录的用户名</span><br/>
+            <span class="invalid lbl lbl-red hide" id="user-invalid">用户名为字母+数字，长度4-20个字符</span>
+        </p>
+        <p class="field">
+            <label for="nick">昵称</label>
+            <input id="nick" type="text" name="nick" value="{{.User.Nick}}" required="required" class="ipt"/>
+            <span class="tip">显示在前台的称呼</span>
+            <br/><span class="invalid lbl lbl-red hide" id="nick-invalid">昵称长度2-20个字符</span>
+        </p>
+        <p class="field">
+            <label for="email">邮箱</label>
+            <input id="email" type="email" name="email" value="{{.User.Email}}" required="required" class="ipt"/>
+            <span class="tip">联系邮箱，十分重要！</span>
+            <br/><span class="invalid lbl lbl-red hide" id="email-invalid">邮箱格式错误</span>
+        </p>
+        <p class="field">
+            <label for="url">网址</label>
+            <input id="url" type="url" name="url" value="{{.User.Url}}" class="ipt"/>
+            <br/><span class="invalid lbl lbl-red hide" id="url-invalid">网址格式错误</span>
+        </p>
+        <p class="field">
+            <textarea class="ipt bio" name="bio" id="bio">{{.User.Bio}}</textarea>
+        </p>
+        <p class="field">
+            <label>&nbsp;</label>
+            <button class="btn btn-blue">保存修改</button>
+        </p>
+    </div>
+</form>
+<script>
+    $(function(){
+        new FormValidator("profile-form",[
+            {"name":"user","rules":"alpha_numeric|min_length[4]|max_length[20]"},
+            {"name":"nick","rules":"min_length[2]|max_length[20]"},
+            {"name":"email","rules":"valid_email"},
+            {"name":"url","rules":"valid_url"}
+        ],function(errors,e){
+            e.preventDefault();
+            $('.invalid').hide();
+            if(errors.length){
+                $("#"+errors[0].id+"-invalid").removeClass("hide").show();
+                return;
+            }
+            $('#profile').ajaxSubmit(function(json){
+                if(!json.res){
+                    alert(json.msg);
+                }else{
+                    alert("已保存");
+                }
+            });
+        })
+    });
+</script>
