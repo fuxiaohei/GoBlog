@@ -176,6 +176,7 @@ func writeDefaultData() {
 		"c_footer_github":"#",
 		"c_footer_email":"#",
 		"c_home_avatar":"/static/img/site.png",
+		"c_footer_ga":"<!-- google analytics or other -->",
 	}
 	Storage.Set("settings", s)
 
