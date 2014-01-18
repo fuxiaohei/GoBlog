@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="http://cdn.staticfile.org/font-awesome/4.0.3/css/font-awesome.min.css"/>
     <link rel="alternate" type="application/rss+xml" title="{{Setting `site_title`}} - RSS 2.0" href="/rss.xml"/>
     <script src="http://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://cdn.staticfile.org/jquery.form/3.46/jquery.form.min.js"></script>
+    <script src="/static/lib/marked.min.js"></script>
 </head>
 <body>
 <header id="header" class="clear">
@@ -38,7 +40,9 @@
         <a class="email" href="{{Setting `c_footer_email`}}" target="_blank"><i class="fa fa-envelope"></i>Email</a>
         <a class="rss" href="/rss.xml" target="_blank"><i class="fa fa-rss"></i>RSS</a>
     </p>
-    <span>All content © 2013 FuXiaoHei All rights reserved. Proudly published with Fxh.Go.</span>
+    <span>Go © 2014 All rights reserved. Proudly published with Fxh.Go.</span>
+    <a id="go-top" href="#" class="lbl hide lbl-blue" title="回到顶部"><i class="fa fa-arrow-up fa-lg"></i></a>
 </footer>
+<script src="/static/js/home.js"></script>
 </body>
 </html>
