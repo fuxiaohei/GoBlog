@@ -25,6 +25,11 @@
         <label for="article-size">单页文章</label>
         <input id="article-size" class="ipt" type="number" name="article_size" value="{{Setting `article_size`}}" max="10" min="3"/>
     </p>
+    <p class="item">
+        <label for="site-theme">主题</label>
+        <input id="site-theme" class="ipt" type="text" name="site_theme" value="{{Setting `site_theme`}}"/>
+        <br/><span class="tip">主题即指向的模板目录，具体内容请参考 default 目录（即 default 主题）</span>
+    </p>
     <p>
         <label>&nbsp;</label>
         <button class="btn btn-blue">保存</button>

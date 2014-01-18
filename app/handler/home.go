@@ -20,7 +20,7 @@ func Login(context *GoInk.Context) {
 			Json(context, false).End()
 			return
 		}
-		exp := 3600 * 24 * 3
+		exp := 3600*24 * 3
 		expStr := strconv.Itoa(exp)
 		s := model.CreateToken(user, context, int64(exp))
 		context.Cookie("token-user", strconv.Itoa(s.UserId), expStr)
@@ -32,7 +32,7 @@ func Login(context *GoInk.Context) {
 		context.Redirect("/admin/")
 		return
 	}
-	context.Render("home/login", nil)
+	context.Render("admin/login", nil)
 }
 
 func Auth(context *GoInk.Context) {
@@ -61,10 +61,10 @@ func Home(context *GoInk.Context) {
 	page, _ := strconv.Atoi(context.Param("page"))
 	size, _ := strconv.Atoi(model.GetSetting("article_size"))
 	articles, pager := model.GetArticleList(page, size)
-	context.Render("home/home", map[string]interface{}{
-		"Articles": articles,
-		"Pager":    pager,
-	})
+	Theme(context).Layout("home").Render("index", map[string]interface{}{
+			"Articles": articles,
+			"Pager":    pager,
+		})
 }
 
 func Article(context *GoInk.Context) {
@@ -80,12 +80,11 @@ func Article(context *GoInk.Context) {
 		return
 	}
 	article.Hits++
-	context.Layout("home")
-	context.Render("home/article", map[string]interface{}{
-		"Title":       article.Title,
-		"Article":     article,
-		"CommentHtml": Comments(context, article),
-	})
+	Theme(context).Layout("home").Render("article", map[string]interface{}{
+			"Title":       article.Title,
+			"Article":     article,
+			"CommentHtml": Comments(context, article),
+		})
 }
 
 func Page(context *GoInk.Context) {
@@ -101,12 +100,11 @@ func Page(context *GoInk.Context) {
 		return
 	}
 	article.Hits++
-	context.Layout("home")
-	context.Render("home/page", map[string]interface{}{
-		"Title": article.Title,
-		"Page":  article,
-		//"CommentHtml": Comments(context, article),
-	})
+	Theme(context).Layout("home").Render("page", map[string]interface{}{
+			"Title": article.Title,
+			"Page":  article,
+			//"CommentHtml": Comments(context, article),
+		})
 }
 
 func TopPage(context *GoInk.Context) {
@@ -117,11 +115,10 @@ func TopPage(context *GoInk.Context) {
 		return
 	}
 	if page.IsLinked && page.Type == "page" {
-		context.Layout("home")
-		context.Render("home/page", map[string]interface{}{
-			"Title": page.Title,
-			"Page":  page,
-		})
+		Theme(context).Layout("home").Render("page", map[string]interface{}{
+				"Title": page.Title,
+				"Page":  page,
+			})
 		page.Hits++
 		return
 	}
@@ -129,10 +126,10 @@ func TopPage(context *GoInk.Context) {
 }
 
 func Comments(context *GoInk.Context, c *model.Content) string {
-	return context.Tpl("home/comment", map[string]interface{}{
-		"Content":  c,
-		"Comments": c.Comments,
-	})
+	return Theme(context).Tpl("comment", map[string]interface{}{
+			"Content":  c,
+			"Comments": c.Comments,
+		})
 }
 
 func Comment(context *GoInk.Context) {

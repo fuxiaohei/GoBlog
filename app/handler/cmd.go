@@ -27,7 +27,7 @@ func CmdBackup(context *GoInk.Context) {
 	}
 	files, _ := cmd.GetBackupFiles()
 	context.Layout("cmd")
-	context.Render("cmd/backup", map[string]interface {}{
+	context.Render("admin/cmd/backup", map[string]interface {}{
 			"Files":files,
 		})
 }

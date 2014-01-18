@@ -94,9 +94,9 @@ func Init() {
 	// set recover handler
 	App.Recover(func(context *GoInk.Context) {
 		go LogError(append(append(context.Body, []byte("\n")...), debug.Stack()...))
-		if App.View().Has("error/error.html") {
-			context.Layout("")
-			context.Render("error/error", map[string]interface{}{
+		theme := handler.Theme(context)
+		if theme.Has("error/error.html") {
+			theme.Layout("").Render("error/error", map[string]interface{}{
 				"error":   string(context.Body),
 				"stack":   string(debug.Stack()),
 				"context": context,
@@ -112,9 +112,9 @@ func Init() {
 
 	// set not found handler
 	App.NotFound(func(context *GoInk.Context) {
-		if App.View().Has("error/notfound.html") {
-			context.Layout("")
-			context.Render("error/notfound", map[string]interface{}{
+		theme := handler.Theme(context)
+		if theme.Has("error/notfound.html") {
+			theme.Layout("").Render("error/notfound", map[string]interface{}{
 				"context": context,
 			})
 		}

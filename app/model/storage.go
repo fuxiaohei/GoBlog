@@ -171,6 +171,7 @@ func writeDefaultData() {
 		"site_description": "Go语言开发的简单博客程序",
 		"site_url":         "http://localhost/",
 		"article_size":     "4",
+		"site_theme":"default",
 		"c_footer_weibo":"#",
 		"c_footer_github":"#",
 		"c_footer_email":"#",
