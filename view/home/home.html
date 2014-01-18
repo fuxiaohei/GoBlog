@@ -6,7 +6,7 @@
             <p class="lbl lbl-green views"><i class="fa fa-eye"></i><strong>{{.Hits}} ℉</strong></p>
             <p class="lbl lbl-gray time"><i class="fa fa-clock-o"></i><strong>{{DateInt64 .CreateTime "MM.DD"}}</strong></p>
         </div>
-        <div class="main right">
+        <div class="main">
             <h3 class="title"><a href="{{.Link}}" title="{{.Title}}">{{.Title}}</a></h3>
             <section class="content markdown">{{Html .Summary}}</section>
             <p class="info clear">
