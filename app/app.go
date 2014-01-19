@@ -199,6 +199,7 @@ func Run() {
 	App.View().FuncMap["Html2str"] = utils.Html2str
 	App.View().FuncMap["FileSize"] = utils.FileSize
 	App.View().FuncMap["Setting"] = model.GetSetting
+	App.View().FuncMap["Md2html"] = utils.Markdown2HtmlTemplate
 
 	registerAdminHandler()
 	registerCmdHandler()

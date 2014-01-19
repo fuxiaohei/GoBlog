@@ -36,7 +36,7 @@ function topButton(){
 
 function renderMarkdown() {
     var $md = $('.markdown');
-    if (window.is_marked) {
+    if (window.go_marked === "false") {
         $md.each(function (i, item) {
             $(item).html(marked($(item).html().replace(/&gt;/g, '>')));
         });

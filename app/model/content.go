@@ -60,12 +60,19 @@ func (cnt *Content) Link() string {
 
 // get content text.
 func (cnt *Content) Content() string {
+	if GetSetting("enable_go_markdown") == "true" {
+		return utils.Markdown2Html(cnt.Text)
+	}
 	return cnt.Text
 }
 
 // get content summary.
 func (cnt *Content) Summary() string {
-	return strings.Split(cnt.Text, "<!--more-->")[0]
+	text := strings.Split(cnt.Text, "<!--more-->")[0]
+	if GetSetting("enable_go_markdown") == "true" {
+		return utils.Markdown2Html(text)
+	}
+	return text
 }
 
 // get content comments number.

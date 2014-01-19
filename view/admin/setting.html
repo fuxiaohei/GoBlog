@@ -1,34 +1,39 @@
 <form id="setting-form" class="form form-align" action="/admin/setting/" method="post">
     <p class="item">
-        <label for="site-url">根地址</label>
+        <label for="site-url">站点地址</label>
         <input id="site-url" class="ipt" type="url" name="site_url" required="required" value="{{Setting `site_url`}}"/>
     </p>
     <p class="item">
-        <label for="site-title">主标题</label>
+        <label for="site-title">站点主标题</label>
         <input id="site-title" class="ipt" type="text" name="site_title" required="required" value="{{Setting `site_title`}}"/>
     </p>
     <p class="item">
-        <label for="site-sub-title">副标题</label>
+        <label for="site-sub-title">站点副标题</label>
         <input id="site-sub-title" class="ipt" type="text" name="site_sub_title" required="required" value="{{Setting `site_sub_title`}}"/>
     </p>
     <p class="item">
-        <label for="site-keywords">关键字</label>
+        <label for="site-keywords">Meta关键字</label>
         <input id="site-keywords" class="ipt" type="text" name="site_keywords" value="{{Setting `site_keywords`}}"/>
-        <span class="tip">出现在meta中</span>
     </p>
     <p class="item">
-        <label for="site-desc">站点介绍</label>
+        <label for="site-desc">Meta站点介绍</label>
         <input id="site-desc" class="ipt" type="text" name="site_description" value="{{Setting `site_description`}}"/>
-        <span class="tip">出现在meta中</span>
     </p>
     <p class="item">
-        <label for="article-size">单页文章</label>
+        <label for="article-size">单页文章列表数</label>
         <input id="article-size" class="ipt" type="number" name="article_size" value="{{Setting `article_size`}}" max="10" min="3"/>
     </p>
     <p class="item">
-        <label for="site-theme">主题</label>
+        <label for="site-theme">主题目录名</label>
         <input id="site-theme" class="ipt" type="text" name="site_theme" value="{{Setting `site_theme`}}"/>
-        <br/><span class="tip">主题即指向的模板目录，具体内容请参考 default 目录（即 default 主题）</span>
+        <span class="tip block">主题即指向的模板目录，具体内容请参考 default 目录（即 default 主题）</span>
+        <input type="hidden" name="site_theme_def" value="default"/>
+    </p>
+    <p class="item">
+        <label for="go-markdown">Go渲染Markdown</label>
+        <input id="go-markdown" class="ipt" type="text" name="enable_go_markdown" value="{{Setting `enable_go_markdown`}}"/>
+        <span class="tip block">默认关闭，使用前端marked.js渲染，填true时开启</span>
+        <input type="hidden" name="enable_go_markdown_def" value="false"/>
     </p>
     <p>
         <label>&nbsp;</label>

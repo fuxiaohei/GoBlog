@@ -3,6 +3,8 @@ package utils
 import (
 	"regexp"
 	"strings"
+	"github.com/russross/blackfriday"
+	"html/template"
 )
 
 func Html2str(html string) string {
@@ -29,4 +31,12 @@ func Html2str(html string) string {
 	src = re.ReplaceAllString(src, "\n")
 
 	return strings.TrimSpace(src)
+}
+
+func Markdown2Html(text string) string {
+	return string(blackfriday.MarkdownCommon([]byte(text)))
+}
+
+func Markdown2HtmlTemplate(text string) template.HTML {
+	return template.HTML(Markdown2Html(text))
 }
