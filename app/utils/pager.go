@@ -10,6 +10,8 @@ type Pager struct {
 	End       int
 	Prev      int
 	Next      int
+	IsPrev    bool
+	IsNext    bool
 }
 
 func NewPager(page, size, total int) *Pager {
@@ -40,12 +42,16 @@ func NewPager(page, size, total int) *Pager {
 		p.End = p.Total
 	}
 	p.Prev = p.Current - 1
+	p.IsPrev = true
 	if p.Prev < 1 {
 		p.Prev = 1
+		p.IsPrev = false
 	}
 	p.Next = p.Current + 1
+	p.IsNext = true
 	if p.Next > p.Pages {
 		p.Next = p.Pages
+		p.IsNext = false
 	}
 	return p
 }

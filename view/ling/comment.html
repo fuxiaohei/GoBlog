@@ -1,0 +1,60 @@
+<div id="comment" class="relative">
+    <h4 id="comment-title">文章评论</h4>
+    <div class="meta absolute text-center">
+        <p class="lbl lbl-red comments"><a href="{{.Link}}#comment">{{.Content.CommentNum}}</a></p>
+    </div>
+    <div id="comment-list">{{range .Comments}}{{if .IsValid}}
+        <div class="comment clear" id="comment-{{.Id}}">
+            <img class="c-avatar left" src="{{.Avatar}}" alt="{{.Author}}"/>
+            <div class="c-section">
+                <div class="c-meta clear">
+                    <a class="c-reply lbl right" href="#" rel="{{.Id}}">回复</a>
+                    <p><a class="c-author{{if .IsAdmin}} admin{{end}}" href="{{.Url}}" target="_blank">{{.Author}}{{if .IsAdmin}}&nbsp;&nbsp;(admin){{end}}</a></p>
+                    <p><span class="c-time">{{DateInt64 .CreateTime "MM 月 DD 日 HH 时 mm 分"}}</span></p>
+                </div>
+                <section class="c-content">{{Html .Content}}</section>{{if .ParentMd}}
+                <div class="c-p-md markdown">{{Html .ParentMd}}</div>{{end}}
+            </div>
+        </div>{{end}}{{end}}
+    </div>
+    <div id="comment-show" class="text-center">{{if .Content.IsComment}}
+        <button class="btn btn-green enable">发表评论</button>{{else}}
+        <button class="btn btn-red">本文关闭了评论</button>{{end}}
+    </div>{{if .Content.IsComment}}
+    <form id="comment-form" class="hide clear text-center form" action="/comment/{{.Content.Id}}/" method="post">
+        <div class="c-info left text-right">
+            <p class="item c-avatar-field">
+                <img class="c-avatar null" src="/static/img/site.png" alt="" id="comment-avatar"/>
+                <a class="not-me block" href="#">不是我?</a>
+            </p>
+            <div class="c-info-fields hide">
+                <p class="item"><input class="ipt" type="text" name="user" required="required" placeholder="称呼" id="comment-author"/></p>
+                <p class="item"><input class="ipt" type="email" name="email" required="required" placeholder="邮箱" id="comment-email"/> </p>
+                <p class="item"><input class="ipt" type="url" name="url" placeholder="网址" id="comment-url"/></p>
+                <input id="comment-parent" type="hidden" value="0" name="pid"/>
+            </div>
+        </div>
+        <div class="c-content text-left right">
+            <textarea class="ipt" name="content" id="comment-content" required="required"></textarea>
+            <button class="btn btn-blue">发表评论</button>
+            <button class="lbl lbl-green cancel-reply" type="button">取消回复</button>
+        </div>
+    </form>{{end}}
+    <script type="text/template" id="comment-tpl">
+        <div class="comment clear">
+            <img class="c-avatar left" src="{{.Avatar}}" alt=""/>
+            <div class="c-section">
+                <div class="c-meta clear">
+                    <a class="c-reply lbl right" href="#" rel="">回复</a>
+                    <p><a class="c-author " href="{{.Url}}" target="_blank"></a></p>
+                    <p>
+                        <span class="c-time">Now</span>
+                        <span class="c-check">审核中，刷新后隐藏</span>
+                    </p>
+                </div>
+                <section class="c-content"></section>
+                <div class="c-p-md markdown"></div>
+            </div>
+        </div>
+    </script>
+</div>

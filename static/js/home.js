@@ -118,6 +118,8 @@ function initComment() {
             $('#comment-show .enable').trigger("click");
         }
         $('.cancel-reply').show();
+        var top = $('#comment-form').offset().top;
+        $('body,html').animate({scrollTop:top},500);
         return false;
     });
     $('.cancel-reply').on("click", function () {
