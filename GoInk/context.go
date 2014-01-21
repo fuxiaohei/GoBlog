@@ -12,8 +12,9 @@ import (
 )
 
 const (
-	CONTEXT_END  = "context_end"
-	CONTEXT_SEND = "context_send"
+	CONTEXT_RENDERED = "context_rendered"
+	CONTEXT_END      = "context_end"
+	CONTEXT_SEND     = "context_send"
 )
 
 type Context struct {
@@ -267,7 +268,7 @@ func (ctx *Context) End() {
 	ctx.Do(CONTEXT_END)
 }
 
-func (ctx *Context) Throw(status int, message ...interface {}) {
+func (ctx *Context) Throw(status int, message ...interface{}) {
 	e := strconv.Itoa(status)
 	ctx.Status = status
 	ctx.Do(e, message...)
@@ -278,7 +279,7 @@ func (ctx *Context) Layout(str string) {
 	ctx.layout = str
 }
 
-func (ctx *Context) Tpl(tpl string, data map[string]interface {}) string {
+func (ctx *Context) Tpl(tpl string, data map[string]interface{}) string {
 	b, e := ctx.app.view.Render(tpl + ".html", data)
 	if e != nil {
 		panic(e)
@@ -299,13 +300,13 @@ func (ctx *Context) Render(tpl string, data map[string]interface{}) {
 		b = bytes.Replace(l, []byte("{@Content}"), b, -1)
 	}
 	ctx.Body = b
+	ctx.Do(CONTEXT_RENDERED)
 }
 
-func (ctx *Context) Func(name string, fn interface {}) {
+func (ctx *Context) Func(name string, fn interface{}) {
 	ctx.app.view.FuncMap[name] = fn
 }
 
 func (ctx *Context) App() *App {
 	return ctx.app
 }
-
