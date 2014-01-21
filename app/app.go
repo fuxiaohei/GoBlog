@@ -182,6 +182,7 @@ func registerAdminHandler() {
 	App.Post("/admin/files/upload/", handler.Auth, handler.FileUpload)
 
 	App.Route("GET,POST", "/admin/plugins/", handler.Auth, handler.AdminPlugin)
+	App.Route("GET,POST", "/admin/plugins/:plugin_key/", handler.Auth, handler.PluginSetting)
 }
 
 func registerCmdHandler() {

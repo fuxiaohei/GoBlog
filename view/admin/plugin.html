@@ -2,7 +2,8 @@
     <li class="clear">{{if .IsActive}}
         <span class="left lbl active lbl-green">&nbsp;</span>{{end}}
         <span class="name left">{{.Name}}</span>
-        <span class="version left">{{.Version}}</span>{{if .IsActive}}
+        <span class="version left">{{.Version}}</span>{{if .HasSetting}}
+        <a class="setting left" href="/admin/plugins/{{.Key}}/">选项</a>{{end}}{{if .IsActive}}
         <a class="deactivate lbl lbl-red right" href="#" rel="{{.Key}}">封印</a>{{else}}
         <a class="activate lbl lbl-blue right" href="#" rel="{{.Key}}">激活</a>{{end}}
         <p class="desc left">{{.Desc}}</p>

@@ -20,6 +20,7 @@ func (jss *jsonStorage) Init(dir string) {
 	if !jss.has("version") {
 		os.Mkdir(jss.dir, os.ModePerm)
 		os.Mkdir(path.Join(jss.dir, "content"), os.ModePerm)
+		os.Mkdir(path.Join(jss.dir, "plugin"), os.ModePerm)
 		writeDefaultData()
 	}
 	loadAllData()
@@ -28,34 +29,34 @@ func (jss *jsonStorage) Init(dir string) {
 }
 
 func (jss *jsonStorage) has(key string) bool {
-	file := path.Join(jss.dir, key + ".json")
+	file := path.Join(jss.dir, key+".json")
 	_, e := os.Stat(file)
 	return e == nil
 }
 
 func (jss *jsonStorage) Get(key string, v interface{}) {
-	file := path.Join(jss.dir, key + ".json")
+	file := path.Join(jss.dir, key+".json")
 	bytes, e := ioutil.ReadFile(file)
 	if e != nil {
-		println("read storage '"+key+"' error")
+		println("read storage '" + key + "' error")
 		return
 	}
 	e = json.Unmarshal(bytes, v)
 	if e != nil {
-		println("json decode '"+key+"' error")
+		println("json decode '" + key + "' error")
 	}
 }
 
 func (jss *jsonStorage) Set(key string, v interface{}) {
 	bytes, e := json.MarshalIndent(v, "", "  ")
 	if e != nil {
-		println("json encode '"+key+"' error")
+		println("json encode '" + key + "' error")
 		return
 	}
-	file := path.Join(jss.dir, key + ".json")
+	file := path.Join(jss.dir, key+".json")
 	e = ioutil.WriteFile(file, bytes, 0777)
 	if e != nil {
-		println("write storage '"+key+"' error")
+		println("write storage '" + key + "' error")
 	}
 }
 
@@ -111,7 +112,7 @@ func writeDefaultData() {
 	co.Status = "approved"
 	co.Cid = a.Id
 	a.Comments = []*Comment{co}
-	Storage.Set("content/article-" + strconv.Itoa(a.Id), a)
+	Storage.Set("content/article-"+strconv.Itoa(a.Id), a)
 
 	// write pages
 	p := new(Content)
@@ -132,7 +133,7 @@ func writeDefaultData() {
 	p.Comments = make([]*Comment, 0)
 	p.Template = "page.html"
 	p.Hits = 1
-	Storage.Set("content/page-" + strconv.Itoa(p.Id), p)
+	Storage.Set("content/page-"+strconv.Itoa(p.Id), p)
 	p2 := new(Content)
 	p2.Id = p.Id + Storage.TimeInc(6)
 	p2.Title = "好友"
@@ -151,7 +152,7 @@ func writeDefaultData() {
 	p2.Comments = make([]*Comment, 0)
 	p2.Template = "page.html"
 	p2.Hits = 1
-	Storage.Set("content/page-" + strconv.Itoa(p2.Id), p2)
+	Storage.Set("content/page-"+strconv.Itoa(p2.Id), p2)
 
 	// write new reader
 	Storage.Set("readers", map[string]*Reader{})
@@ -171,12 +172,12 @@ func writeDefaultData() {
 		"site_description": "Go语言开发的简单博客程序",
 		"site_url":         "http://localhost/",
 		"article_size":     "4",
-		"site_theme":"default",
-		"c_footer_weibo":"#",
-		"c_footer_github":"#",
-		"c_footer_email":"#",
-		"c_home_avatar":"/static/img/site.png",
-		"c_footer_ga":"<!-- google analytics or other -->",
+		"site_theme":       "default",
+		"c_footer_weibo":   "#",
+		"c_footer_github":  "#",
+		"c_footer_email":   "#",
+		"c_home_avatar":    "/static/img/site.png",
+		"c_footer_ga":      "<!-- google analytics or other -->",
 	}
 	Storage.Set("settings", s)
 

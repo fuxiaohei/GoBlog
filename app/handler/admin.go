@@ -342,6 +342,24 @@ func AdminPlugin(context *GoInk.Context) {
 	context.Layout("admin")
 	context.Render("admin/plugin", map[string]interface{}{
 		"Title":   "插件",
-		"Plugins": plugin.Plugins(),
+		"Plugins": plugin.GetPlugins(),
 	})
+}
+
+func PluginSetting(context *GoInk.Context){
+	key := context.Param("plugin_key")
+	if key == ""{
+		context.Redirect("/admin/plugins/")
+		return
+	}
+	p := plugin.GetPluginByKey(key)
+	if p == nil{
+		context.Redirect("/admin/plugins/")
+		return
+	}
+	context.Layout("admin")
+	context.Render("admin/plugin_setting",map[string]interface {}{
+			"Title":"插件 - "+p.Name(),
+			"Form":p.Form(),
+		})
 }
