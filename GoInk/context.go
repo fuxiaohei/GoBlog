@@ -66,7 +66,7 @@ func NewContext(app *App, res http.ResponseWriter, req *http.Request) *Context {
 	context.IsSSL = req.TLS != nil
 	context.Referer = req.Referer()
 	context.UserAgent = req.UserAgent()
-	context.Base = "://"+context.Host + "/"
+	context.Base = "://" + context.Host + "/"
 	if context.IsSSL {
 		context.Base = "https" + context.Base
 	} else {
@@ -111,13 +111,13 @@ func (ctx *Context) Do(e string, args ...interface{}) []interface{} {
 		return nil
 	}
 	if !ctx.eventsFunc[e].IsValid() {
-		println("invalid function call for Context.Do("+e+")")
+		println("invalid function call for Context.Do(" + e + ")")
 		return nil
 	}
 	fn := ctx.eventsFunc[e]
 	numIn := fn.Type().NumIn()
 	if numIn > len(args) {
-		println("not enough parameters for Context.Do("+e+")")
+		println("not enough parameters for Context.Do(" + e + ")")
 		return nil
 	}
 	rArgs := make([]reflect.Value, numIn)
@@ -204,7 +204,7 @@ func (ctx *Context) Cookie(key string, value ...string) string {
 	if len(value) == 2 {
 		t := time.Now()
 		expire, _ := strconv.Atoi(value[1])
-		t = t.Add(time.Duration(expire)*time.Second)
+		t = t.Add(time.Duration(expire) * time.Second)
 		cookie := &http.Cookie{
 			Name:    key,
 			Value:   value[0],
@@ -280,7 +280,7 @@ func (ctx *Context) Layout(str string) {
 }
 
 func (ctx *Context) Tpl(tpl string, data map[string]interface{}) string {
-	b, e := ctx.app.view.Render(tpl + ".html", data)
+	b, e := ctx.app.view.Render(tpl+".html", data)
 	if e != nil {
 		panic(e)
 	}
@@ -288,12 +288,12 @@ func (ctx *Context) Tpl(tpl string, data map[string]interface{}) string {
 }
 
 func (ctx *Context) Render(tpl string, data map[string]interface{}) {
-	b, e := ctx.app.view.Render(tpl + ".html", data)
+	b, e := ctx.app.view.Render(tpl+".html", data)
 	if e != nil {
 		panic(e)
 	}
 	if ctx.layout != "" {
-		l, e := ctx.app.view.Render(ctx.layout + ".layout", data)
+		l, e := ctx.app.view.Render(ctx.layout+".layout", data)
 		if e != nil {
 			panic(e)
 		}

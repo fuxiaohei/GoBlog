@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"runtime/debug"
+	"strings"
 )
 
 const ()
@@ -137,6 +138,24 @@ func (app *App) Put(key string, fn ...Handler) {
 
 func (app *App) Delete(key string, fn ...Handler) {
 	app.router.Delete(key, fn...)
+}
+
+func (app *App) Route(method string, key string, fn ...Handler) {
+	methods := strings.Split(method, ",")
+	for _, m := range methods {
+		switch m{
+		case "GET":
+			app.Get(key, fn...)
+		case "POST":
+			app.Post(key, fn...)
+		case "PUT":
+			app.Put(key, fn...)
+		case "DELETE":
+			app.Delete(key, fn...)
+		default:
+			println("unknow route method "+m)
+		}
+	}
 }
 
 func (app *App) Static(h Handler) {
