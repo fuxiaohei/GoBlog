@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/fuxiaohei/GoBlog/GoInk"
 	"github.com/fuxiaohei/GoBlog/app/model"
+	"github.com/fuxiaohei/GoBlog/app/plugin"
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"strconv"
 	"strings"
@@ -313,5 +314,34 @@ func AdminComments(context *GoInk.Context) {
 		"Title":    "评论",
 		"Comments": comments,
 		"Pager":    pager,
+	})
+}
+
+func AdminPlugin(context *GoInk.Context) {
+	if context.Method == "POST" {
+		action := context.String("action")
+		if action == "" {
+			Json(context, false).End()
+			return
+		}
+		pln := context.String("plugin")
+		if action == "activate" {
+			plugin.Activate(pln)
+			Json(context, true).End()
+			return
+		}
+		if action == "deactivate" {
+			plugin.Deactivate(pln)
+			Json(context, true).End()
+			return
+		}
+		context.Status = 405
+		Json(context, false).End()
+		return
+	}
+	context.Layout("admin")
+	context.Render("admin/plugin", map[string]interface{}{
+		"Title":   "插件",
+		"Plugins": plugin.Plugins(),
 	})
 }

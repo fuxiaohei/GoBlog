@@ -19,6 +19,7 @@
             <a class="pages left" href="/admin/pages/" title="独立页面"><i class="fa fa-paste"></i></a>
             <a class="comments left" href="/admin/comments/" title="评论"><i class="fa fa-comments"></i></a>
             <a class="files left" href="/admin/files/" title="媒体文件"><i class="fa fa-inbox"></i></a>
+            <a class="plugins left" href="/admin/plugins/" title="插件"><i class="fa fa-gears"></i></a>
             <a class="setting left" href="/admin/setting/" title="设置"><i class="fa fa-cog"></i></a>
         </div>
         <a class="out nav-item right" href="/logout/" title="退出"><i class="fa fa-power-off fa-lg"></i></a>

@@ -5,6 +5,7 @@ import (
 	"github.com/fuxiaohei/GoBlog/GoInk"
 	"github.com/fuxiaohei/GoBlog/app/handler"
 	"github.com/fuxiaohei/GoBlog/app/model"
+	"github.com/fuxiaohei/GoBlog/app/plugin"
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"net/http"
 	"os"
@@ -126,57 +127,69 @@ func Init() {
 
 	// set version
 	model.SetVersion(VERSION)
+
+	// init plugin
+	plugin.Init()
+
+	pluginHandlers := plugin.Handlers()
+
+	if len(pluginHandlers["middle"]) > 0 {
+		for _, h := range pluginHandlers["middle"] {
+			App.Use(h)
+		}
+	}
+
+	if len(pluginHandlers["inter"]) > 0 {
+		for name, h := range pluginHandlers["inter"] {
+			if name == "static" {
+				App.Static(h)
+				continue
+			}
+			if name == "recover" {
+				App.Recover(h)
+				continue
+			}
+			if name == "notfound" {
+				App.NotFound(h)
+				continue
+			}
+		}
+	}
 }
 
 func registerAdminHandler() {
 	// add admin handlers
 	App.Get("/admin/", handler.Auth, handler.Admin)
 
-	App.Get("/admin/profile/", handler.Auth, handler.AdminProfile)
-	App.Post("/admin/profile/", handler.Auth, handler.AdminProfile)
+	App.Route("GET,POST", "/admin/profile/", handler.Auth, handler.AdminProfile)
 
-	App.Get("/admin/password/", handler.Auth, handler.AdminPassword)
-	App.Post("/admin/password/", handler.Auth, handler.AdminPassword)
+	App.Route("GET,POST", "/admin/password/", handler.Auth, handler.AdminPassword)
 
-	App.Get("/admin/article/write/", handler.Auth, handler.ArticleWrite)
-	App.Post("/admin/article/write/", handler.Auth, handler.ArticleWrite)
+	App.Route("GET,POST", "/admin/article/write/", handler.Auth, handler.ArticleWrite)
 	App.Get("/admin/articles/", handler.Auth, handler.AdminArticle)
-	App.Get("/admin/article/:id/", handler.Auth, handler.ArticleEdit)
-	App.Post("/admin/article/:id/", handler.Auth, handler.ArticleEdit)
-	App.Delete("/admin/article/:id/", handler.Auth, handler.ArticleEdit)
+	App.Route("GET,POST,DELETE", "/admin/article/:id/", handler.Auth, handler.ArticleEdit)
 
-	App.Get("/admin/page/write/", handler.Auth, handler.PageWrite)
-	App.Post("/admin/page/write/", handler.Auth, handler.PageWrite)
+	App.Route("GET,POST", "/admin/page/write/", handler.Auth, handler.PageWrite)
 	App.Get("/admin/pages/", handler.Auth, handler.AdminPage)
-	App.Get("/admin/page/:id/", handler.Auth, handler.PageEdit)
-	App.Post("/admin/page/:id/", handler.Auth, handler.PageEdit)
-	App.Delete("/admin/page/:id/", handler.Auth, handler.PageEdit)
+	App.Route("GET,POST,DELETE", "/admin/page/:id/", handler.Auth, handler.PageEdit)
 
-	App.Get("/admin/comments/", handler.Auth, handler.AdminComments)
-	App.Delete("/admin/comments/", handler.Auth, handler.AdminComments)
-	App.Put("/admin/comments/", handler.Auth, handler.AdminComments)
-	App.Post("/admin/comments/", handler.Auth, handler.AdminComments)
+	App.Route("GET,POST,PUT,DELETE", "/admin/comments/", handler.Auth, handler.AdminComments)
 
-	App.Get("/admin/setting/", handler.Auth, handler.AdminSetting)
-	App.Post("/admin/setting/", handler.Auth, handler.AdminSetting)
+	App.Route("GET,POST", "/admin/setting/", handler.Auth, handler.AdminSetting)
+	App.Route("GET,POST", "/admin/setting/custom/", handler.Auth, handler.CustomSetting)
 
-	App.Get("/admin/setting/custom/", handler.Auth, handler.CustomSetting)
-	App.Post("/admin/setting/custom/", handler.Auth, handler.CustomSetting)
-
-	App.Get("/admin/files/", handler.Auth, handler.AdminFiles)
-	App.Delete("/admin/files/", handler.Auth, handler.AdminFiles)
+	App.Route("GET,DELETE", "/admin/files/", handler.Auth, handler.AdminFiles)
 	App.Post("/admin/files/upload/", handler.Auth, handler.FileUpload)
+
+	App.Route("GET,POST", "/admin/plugins/", handler.Auth, handler.AdminPlugin)
 }
 
 func registerCmdHandler() {
-	App.Get("/cmd/backup/", handler.Auth, handler.CmdBackup)
-	App.Post("/cmd/backup/", handler.Auth, handler.CmdBackup)
-	App.Delete("/cmd/backup/", handler.Auth, handler.CmdBackup)
+	App.Route("GET,POST,DELETE", "/cmd/backup/", handler.Auth, handler.CmdBackup)
 }
 
 func registerHomeHandler() {
-	App.Get("/login/", handler.Login)
-	App.Post("/login/", handler.Login)
+	App.Route("GET,POST", "/login/", handler.Login)
 	App.Get("/logout/", handler.Logout)
 
 	App.Get("/article/:id/:slug", handler.Article)
