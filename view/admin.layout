@@ -4,9 +4,9 @@
     <meta charset="utf-8"/>
     <title>{{.Title}} - Fxh.Go</title>
     <link rel="stylesheet" href="/static/css/admin.css"/>
-    <link rel="stylesheet" href="http://cdn.staticfile.org/font-awesome/4.0.3/css/font-awesome.min.css"/>
-    <script src="http://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
-    <script src="http://cdn.staticfile.org/jquery.form/3.46/jquery.form.min.js"></script>
+    <link rel="stylesheet" href="http://libs.baidu.com/fontawesome/4.0.3/css/font-awesome.min.css"/>
+    <script src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+    <script src="/static/lib/jquery.form.min.js"></script>
     <script src="/static/lib/validate.min.js"></script>
 </head>
 <body>

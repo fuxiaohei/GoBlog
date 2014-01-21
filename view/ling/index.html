@@ -10,9 +10,7 @@
             <p class="time-info">{{if .User}}<strong>{{.User.Nick}}</strong>&nbsp;&nbsp;&nbsp;{{end}}发表于&nbsp;&nbsp;&nbsp;{{DateInt64 .CreateTime "YYYY 年 MM 月 DD 日"}}</p>
             <section class="content markdown">{{Html .Summary}}</section>
             <p class="info clear">
-                <!--<span class="share weibo inline-block"><i class="fa fa-weibo fa-lg"></i></span>{{if .User}}
-                <span class="author inline-block"><i class="fa fa-user"></i>{{.User.Nick}}</span>{{end}}{{if .TagString}}
-                <span class="tag inline-block"><i class="fa fa-tags"></i>{{.TagString}}</span>{{end}}-->
+                <span class="tag inline-block">标签：{{.TagString}}</span>
                 <a class="inline-block read right" href="{{.Link}}">继续阅读</a>
             </p>
         </div>
