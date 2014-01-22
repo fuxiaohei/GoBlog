@@ -14,7 +14,7 @@
     $(function () {
         $('#backup-btn').on("click", function () {
             $.ajax({
-                method: "post",
+                type: "post",
                 beforeSend: function () {
                     $('.cmd-list').prepend('<li class="backup-loading">备份中..</li>');
                     $('#backup-btn').hide();
@@ -35,7 +35,7 @@
             var that = this;
             $.ajax({
                 url: "/cmd/backup/?file=" + $(this).attr("rel"),
-                method: "delete",
+                type: "delete",
                 success: function (json) {
                     if(json.res){
                         $(that).parent().remove();
