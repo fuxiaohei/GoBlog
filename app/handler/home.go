@@ -20,7 +20,7 @@ func Login(context *GoInk.Context) {
 			Json(context, false).End()
 			return
 		}
-		exp := 3600*24 * 3
+		exp := 3600 * 24 * 3
 		expStr := strconv.Itoa(exp)
 		s := model.CreateToken(user, context, int64(exp))
 		context.Cookie("token-user", strconv.Itoa(s.UserId), expStr)
@@ -62,9 +62,9 @@ func Home(context *GoInk.Context) {
 	size, _ := strconv.Atoi(model.GetSetting("article_size"))
 	articles, pager := model.GetArticleList(page, size)
 	Theme(context).Layout("home").Render("index", map[string]interface{}{
-			"Articles": articles,
-			"Pager":    pager,
-		})
+		"Articles": articles,
+		"Pager":    pager,
+	})
 }
 
 func Article(context *GoInk.Context) {
@@ -81,10 +81,10 @@ func Article(context *GoInk.Context) {
 	}
 	article.Hits++
 	Theme(context).Layout("home").Render("article", map[string]interface{}{
-			"Title":       article.Title,
-			"Article":     article,
-			"CommentHtml": Comments(context, article),
-		})
+		"Title":       article.Title,
+		"Article":     article,
+		"CommentHtml": Comments(context, article),
+	})
 }
 
 func Page(context *GoInk.Context) {
@@ -101,10 +101,10 @@ func Page(context *GoInk.Context) {
 	}
 	article.Hits++
 	Theme(context).Layout("home").Render("page", map[string]interface{}{
-			"Title": article.Title,
-			"Page":  article,
-			//"CommentHtml": Comments(context, article),
-		})
+		"Title": article.Title,
+		"Page":  article,
+		//"CommentHtml": Comments(context, article),
+	})
 }
 
 func TopPage(context *GoInk.Context) {
@@ -116,9 +116,9 @@ func TopPage(context *GoInk.Context) {
 	}
 	if page.IsLinked && page.Type == "page" {
 		Theme(context).Layout("home").Render("page", map[string]interface{}{
-				"Title": page.Title,
-				"Page":  page,
-			})
+			"Title": page.Title,
+			"Page":  page,
+		})
 		page.Hits++
 		return
 	}
@@ -127,9 +127,9 @@ func TopPage(context *GoInk.Context) {
 
 func Comments(context *GoInk.Context, c *model.Content) string {
 	return Theme(context).Tpl("comment", map[string]interface{}{
-			"Content":  c,
-			"Comments": c.Comments,
-		})
+		"Content":  c,
+		"Comments": c.Comments,
+	})
 }
 
 func Comment(context *GoInk.Context) {
@@ -155,4 +155,5 @@ func Comment(context *GoInk.Context) {
 	co.IsAdmin = false
 	model.CreateComment(cid, co)
 	Json(context, true).Set("comment", co.ToJson()).End()
+	go context.Do("comment_created", co)
 }

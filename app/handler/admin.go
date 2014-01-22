@@ -305,6 +305,7 @@ func AdminComments(context *GoInk.Context) {
 		co.IsAdmin = true
 		model.CreateComment(cid, co)
 		Json(context, true).Set("comment", co.ToJson()).End()
+		go context.Do("comment_reply",co)
 		return
 	}
 	page := context.IntOr("page", 1)
@@ -346,20 +347,25 @@ func AdminPlugin(context *GoInk.Context) {
 	})
 }
 
-func PluginSetting(context *GoInk.Context){
+func PluginSetting(context *GoInk.Context) {
 	key := context.Param("plugin_key")
-	if key == ""{
+	if key == "" {
 		context.Redirect("/admin/plugins/")
 		return
 	}
 	p := plugin.GetPluginByKey(key)
-	if p == nil{
+	if p == nil {
 		context.Redirect("/admin/plugins/")
 		return
 	}
+	if context.Method == "POST" {
+		p.SetSetting(context.Input())
+		Json(context, true).End()
+		return
+	}
 	context.Layout("admin")
-	context.Render("admin/plugin_setting",map[string]interface {}{
-			"Title":"插件 - "+p.Name(),
-			"Form":p.Form(),
-		})
+	context.Render("admin/plugin_setting", map[string]interface{}{
+		"Title": "插件 - " + p.Name(),
+		"Form":  p.Form(),
+	})
 }

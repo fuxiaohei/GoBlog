@@ -1,11 +1,39 @@
 package plugin
 
-import "github.com/fuxiaohei/GoBlog/app/model"
+import (
+	"bytes"
+	"encoding/base64"
+	"fmt"
+	"github.com/fuxiaohei/GoBlog/GoInk"
+	"github.com/fuxiaohei/GoBlog/app/model"
+	"html/template"
+	"net/mail"
+	"net/smtp"
+	"path"
+	"strings"
+)
+
+var (
+	// email template original from http://ben-lab.com/tech/1789.html
+	emailReplyTemplate = `<table style="width: 99.8%;height:99.8% "><tbody><tr><td style="background:#FAFAFA">
+    <div style="background-color:white;border-top:2px solid #0079BC;box-shadow:0 1px 3px #AAAAAA;line-height:180%;padding:0 15px 12px;width:500px;margin:50px auto;color:#555555;font-family:'Century Gothic','Trebuchet MS','Hiragino Sans GB',微软雅黑,'Microsoft Yahei',Tahoma,Helvetica,Arial,'SimSun',sans-serif;font-size:12px;">
+        <h2 style="border-bottom:1px solid #DDD;font-size:14px;font-weight:normal;padding:13px 0 10px 8px;"><span style="color: #0079bc;font-weight: bold;">&gt; </span>您在<a style="text-decoration:none;color: #e64346;" href="{{.link}}"> {{.site}} </a>上的留言有回复啦！</h2>
+        <div style="padding:0 12px 0 12px;margin-top:18px">
+            <p><strong>{{.author_p}}</strong> 同学，您曾在文章《{{.title}}》上发表评论:</p>
+            <p style="background-color: #f5f5f5;border: 0px solid #DDD;padding: 10px 15px;margin:18px 0">{{.text_p}}</p>
+            <p><strong>{{.author}}</strong> 给您的回复如下:</p>
+            <p style="background-color: #f5f5f5;border: 0px solid #DDD;padding: 10px 15px;margin:18px 0">{{.text}}</p>
+            <p>您可以点击 <a style="text-decoration:none; color:#0079BC" href="{{.permalink}}">查看回复的完整內容 </a>，欢迎再次光临 <a style="text-decoration:none; color:#0079bc" href="{{.link}}">{{.site}} </a>。</p>
+        </div>
+    </div>
+</td></tr></tbody></table>`
+)
 
 type EmailPlugin struct {
 	isActive            bool
 	isHandlerRegistered bool
 	settings            map[string]string
+	templates           map[string]*template.Template
 }
 
 func init() {
@@ -13,6 +41,12 @@ func init() {
 	EmailPlugin.isActive = false
 	EmailPlugin.isHandlerRegistered = false
 	EmailPlugin.settings = make(map[string]string)
+	EmailPlugin.templates = make(map[string]*template.Template)
+	t1, e := template.New("reply").Parse(emailReplyTemplate)
+	if e != nil {
+		panic(e)
+	}
+	EmailPlugin.templates["reply"] = t1
 	register(EmailPlugin)
 }
 
@@ -42,17 +76,16 @@ func (p *EmailPlugin) Activate() {
 		return
 	}
 	model.Storage.Get("plugin/"+p.Key(), &p.settings)
-	/*fn := func(context *GoInk.Context) {
-		now := time.Now()
-		context.On(GoInk.CONTEXT_RENDERED, func() {
-				if p.isActive {
-					duration := time.Since(now)
-					context.Body = append(context.Body, []byte(fmt.Sprint("\n<!-- execute ", duration, " -->"))...)
-				}
-			})
+	fn := func(context *GoInk.Context) {
+		context.On("comment_created", func(co interface{}) {
+			fmt.Println("created", co)
+		})
+		context.On("comment_reply", func(co interface{}) {
+			fmt.Println("reply", co)
+			p.sendEmail(co.(*model.Comment))
+		})
 	}
-	Handler("hello_plugin", fn, false)
-	p.isHandlerRegistered = true*/
+	Handler("comment_email_notify", fn, false)
 	p.isActive = true
 	p.isHandlerRegistered = true
 }
@@ -79,23 +112,101 @@ func (p *EmailPlugin) Form() string {
     </h4>
     <p class="item">
         <label for="smtp-addr">SMTP服务器</label>
-        <input class="ipt" id="smtp-addr" type="text" name="smtp_host" placeholder="SMTP服务器地址，如 smtp.gmail.com:465"/>
+        <input class="ipt" id="smtp-addr" type="text" name="smtp_host" placeholder="SMTP服务器地址，如 smtp.gmail.com:465" required="required" value="` + p.settings["smtp_host"] + `"/>
     </p>
     <p class="item">
         <label for="smtp-email">SMTP邮箱</label>
-        <input class="ipt" id="smtp-email" type="email" name="smtp_email_user" placeholder="使用SMTP的邮箱"/>
+        <input class="ipt" id="smtp-email" type="email" name="smtp_email_user" placeholder="使用SMTP的邮箱" required="required" value="` + p.settings["smtp_email_user"] + `"/>
     </p>
     <p class="item">
         <label for="smtp-password">邮箱密码</label>
-        <input class="ipt" id="smtp-password" type="password" name="smtp_email_password" placeholder="邮箱密码"/>
+        <input class="ipt" id="smtp-password" type="text" name="smtp_email_password" placeholder="邮箱密码" required="required" value="` + p.settings["smtp_email_password"] + `"/>
     </p>
     <p class="submit item">
         <label>&nbsp;</label>
         <button class="btn btn-blue">保存设置</button>
+        <span class="tip">暂不支持验证，请自行保证正确</span>
     </p>`
 }
 
 func (p *EmailPlugin) SetSetting(settings map[string]string) {
 	p.settings = settings
 	model.Storage.Set("plugin/"+p.Key(), p.settings)
+}
+
+func (p *EmailPlugin) sendEmail(co *model.Comment) {
+	var (
+		tpl     *template.Template
+		buff    bytes.Buffer
+		pco     *model.Comment
+		content *model.Content
+		err     error
+	)
+
+	content = model.GetContentById(co.Cid)
+	if content == nil {
+		println("error content getting in email plugin")
+		return
+	}
+	if co.Pid > 0 {
+		pco = model.GetCommentById(co.Pid)
+		tpl = p.templates["reply"]
+		err = tpl.Execute(&buff, map[string]interface{}{
+			"link":      model.GetSetting("site_url"),
+			"site":      model.GetSetting("site_title"),
+			"author_p":  pco.Author,
+			"text_p":    template.HTML(pco.Content),
+			"author":    co.Author,
+			"text":      template.HTML(co.Content),
+			"title":     content.Title,
+			"permalink": path.Join(model.GetSetting("site_url"), content.Link()),
+		})
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+	}
+
+	// render template first
+
+	// set email vars
+	b64 := base64.NewEncoding("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/")
+	host := p.settings["smtp_host"]
+	email := p.settings["smtp_email_user"]
+	user := model.GetUsersByRole("ADMIN")[0]
+
+	from := mail.Address{user.Nick, email}
+	to := mail.Address{pco.Author, pco.Email}
+
+	header := make(map[string]string)
+	header["From"] = from.String()
+	header["To"] = to.String()
+	header["Subject"] = fmt.Sprintf("=?UTF-8?B?%s?=", b64.EncodeToString([]byte("您的评论有了回复")))
+	header["MIME-Version"] = "1.0"
+	header["Content-Type"] = "text/html; charset=UTF-8"
+	header["Content-Transfer-Encoding"] = "base64"
+
+	message := ""
+	for k, v := range header {
+		message += fmt.Sprintf("%s: %s\r\n", k, v)
+	}
+	message += "\r\n" + b64.EncodeToString(buff.Bytes())
+
+	auth := smtp.PlainAuth(
+		"",
+		email,
+		p.settings["smtp_email_password"],
+		strings.Split(host, ":")[0],
+	)
+
+	err = smtp.SendMail(
+		host,
+		auth,
+		email,
+		[]string{to.Address},
+		[]byte(message),
+	)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
