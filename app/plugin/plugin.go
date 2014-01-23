@@ -41,19 +41,20 @@ func init() {
 
 func Init() {
 	var isChanged = false
-	model.Storage.Get("plugins", &pluginStorage)
+	if model.Storage.Has("plugins") {
+		model.Storage.Get("plugins", &pluginStorage)
+	}
 	// activate
 	for k, p := range pluginMap {
 		_, ok := pluginStorage[k]
 		if !ok {
 			pluginStorage[k] = p.ToStorage()
 			isChanged = true
+		}
+		if pluginStorage[k]["is_activate"].(bool) {
+			p.Activate()
 		} else {
-			if pluginStorage[k]["is_activate"].(bool) {
-				p.Activate()
-			} else {
-				p.Deactivate()
-			}
+			p.Deactivate()
 		}
 	}
 	// clean deleted

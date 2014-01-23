@@ -17,7 +17,7 @@ type jsonStorage struct {
 
 func (jss *jsonStorage) Init(dir string) {
 	jss.dir = dir
-	if !jss.has("version") {
+	if !jss.Has("version") {
 		os.Mkdir(jss.dir, os.ModePerm)
 		os.Mkdir(path.Join(jss.dir, "content"), os.ModePerm)
 		os.Mkdir(path.Join(jss.dir, "plugin"), os.ModePerm)
@@ -28,7 +28,7 @@ func (jss *jsonStorage) Init(dir string) {
 	StartContentsTimer()
 }
 
-func (jss *jsonStorage) has(key string) bool {
+func (jss *jsonStorage) Has(key string) bool {
 	file := path.Join(jss.dir, key+".json")
 	_, e := os.Stat(file)
 	return e == nil
@@ -166,18 +166,19 @@ func writeDefaultData() {
 
 	// write settings
 	s := map[string]string{
-		"site_title":       "Fxh.Go",
-		"site_sub_title":   "Go开发的简单博客",
-		"site_keywords":    "Fxh.Go,Golang,Blog",
-		"site_description": "Go语言开发的简单博客程序",
-		"site_url":         "http://localhost/",
-		"article_size":     "4",
-		"site_theme":       "default",
-		"c_footer_weibo":   "#",
-		"c_footer_github":  "#",
-		"c_footer_email":   "#",
-		"c_home_avatar":    "/static/img/site.png",
-		"c_footer_ga":      "<!-- google analytics or other -->",
+		"site_title":         "Fxh.Go",
+		"site_sub_title":     "Go开发的简单博客",
+		"site_keywords":      "Fxh.Go,Golang,Blog",
+		"site_description":   "Go语言开发的简单博客程序",
+		"site_url":           "http://localhost/",
+		"article_size":       "4",
+		"site_theme":         "default",
+		"enable_go_markdown": "false",
+		"c_footer_weibo":     "#",
+		"c_footer_github":    "#",
+		"c_footer_email":     "#",
+		"c_home_avatar":      "/static/img/site.png",
+		"c_footer_ga":        "<!-- google analytics or other -->",
 	}
 	Storage.Set("settings", s)
 

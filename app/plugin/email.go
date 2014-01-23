@@ -90,7 +90,9 @@ func (p *EmailPlugin) Activate() {
 		p.isActive = true
 		return
 	}
-	model.Storage.Get("plugin/"+p.Key(), &p.settings)
+	if model.Storage.Has("plugin/" + p.Key()) {
+		model.Storage.Get("plugin/"+p.Key(), &p.settings)
+	}
 	fn := func(context *GoInk.Context) {
 		context.On("comment_created", func(co interface{}) {
 			if len(p.settings["smtp_host"]) < 1 || len(p.settings["smtp_email_user"]) < 1 || len(p.settings["smtp_email_password"]) < 1 {
@@ -108,6 +110,7 @@ func (p *EmailPlugin) Activate() {
 		})
 	}
 	Handler("comment_email_notify", fn, false)
+	p.SetSetting(p.settings)
 	p.isActive = true
 	p.isHandlerRegistered = true
 }
