@@ -1,7 +1,6 @@
 package plugin
 
 import (
-	"fmt"
 	"github.com/fuxiaohei/GoBlog/GoInk"
 	"github.com/fuxiaohei/GoBlog/app/model"
 )
@@ -43,7 +42,6 @@ func init() {
 func Init() {
 	var isChanged = false
 	model.Storage.Get("plugins", &pluginStorage)
-	fmt.Println(pluginStorage, pluginMap)
 	// activate
 	for k, p := range pluginMap {
 		_, ok := pluginStorage[k]
@@ -59,9 +57,9 @@ func Init() {
 		}
 	}
 	// clean deleted
-	for k,_ := range pluginStorage{
-		if pluginMap[k] == nil{
-			delete(pluginStorage,k)
+	for k, _ := range pluginStorage {
+		if pluginMap[k] == nil {
+			delete(pluginStorage, k)
 			isChanged = true
 		}
 	}

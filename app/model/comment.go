@@ -151,6 +151,7 @@ func CreateComment(cid int, c *Comment) {
 func SaveComment(c *Comment) {
 	cnt := GetContentById(c.Cid)
 	go SyncContent(cnt)
+	go SyncReaders()
 }
 
 func RemoveComment(cid int, id int) {

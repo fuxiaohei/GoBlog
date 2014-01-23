@@ -43,9 +43,6 @@
     <span>Go © 2014 All rights reserved. Proudly published with Fxh.Go.</span>
     <a id="go-top" href="#" class="lbl hide lbl-blue" title="回到顶部"><i class="fa fa-arrow-up fa-lg"></i></a>
 </footer>
-<script>
-    window.go_marked = "{{Setting `enable_go_markdown`}}";
-</script>
 <script src="/static/js/home.js"></script>
 </body>
 </html>

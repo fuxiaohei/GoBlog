@@ -243,7 +243,7 @@ func LoadContents() {
 
 func StartContentsTimer() {
 	time.AfterFunc(time.Duration(10) * time.Minute, func() {
-			println("write contents in timer")
+			println("write contents in 10 min timer")
 			SyncContents()
 			StartContentsTimer()
 		})
