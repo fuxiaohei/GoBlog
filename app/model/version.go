@@ -14,10 +14,9 @@ func loadVersion() {
 	Storage.Get("version", ver)
 }
 
-func SetVersion(v int) {
-	ver.CurrentVersion = v
-}
-
-func CheckVersion() bool {
-	return ver.Version >= ver.CurrentVersion
+func GetVersion() int{
+	if ver == nil{
+		loadVersion()
+	}
+	return ver.Version
 }

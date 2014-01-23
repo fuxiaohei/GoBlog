@@ -11,11 +11,12 @@ import (
 	"os"
 	"path"
 	"runtime/debug"
+	"strconv"
 	"strings"
 )
 
 var (
-	VERSION          = 20140116
+	VERSION          = 20140130
 	App              *GoInk.App
 	staticFileSuffix = ".css,.js,.jpg,.jpeg,.png,.gif,.ico,.xml,.zip,.txt,.html,.otf,.svg,.eot,.woff,.ttf,.doc,.ppt,.xls,.docx,.pptx,.xlsx"
 	uploadFileSuffix = ".jpg,.png,.gif,.zip,.txt,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
@@ -123,10 +124,12 @@ func Init() {
 	})
 
 	// init storage
-	model.Init()
+	model.Init(VERSION)
 
-	// set version
-	model.SetVersion(VERSION)
+	// load all data
+	model.All()
+
+	println("app version @ " + strconv.Itoa(model.GetVersion()))
 
 	// init plugin
 	plugin.Init()

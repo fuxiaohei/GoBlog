@@ -9,7 +9,10 @@ import (
 	"strconv"
 )
 
-var Storage *jsonStorage
+var (
+	appVersion int
+	Storage *jsonStorage
+)
 
 type jsonStorage struct {
 	dir string
@@ -23,9 +26,6 @@ func (jss *jsonStorage) Init(dir string) {
 		os.Mkdir(path.Join(jss.dir, "plugin"), os.ModePerm)
 		writeDefaultData()
 	}
-	loadAllData()
-	// start timers
-	StartContentsTimer()
 }
 
 func (jss *jsonStorage) Has(key string) bool {
@@ -161,7 +161,7 @@ func writeDefaultData() {
 	v := new(version)
 	v.Name = "Fxh.Go"
 	v.BuildTime = utils.Now()
-	v.Version = 20140116
+	v.Version = appVersion
 	Storage.Set("version", v)
 
 	// write settings
@@ -201,7 +201,13 @@ func (jss *jsonStorage) TimeInc(d int) int {
 	return int(utils.Now())%d + 1
 }
 
-func Init() {
+func Init(v int) {
+	appVersion = v
 	Storage = new(jsonStorage)
 	Storage.Init("data")
+}
+
+func All(){
+	loadAllData()
+	StartContentsTimer()
 }
