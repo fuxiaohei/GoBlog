@@ -7,7 +7,7 @@ import (
 
 func CmdBackup(context *GoInk.Context) {
 	if context.Method == "POST" {
-		file , e := cmd.DoBackup(context.App())
+		file, e := cmd.DoBackup(context.App(), true)
 		if e != nil {
 			Json(context, false).Set("msg", e.Error()).End()
 			return
@@ -27,7 +27,7 @@ func CmdBackup(context *GoInk.Context) {
 	}
 	files, _ := cmd.GetBackupFiles()
 	context.Layout("cmd")
-	context.Render("admin/cmd/backup", map[string]interface {}{
-			"Files":files,
-		})
+	context.Render("admin/cmd/backup", map[string]interface{}{
+		"Files": files,
+	})
 }
