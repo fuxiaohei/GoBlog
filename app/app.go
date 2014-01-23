@@ -26,42 +26,6 @@ func init() {
 	// init application
 	App = GoInk.New()
 
-	// add recover defer
-	defer func() {
-		e := recover()
-		if e != nil {
-			bytes := append([]byte(fmt.Sprint(e)+"\n"), debug.Stack()...)
-			LogError(bytes)
-			println("panic error, crash down")
-			os.Exit(1)
-		}
-	}()
-}
-
-func Init() {
-
-	// init some settings
-	if App.Get("upload_files") == "" {
-		App.Set("upload_files", uploadFileSuffix)
-	}
-	if App.Get("upload_size") == "" {
-		App.Set("upload_size", 1024*1024*10)
-	}
-	if App.Get("upload_dir") == "" {
-		App.Set("upload_dir", "static/upload")
-		os.MkdirAll("static/upload", os.ModePerm)
-	}
-
-	// init temp dir
-	if App.Get("log_dir") == "" {
-		App.Set("log_dir", "tmp/log")
-		os.MkdirAll("tmp/log", os.ModePerm)
-	}
-
-	// set static files handler
-	if App.Get("static_files") != "" {
-		staticFileSuffix = App.Get("static_files")
-	}
 	App.Static(func(context *GoInk.Context) {
 		static := App.Config().StringOr("static_dir", "static")
 		url := strings.TrimPrefix(context.Url, "/")
@@ -123,13 +87,50 @@ func Init() {
 		context.End()
 	})
 
+	// add recover defer
+	defer func() {
+		e := recover()
+		if e != nil {
+			bytes := append([]byte(fmt.Sprint(e)+"\n"), debug.Stack()...)
+			LogError(bytes)
+			println("panic error, crash down")
+			os.Exit(1)
+		}
+	}()
+}
+
+func Init() {
+
+	// init some settings
+	if App.Get("upload_files") == "" {
+		App.Set("upload_files", uploadFileSuffix)
+	}
+	if App.Get("upload_size") == "" {
+		App.Set("upload_size", 1024*1024*10)
+	}
+	if App.Get("upload_dir") == "" {
+		App.Set("upload_dir", "static/upload")
+		os.MkdirAll("static/upload", os.ModePerm)
+	}
+
+	// init temp dir
+	if App.Get("log_dir") == "" {
+		App.Set("log_dir", "tmp/log")
+		os.MkdirAll("tmp/log", os.ModePerm)
+	}
+
+	// set static files handler
+	if App.Get("static_files") != "" {
+		staticFileSuffix = App.Get("static_files")
+	}
+
 	// init storage
 	model.Init(VERSION)
 
 	// load all data
 	model.All()
 
-	println("app version @ " + strconv.Itoa(model.GetVersion()))
+	println("app version @ " + strconv.Itoa(model.GetVersion().Version))
 
 	// init plugin
 	plugin.Init()

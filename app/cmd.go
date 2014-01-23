@@ -22,5 +22,11 @@ func Cmd() {
 	// do install and run server together
 	if !cmd.CheckInstall() {
 		cmd.DoInstall()
+		return
+	}
+	// check app version
+	if cmd.CheckUpgrade(VERSION) {
+		os.Exit(1)
+		return
 	}
 }
