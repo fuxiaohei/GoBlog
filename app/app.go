@@ -121,8 +121,6 @@ func Init() {
 	// load all data
 	model.All()
 
-	println("app version @ " + strconv.Itoa(model.GetVersion().Version))
-
 	// init plugin
 	plugin.Init()
 
@@ -150,6 +148,17 @@ func Init() {
 			}
 		}
 	}
+
+	App.View().FuncMap["DateInt64"] = utils.DateInt64
+	App.View().FuncMap["DateString"] = utils.DateString
+	App.View().FuncMap["DateTime"] = utils.DateTime
+	App.View().FuncMap["Now"] = utils.Now
+	App.View().FuncMap["Html2str"] = utils.Html2str
+	App.View().FuncMap["FileSize"] = utils.FileSize
+	App.View().FuncMap["Setting"] = model.GetSetting
+	App.View().FuncMap["Md2html"] = utils.Markdown2HtmlTemplate
+
+	println("app version @ " + strconv.Itoa(model.GetVersion().Version))
 }
 
 func registerAdminHandler() {
@@ -200,15 +209,6 @@ func registerHomeHandler() {
 }
 
 func Run() {
-
-	App.View().FuncMap["DateInt64"] = utils.DateInt64
-	App.View().FuncMap["DateString"] = utils.DateString
-	App.View().FuncMap["DateTime"] = utils.DateTime
-	App.View().FuncMap["Now"] = utils.Now
-	App.View().FuncMap["Html2str"] = utils.Html2str
-	App.View().FuncMap["FileSize"] = utils.FileSize
-	App.View().FuncMap["Setting"] = model.GetSetting
-	App.View().FuncMap["Md2html"] = utils.Markdown2HtmlTemplate
 
 	registerAdminHandler()
 	registerCmdHandler()

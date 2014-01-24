@@ -2,6 +2,7 @@ package app
 
 import (
 	"github.com/fuxiaohei/GoBlog/app/cmd"
+	_ "github.com/fuxiaohei/GoBlog/app/upgrade"
 	"os"
 )
 
@@ -16,6 +17,8 @@ func Cmd() {
 			cmd.DoUpdateZipBytes(file)
 		case "backup":
 			cmd.DoBackup(App, true)
+		case "upgrade":
+			cmd.DoUpgrade(VERSION, App)
 		}
 		os.Exit(1)
 	}
