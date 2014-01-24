@@ -25,6 +25,7 @@ func (cfg *Config) String(key string) string {
 func (cfg *Config) StringOr(key string, def string) string {
 	value := cfg.String(key)
 	if value == "" {
+		cfg.Set(key, def)
 		return def
 	}
 	return value
@@ -39,6 +40,7 @@ func (cfg *Config) Int(key string) int {
 func (cfg *Config) IntOr(key string, def int) int {
 	i := cfg.Int(key)
 	if i == 0 {
+		cfg.Set(key, def)
 		return def
 	}
 	return i
@@ -53,6 +55,7 @@ func (cfg *Config) Float(key string) float64 {
 func (cfg *Config) FloatOr(key string, def float64) float64 {
 	f := cfg.Float(key)
 	if f == 0.0 {
+		cfg.Set(key, def)
 		return def
 	}
 	return f
@@ -70,10 +73,10 @@ func (cfg *Config) Set(key string, value interface{}) {
 		return
 	}
 	if (*cfg) == nil {
-		(*cfg) = make(map[string]map[string]interface {})
+		(*cfg) = make(map[string]map[string]interface{})
 	}
 	if _, ok := (*cfg)[keys[0]]; !ok {
-		(*cfg)[keys[0]] = make(map[string]interface {})
+		(*cfg)[keys[0]] = make(map[string]interface{})
 	}
 	(*cfg)[keys[0]][keys[1]] = value
 }
