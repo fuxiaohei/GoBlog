@@ -12,32 +12,32 @@ import (
 )
 
 func AdminFiles(context *GoInk.Context) {
-	if context.Method == "DELETE"{
+	if context.Method == "DELETE" {
 		id := context.Int("id")
 		model.RemoveFile(id)
-		Json(context,true).End()
+		Json(context, true).End()
 		return
 	}
 	files, pager := model.GetFileList(context.Int("page"), 10)
 	context.Layout("admin")
 	context.Render("admin/files", map[string]interface{}{
-			"Title":    "媒体文件",
-			"Files": files,
-			"Pager":    pager,
-		})
+		"Title": "媒体文件",
+		"Files": files,
+		"Pager": pager,
+	})
 }
 
 func FileUpload(context *GoInk.Context) {
 	var req *http.Request
 	req = context.Request
-	req.ParseMultipartForm(32<<20)
+	req.ParseMultipartForm(32 << 20)
 	f, h, e := req.FormFile("file")
 	if e != nil {
 		Json(context, false).Set("msg", e.Error()).End()
 		return
 	}
 	data, _ := ioutil.ReadAll(f)
-	maxSize := context.App().Config().IntOr("app.upload_size", 1024*1024 * 10)
+	maxSize := context.App().Config().Int("app.upload_size")
 	defer func() {
 		f.Close()
 		data = nil
