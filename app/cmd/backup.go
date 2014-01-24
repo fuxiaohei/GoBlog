@@ -25,9 +25,14 @@ func DoBackup(app *GoInk.App, withData bool) (string, error) {
 		return "", e
 	}
 	root, _ := os.Getwd()
-	z.AddDir("static", path.Join(root, "static"))
+	z.AddDir("static/css", path.Join(root, "static", "css"))
+	z.AddDir("static/img", path.Join(root, "static", "img"))
+	z.AddDir("static/js", path.Join(root, "static", "js"))
+	z.AddDir("static/lib", path.Join(root, "static", "lib"))
+	z.AddFile("static/favicon.ico", path.Join(root, "static", "favicon.ico"))
 	if withData {
 		z.AddDir("data", path.Join(root, "data"))
+		z.AddDir("static/upload", path.Join(root, "static", "upload"))
 	}
 	z.AddDir(app.View().Dir, path.Join(root, app.View().Dir))
 	e = z.Flush()
