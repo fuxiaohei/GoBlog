@@ -49,6 +49,11 @@ visit `localhost:9000/login/` to enter administrator with username `admin` and p
 
 create issues or pull requests here.
 
+### Products
+
+* [抛弃世俗之浮躁，留我钻研之刻苦](http://wuwen.org)
+* [FuXiaoHei.Net](http://fuxiaohei.net)
+
 ### Thanks
 
 gladly thank for [@Unknwon](https://github.com/Unknwon) on testing and [zip library](https://github.com/Unknwon/cae) support.
