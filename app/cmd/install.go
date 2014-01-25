@@ -20,7 +20,7 @@ func CheckInstall() bool {
 	return e == nil
 }
 
-func DoInstall() {
+func ExtractBundleBytes(){
 	// origin from https://github.com/wendal/gor/blob/master/gor/gor.go
 	decoder := base64.NewDecoder(base64.StdEncoding, bytes.NewBufferString(zipBytes))
 	b, _ := ioutil.ReadAll(decoder)
@@ -36,6 +36,10 @@ func DoInstall() {
 		decoder = nil
 		os.Remove(tmpZipFile)
 	}()
+}
+
+func DoInstall() {
+	ExtractBundleBytes()
 	ioutil.WriteFile(installLockFile, []byte(fmt.Sprint(utils.Now())), os.ModePerm)
 	println("install success")
 }

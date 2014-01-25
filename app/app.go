@@ -5,16 +5,18 @@ import (
 	"github.com/fuxiaohei/GoBlog/GoInk"
 	"github.com/fuxiaohei/GoBlog/app/handler"
 	"github.com/fuxiaohei/GoBlog/app/model"
+	"github.com/fuxiaohei/GoBlog/app/plugin"
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"net/http"
 	"os"
 	"path"
 	"runtime/debug"
+	"strconv"
 	"strings"
 )
 
 var (
-	VERSION          = 20140116
+	VERSION          = 20140130
 	App              *GoInk.App
 	staticFileSuffix = ".css,.js,.jpg,.jpeg,.png,.gif,.ico,.xml,.zip,.txt,.html,.otf,.svg,.eot,.woff,.ttf,.doc,.ppt,.xls,.docx,.pptx,.xlsx"
 	uploadFileSuffix = ".jpg,.png,.gif,.zip,.txt,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
@@ -24,44 +26,22 @@ func init() {
 	// init application
 	App = GoInk.New()
 
-	// add recover defer
-	defer func() {
-		e := recover()
-		if e != nil {
-			bytes := append([]byte(fmt.Sprint(e)+"\n"), debug.Stack()...)
-			LogError(bytes)
-			println("panic error, crash down")
-			os.Exit(1)
-		}
-	}()
-}
-
-func Init() {
-
 	// init some settings
-	if App.Get("upload_files") == "" {
-		App.Set("upload_files", uploadFileSuffix)
-	}
-	if App.Get("upload_size") == "" {
-		App.Set("upload_size", 1024*1024*10)
-	}
-	if App.Get("upload_dir") == "" {
-		App.Set("upload_dir", "static/upload")
-		os.MkdirAll("static/upload", os.ModePerm)
-	}
+	App.Config().StringOr("app.static_dir", "static")
+	App.Config().StringOr("app.log_dir", "tmp/log")
+	os.MkdirAll(App.Get("log_dir"), os.ModePerm)
 
-	// init temp dir
-	if App.Get("log_dir") == "" {
-		App.Set("log_dir", "tmp/log")
-		os.MkdirAll("tmp/log", os.ModePerm)
-	}
+	App.Config().IntOr("app.upload_size", 1024*1024*10)
+	App.Config().StringOr("app.upload_files", uploadFileSuffix)
+	App.Config().StringOr("app.upload_dir", path.Join(App.Get("static_dir"), "upload"))
+	os.MkdirAll(App.Get("upload_dir"), os.ModePerm)
 
-	// set static files handler
 	if App.Get("static_files") != "" {
 		staticFileSuffix = App.Get("static_files")
 	}
+
 	App.Static(func(context *GoInk.Context) {
-		static := App.Config().StringOr("static_dir", "static")
+		static := App.Config().String("app.static_dir")
 		url := strings.TrimPrefix(context.Url, "/")
 		if url == "favicon.ico" {
 			url = path.Join(static, url)
@@ -94,9 +74,9 @@ func Init() {
 	// set recover handler
 	App.Recover(func(context *GoInk.Context) {
 		go LogError(append(append(context.Body, []byte("\n")...), debug.Stack()...))
-		if App.View().Has("error/error.html") {
-			context.Layout("")
-			context.Render("error/error", map[string]interface{}{
+		theme := handler.Theme(context)
+		if theme.Has("error/error.html") {
+			theme.Layout("").Render("error/error", map[string]interface{}{
 				"error":   string(context.Body),
 				"stack":   string(debug.Stack()),
 				"context": context,
@@ -112,71 +92,109 @@ func Init() {
 
 	// set not found handler
 	App.NotFound(func(context *GoInk.Context) {
-		if App.View().Has("error/notfound.html") {
-			context.Layout("")
-			context.Render("error/notfound", map[string]interface{}{
+		theme := handler.Theme(context)
+		if theme.Has("error/notfound.html") {
+			theme.Layout("").Render("error/notfound", map[string]interface{}{
 				"context": context,
 			})
 		}
 		context.End()
 	})
 
-	// init storage
-	model.Init()
+	// add recover defer
+	defer func() {
+		e := recover()
+		if e != nil {
+			bytes := append([]byte(fmt.Sprint(e)+"\n"), debug.Stack()...)
+			LogError(bytes)
+			println("panic error, crash down")
+			os.Exit(1)
+		}
+	}()
+}
 
-	// set version
-	model.SetVersion(VERSION)
+func Init() {
+
+	// init storage
+	model.Init(VERSION)
+
+	// load all data
+	model.All()
+
+	// init plugin
+	plugin.Init()
+
+	pluginHandlers := plugin.Handlers()
+
+	if len(pluginHandlers["middle"]) > 0 {
+		for _, h := range pluginHandlers["middle"] {
+			App.Use(h)
+		}
+	}
+
+	if len(pluginHandlers["inter"]) > 0 {
+		for name, h := range pluginHandlers["inter"] {
+			if name == "static" {
+				App.Static(h)
+				continue
+			}
+			if name == "recover" {
+				App.Recover(h)
+				continue
+			}
+			if name == "notfound" {
+				App.NotFound(h)
+				continue
+			}
+		}
+	}
+
+	App.View().FuncMap["DateInt64"] = utils.DateInt64
+	App.View().FuncMap["DateString"] = utils.DateString
+	App.View().FuncMap["DateTime"] = utils.DateTime
+	App.View().FuncMap["Now"] = utils.Now
+	App.View().FuncMap["Html2str"] = utils.Html2str
+	App.View().FuncMap["FileSize"] = utils.FileSize
+	App.View().FuncMap["Setting"] = model.GetSetting
+	App.View().FuncMap["Md2html"] = utils.Markdown2HtmlTemplate
+
+	println("app version @ " + strconv.Itoa(model.GetVersion().Version))
 }
 
 func registerAdminHandler() {
 	// add admin handlers
 	App.Get("/admin/", handler.Auth, handler.Admin)
 
-	App.Get("/admin/profile/", handler.Auth, handler.AdminProfile)
-	App.Post("/admin/profile/", handler.Auth, handler.AdminProfile)
+	App.Route("GET,POST", "/admin/profile/", handler.Auth, handler.AdminProfile)
 
-	App.Get("/admin/password/", handler.Auth, handler.AdminPassword)
-	App.Post("/admin/password/", handler.Auth, handler.AdminPassword)
+	App.Route("GET,POST", "/admin/password/", handler.Auth, handler.AdminPassword)
 
-	App.Get("/admin/article/write/", handler.Auth, handler.ArticleWrite)
-	App.Post("/admin/article/write/", handler.Auth, handler.ArticleWrite)
+	App.Route("GET,POST", "/admin/article/write/", handler.Auth, handler.ArticleWrite)
 	App.Get("/admin/articles/", handler.Auth, handler.AdminArticle)
-	App.Get("/admin/article/:id/", handler.Auth, handler.ArticleEdit)
-	App.Post("/admin/article/:id/", handler.Auth, handler.ArticleEdit)
-	App.Delete("/admin/article/:id/", handler.Auth, handler.ArticleEdit)
+	App.Route("GET,POST,DELETE", "/admin/article/:id/", handler.Auth, handler.ArticleEdit)
 
-	App.Get("/admin/page/write/", handler.Auth, handler.PageWrite)
-	App.Post("/admin/page/write/", handler.Auth, handler.PageWrite)
+	App.Route("GET,POST", "/admin/page/write/", handler.Auth, handler.PageWrite)
 	App.Get("/admin/pages/", handler.Auth, handler.AdminPage)
-	App.Get("/admin/page/:id/", handler.Auth, handler.PageEdit)
-	App.Post("/admin/page/:id/", handler.Auth, handler.PageEdit)
-	App.Delete("/admin/page/:id/", handler.Auth, handler.PageEdit)
+	App.Route("GET,POST,DELETE", "/admin/page/:id/", handler.Auth, handler.PageEdit)
 
-	App.Get("/admin/comments/", handler.Auth, handler.AdminComments)
-	App.Delete("/admin/comments/", handler.Auth, handler.AdminComments)
-	App.Put("/admin/comments/", handler.Auth, handler.AdminComments)
-	App.Post("/admin/comments/", handler.Auth, handler.AdminComments)
+	App.Route("GET,POST,PUT,DELETE", "/admin/comments/", handler.Auth, handler.AdminComments)
 
-	App.Get("/admin/setting/", handler.Auth, handler.AdminSetting)
-	App.Post("/admin/setting/", handler.Auth, handler.AdminSetting)
+	App.Route("GET,POST", "/admin/setting/", handler.Auth, handler.AdminSetting)
+	App.Route("GET,POST", "/admin/setting/custom/", handler.Auth, handler.CustomSetting)
 
-	App.Get("/admin/setting/custom/", handler.Auth, handler.CustomSetting)
-	App.Post("/admin/setting/custom/", handler.Auth, handler.CustomSetting)
-
-	App.Get("/admin/files/", handler.Auth, handler.AdminFiles)
-	App.Delete("/admin/files/", handler.Auth, handler.AdminFiles)
+	App.Route("GET,DELETE", "/admin/files/", handler.Auth, handler.AdminFiles)
 	App.Post("/admin/files/upload/", handler.Auth, handler.FileUpload)
+
+	App.Route("GET,POST", "/admin/plugins/", handler.Auth, handler.AdminPlugin)
+	App.Route("GET,POST", "/admin/plugins/:plugin_key/", handler.Auth, handler.PluginSetting)
 }
 
 func registerCmdHandler() {
-	App.Get("/cmd/backup/", handler.Auth, handler.CmdBackup)
-	App.Post("/cmd/backup/", handler.Auth, handler.CmdBackup)
-	App.Delete("/cmd/backup/", handler.Auth, handler.CmdBackup)
+	App.Route("GET,POST,DELETE", "/cmd/backup/", handler.Auth, handler.CmdBackup)
 }
 
 func registerHomeHandler() {
-	App.Get("/login/", handler.Login)
-	App.Post("/login/", handler.Login)
+	App.Route("GET,POST", "/login/", handler.Login)
 	App.Get("/logout/", handler.Logout)
 
 	App.Get("/article/:id/:slug", handler.Article)
@@ -191,14 +209,6 @@ func registerHomeHandler() {
 }
 
 func Run() {
-
-	App.View().FuncMap["DateInt64"] = utils.DateInt64
-	App.View().FuncMap["DateString"] = utils.DateString
-	App.View().FuncMap["DateTime"] = utils.DateTime
-	App.View().FuncMap["Now"] = utils.Now
-	App.View().FuncMap["Html2str"] = utils.Html2str
-	App.View().FuncMap["FileSize"] = utils.FileSize
-	App.View().FuncMap["Setting"] = model.GetSetting
 
 	registerAdminHandler()
 	registerCmdHandler()

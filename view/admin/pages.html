@@ -21,7 +21,7 @@
             var id = $(this).attr("rel");
             $.ajax({
                 "url":"/admin/page/"+id+"/",
-                "method":"delete",
+                "type":"delete",
                 "success":function(json){
                     if(json.res){
                         alert("已删除");

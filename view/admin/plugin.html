@@ -1,0 +1,43 @@
+<ul id="plugin-list" class="container960 admin">{{range .Plugins}}
+    <li class="clear">{{if .IsActive}}
+        <span class="left lbl active lbl-green">&nbsp;</span>{{end}}
+        <span class="name left">{{.Name}}</span>
+        <span class="version left">{{.Version}}</span>{{if .HasSetting}}
+        <a class="setting left" href="/admin/plugins/{{.Key}}/">选项</a>{{end}}{{if .IsActive}}
+        <a class="deactivate lbl lbl-red right" href="#" rel="{{.Key}}">封印</a>{{else}}
+        <a class="activate lbl lbl-blue right" href="#" rel="{{.Key}}">激活</a>{{end}}
+        <p class="desc left">{{.Desc}}</p>
+    </li>{{end}}
+</ul>
+<script>
+    $(function () {
+        $(".deactivate").on("click", function () {
+            var $this = $(this);
+            var p = $this.attr("rel");
+            $.post("", {
+                "action": "deactivate",
+                "plugin": p
+            }, function (json) {
+                if (json.res) {
+                    $this.off("click").text("下次激活");
+                } else {
+                    alert("封印失败");
+                }
+            })
+        });
+        $(".activate").on("click", function () {
+            var $this = $(this);
+            var p = $this.attr("rel");
+            $.post("", {
+                "action": "activate",
+                "plugin": p
+            }, function (json) {
+                if (json.res) {
+                    $this.off("click").text("下次封印");
+                } else {
+                    alert("激活失败");
+                }
+            })
+        })
+    });
+</script>

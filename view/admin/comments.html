@@ -31,7 +31,7 @@
             if (confirm("删除评论将使相关内容无效!")) {
                 var id = $(this).attr("rel");
                 $.ajax({
-                    method: "delete",
+                    type: "delete",
                     url: "/admin/comments/?id=" + id,
                     success: function (json) {
                         if (json.res) {
@@ -48,7 +48,7 @@
             if (confirm("审核后此作者将不再标记审核!")) {
                 var id = $(this).attr("rel");
                 $.ajax({
-                    method: "put",
+                    type: "put",
                     url: "/admin/comments/?id=" + id,
                     success: function (json) {
                         if (json.res) {

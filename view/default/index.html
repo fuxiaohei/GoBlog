@@ -6,7 +6,7 @@
             <p class="lbl lbl-green views"><i class="fa fa-eye"></i><strong>{{.Hits}} ℉</strong></p>
             <p class="lbl lbl-gray time"><i class="fa fa-clock-o"></i><strong>{{DateInt64 .CreateTime "MM.DD"}}</strong></p>
         </div>
-        <div class="main right">
+        <div class="main">
             <h3 class="title"><a href="{{.Link}}" title="{{.Title}}">{{.Title}}</a></h3>
             <section class="content markdown">{{Html .Summary}}</section>
             <p class="info clear">
@@ -21,19 +21,3 @@
         <a href="/p/{{.}}/" class="item{{if eq $.Pager.Current .}} current{{end}}">{{.}}</a>{{end}}
     </div>
 </div>
-<script src="/static/lib/marked.min.js"></script>
-<script>
-    $(document).ready(function(){
-        var $md = $('.markdown');
-        $md.each(function(i,item){
-            $(item).html(marked($(item).html().replace(/&gt;/g,'>')));
-        });
-        var code = $md.find('pre code');
-        if(code.length){
-            $("<link>").attr({ rel: "stylesheet",type: "text/css",href: "/static/css/highlight.css"}).appendTo("head");
-            $.getScript("/static/lib/highlight.min.js",function(){
-                code.each(function(i,item){hljs.highlightBlock(item)});
-            });
-        }
-    });
-</script>

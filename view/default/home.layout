@@ -2,13 +2,18 @@
 <html>
 <head>
     <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <title>{{if .Title}}{{.Title}} - {{end}}{{Setting "site_title"}}</title>
     <meta name="keywords" content="{{Setting `site_keywords`}}"/>
     <meta name="description" content="{{Setting `site_description`}}"/>
+    <meta name="generator" content="FxhGo Blog" />
     <link rel="stylesheet" href="/static/css/style.css"/>
-    <link rel="stylesheet" href="http://cdn.staticfile.org/font-awesome/4.0.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="http://libs.baidu.com/fontawesome/4.0.3/css/font-awesome.min.css"/>
     <link rel="alternate" type="application/rss+xml" title="{{Setting `site_title`}} - RSS 2.0" href="/rss.xml"/>
-    <script src="http://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+    <script src="/static/lib/jquery.form.min.js"></script>
+    <script src="/static/lib/marked.min.js"></script>
 </head>
 <body>
 <header id="header" class="clear">
@@ -33,9 +38,11 @@
         <a class="weibo" href="{{Setting `c_footer_weibo`}}" target="_blank"><i class="fa fa-weibo"></i>Weibo</a>
         <a class="git" href="{{Setting `c_footer_github`}}" target="_blank"><i class="fa fa-github"></i>GitHub</a>
         <a class="email" href="{{Setting `c_footer_email`}}" target="_blank"><i class="fa fa-envelope"></i>Email</a>
-        <a class="rss" href="/rss.xml" target="_blank"><i class="fa fa-rss"></i>RSS</a>
+        <a class="rss" href="/rss.xml" target="_blank"><i class="fa fa-rss"></i>RSS</a>{{Setting `c_footer_ga` | Html}}
     </p>
-    <span>All content © 2013 FuXiaoHei All rights reserved. Proudly published with Fxh.Go.</span>
+    <span>Go © 2014 All rights reserved. Proudly published with Fxh.Go.</span>
+    <a id="go-top" href="#" class="lbl hide lbl-blue" title="回到顶部"><i class="fa fa-arrow-up fa-lg"></i></a>
 </footer>
+<script src="/static/js/home.js"></script>
 </body>
 </html>

@@ -32,7 +32,7 @@ func Feed(context *GoInk.Context) {
 		item.Link = &feeds.Link{Href: path.Join(baseUrl, a.Link())}
 		item.Author = feed.Author
 		item.Created = time.Unix(a.CreateTime, 0)
-		item.Description = utils.Html2str(a.Summary())
+		item.Description = utils.Markdown2Html(a.Summary())
 		feed.Items = append(feed.Items, item)
 	}
 	str, e := feed.ToRss()

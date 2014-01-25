@@ -1,0 +1,10 @@
+<form id="plugin-setting-form" class="form container960 admin" action="#" method="post">
+    {{Html .Form}}
+</form>
+<script>
+    $(document).ready(function(){
+        $('#plugin-setting-form').ajaxForm(function(json){
+            alert(json.res ? "已保存":"保存失败");
+        })
+    })
+</script>

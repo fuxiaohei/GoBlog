@@ -3,16 +3,21 @@ package handler
 import (
 	"github.com/fuxiaohei/GoBlog/GoInk"
 	"github.com/fuxiaohei/GoBlog/app/model"
+	"github.com/fuxiaohei/GoBlog/app/plugin"
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"strconv"
 	"strings"
 )
 
 func Admin(context *GoInk.Context) {
+	uid, _ := strconv.Atoi(context.Cookie("token-user"))
+	user := model.GetUserById(uid)
 	context.Layout("admin")
 	context.Render("admin/home", map[string]interface{}{
-			"Title": "控制台",
-		})
+		"Title":  "控制台",
+		"Statis": model.NewStatis(),
+		"User":   user,
+	})
 }
 
 func AdminProfile(context *GoInk.Context) {
@@ -36,9 +41,9 @@ func AdminProfile(context *GoInk.Context) {
 	}
 	context.Layout("admin")
 	context.Render("admin/profile", map[string]interface{}{
-			"Title": "个性资料",
-			"User":  user,
-		})
+		"Title": "个性资料",
+		"User":  user,
+	})
 }
 
 func AdminPassword(context *GoInk.Context) {
@@ -56,19 +61,19 @@ func AdminPassword(context *GoInk.Context) {
 	}
 	context.Layout("admin")
 	context.Render("admin/password", map[string]interface{}{
-			"Title": "修改密码",
-			//"User":user,
-		})
+		"Title": "修改密码",
+		//"User":user,
+	})
 }
 
 func AdminArticle(context *GoInk.Context) {
 	articles, pager := model.GetArticleList(context.Int("page"), 10)
 	context.Layout("admin")
 	context.Render("admin/articles", map[string]interface{}{
-			"Title":    "文章",
-			"Articles": articles,
-			"Pager":    pager,
-		})
+		"Title":    "文章",
+		"Articles": articles,
+		"Pager":    pager,
+	})
 }
 
 func ArticleWrite(context *GoInk.Context) {
@@ -102,8 +107,8 @@ func ArticleWrite(context *GoInk.Context) {
 	}
 	context.Layout("admin")
 	context.Render("admin/write_article", map[string]interface{}{
-			"Title": "撰写文章",
-		})
+		"Title": "撰写文章",
+	})
 }
 
 func ArticleEdit(context *GoInk.Context) {
@@ -140,9 +145,9 @@ func ArticleEdit(context *GoInk.Context) {
 	}
 	context.Layout("admin")
 	context.Render("admin/edit_article", map[string]interface{}{
-			"Title":   "编辑文章",
-			"Article": c,
-		})
+		"Title":   "编辑文章",
+		"Article": c,
+	})
 }
 
 func PageWrite(context *GoInk.Context) {
@@ -176,18 +181,18 @@ func PageWrite(context *GoInk.Context) {
 	}
 	context.Layout("admin")
 	context.Render("admin/write_page", map[string]interface{}{
-			"Title": "撰写页面",
-		})
+		"Title": "撰写页面",
+	})
 }
 
 func AdminPage(context *GoInk.Context) {
 	pages, pager := model.GetPageList(context.Int("page"), 10)
 	context.Layout("admin")
 	context.Render("admin/pages", map[string]interface{}{
-			"Title": "页面",
-			"Pages": pages,
-			"Pager": pager,
-		})
+		"Title": "页面",
+		"Pages": pages,
+		"Pager": pager,
+	})
 }
 
 func PageEdit(context *GoInk.Context) {
@@ -224,15 +229,20 @@ func PageEdit(context *GoInk.Context) {
 	}
 	context.Layout("admin")
 	context.Render("admin/edit_page", map[string]interface{}{
-			"Title": "编辑文章",
-			"Page":  c,
-		})
+		"Title": "编辑文章",
+		"Page":  c,
+	})
 }
 
 func AdminSetting(context *GoInk.Context) {
 	if context.Method == "POST" {
 		data := context.Input()
 		for k, v := range data {
+			if v == "" {
+				if data[k+"_def"] != "" {
+					v = data[k+"_def"]
+				}
+			}
 			model.SetSetting(k, v)
 		}
 		model.SyncSettings()
@@ -241,8 +251,8 @@ func AdminSetting(context *GoInk.Context) {
 	}
 	context.Layout("admin")
 	context.Render("admin/setting", map[string]interface{}{
-			"Title": "配置",
-		})
+		"Title": "配置",
+	})
 }
 
 func CustomSetting(context *GoInk.Context) {
@@ -250,7 +260,7 @@ func CustomSetting(context *GoInk.Context) {
 		keys := context.Strings("key")
 		values := context.Strings("value")
 		for i, k := range keys {
-			model.SetSetting("c_" + k, values[i])
+			model.SetSetting("c_"+k, values[i])
 		}
 		model.SyncSettings()
 		Json(context, true).End()
@@ -258,9 +268,9 @@ func CustomSetting(context *GoInk.Context) {
 	}
 	context.Layout("admin")
 	context.Render("admin/custom_setting", map[string]interface{}{
-			"Title":    "自定义配置",
-			"Settings": model.GetCustomSettings(),
-		})
+		"Title":    "自定义配置",
+		"Settings": model.GetCustomSettings(),
+	})
 }
 
 func AdminComments(context *GoInk.Context) {
@@ -299,14 +309,67 @@ func AdminComments(context *GoInk.Context) {
 		co.IsAdmin = true
 		model.CreateComment(cid, co)
 		Json(context, true).Set("comment", co.ToJson()).End()
+		go context.Do("comment_reply", co)
 		return
 	}
 	page := context.IntOr("page", 1)
 	comments, pager := model.GetCommentList(page, 6)
 	context.Layout("admin")
 	context.Render("admin/comments", map[string]interface{}{
-			"Title":    "评论",
-			"Comments": comments,
-			"Pager":    pager,
-		})
+		"Title":    "评论",
+		"Comments": comments,
+		"Pager":    pager,
+	})
+}
+
+func AdminPlugin(context *GoInk.Context) {
+	if context.Method == "POST" {
+		action := context.String("action")
+		if action == "" {
+			Json(context, false).End()
+			return
+		}
+		pln := context.String("plugin")
+		if action == "activate" {
+			plugin.Activate(pln)
+			Json(context, true).End()
+			return
+		}
+		if action == "deactivate" {
+			plugin.Deactivate(pln)
+			Json(context, true).End()
+			return
+		}
+		context.Status = 405
+		Json(context, false).End()
+		return
+	}
+	context.Layout("admin")
+	context.Render("admin/plugin", map[string]interface{}{
+		"Title":   "插件",
+		"Plugins": plugin.GetPlugins(),
+	})
+}
+
+func PluginSetting(context *GoInk.Context) {
+	key := context.Param("plugin_key")
+	if key == "" {
+		context.Redirect("/admin/plugins/")
+		return
+	}
+	p := plugin.GetPluginByKey(key)
+	if p == nil {
+		context.Redirect("/admin/plugins/")
+		return
+	}
+	if context.Method == "POST" {
+		p.SetSetting(context.Input())
+		Json(context, true).End()
+		return
+	}
+	context.Layout("admin")
+	context.Render("admin/plugin_setting", map[string]interface{}{
+		"Title": "插件 - " + p.Name(),
+		"Form":  p.Form(),
+	})
 }

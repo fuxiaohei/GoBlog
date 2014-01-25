@@ -48,6 +48,12 @@ html,body{
   }
 }
 
+#nav.fixed{
+  position: fixed;
+  width: 100%;
+  top:0;
+}
+
 #main{
   margin: 30px auto;
 }
@@ -73,6 +79,16 @@ html,body{
   }
 }
 
+#go-top{
+  bottom:50px;
+  right:40px;
+  position: fixed;
+  color: @white0;
+  padding-top: 6px;
+  padding-bottom: 8px;
+  opacity: 0.4;
+}
+
 #article-container{
   .meta{
     width: 108px;
@@ -94,7 +110,7 @@ html,body{
     }
   }
   .main{
-    width: 812px;
+    margin-left: 140px;
   }
   h3.title{
     padding: 8px 16px;
@@ -174,6 +190,7 @@ html,body{
     .ipt{
       width: 100%;
       box-sizing: border-box;
+      min-width:0;
     }
   }
   .c-content{
@@ -259,6 +276,82 @@ html,body{
     color: @red1;
     .fa{
       margin-right: 6px;
+    }
+  }
+}
+
+@media only screen and (max-width: 960px) {
+  .container960{
+    padding:0 24px;
+    width: auto;
+  }
+}
+
+@media only screen and (max-width: 760px) {
+  .container960{
+    padding:0 24px;
+    width: auto;
+  }
+  #article-container{
+    .main{
+      margin-left: 0;
+    }
+    .meta.left{
+      display: none;
+    }
+  }
+  #comment-form{
+    .c-info,.c-content{
+      width: 100%;
+      float: left;
+    }
+    .c-info{
+      text-align: left;
+    }
+  }
+}
+
+@media only screen and (max-width: 560px) {
+  .container960{
+    padding:0 24px;
+    width: auto;
+  }
+  #header-img{
+    float: left;
+    width: 64px;
+    height: 64px;
+  }
+  #header-h{
+    padding:17px 0;
+    font-size: 24px;
+  }
+  #header-sub{
+    display: none;
+  }
+  #article-container{
+    .tag{
+      display: none;
+    }
+  }
+  #comment-form{
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .container960{
+    padding:0 24px;
+    width: auto;
+  }
+  #header-img{
+    display: none;
+  }
+  #header-sub{
+    display: none;
+  }
+  #comment-list{
+    .c-avatar{
+      display: none;
     }
   }
 }

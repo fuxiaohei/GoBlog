@@ -1,1 +1,38 @@
-<div class="admin container">页面开发中...</div>
+<div class="admin container clear" id="dashboard">
+    <div class="grid-1-5 left">
+        <div class="welcome">
+            <h4>Welcome</h4>
+            <p>欢迎回来， <strong>{{.User.Nick}}</strong></p>
+        </div>
+        <div class="quick-link">
+            <h4>快速链接</h4>
+            <ul>
+                <li><a href="/admin/article/write/">撰写文章</a></li>
+                <li><a href="/admin/page/write/">添加页面</a></li>
+                <li><a href="/admin/comments/">查看和审核评论</a></li>
+                <li><a href="/admin/setting/">修改配置</a></li>
+                <li><a href="/admin/profile/">更新个人资料</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="grid-1-2 left">
+        <div class="activity">
+            <h4>最新活动</h4>
+            <p>内容开发中...</p>
+        </div>
+    </div>
+    <div class="grid-1-4 right">
+        <div class="stats">
+            <h4>数据统计</h4>
+            <p>已经发布文章 <span class="lbl lbl-red">{{.Statis.Articles}}</span> 篇，
+            页面 <span class="lbl lbl-red">{{.Statis.Pages}}</span> 个， <br/>
+            收到评论 <span class="lbl lbl-blue">{{.Statis.Comments}}</span> 次，
+            上传 <span class="lbl lbl-green">{{.Statis.Files}}</span> 个附件</p>
+            <p>当前程序版本：<strong>{{.Statis.Version}}</strong></p>
+        </div>
+        <div class="office">
+            <h4>官方消息</h4>
+            <p>还没有消息</p>
+        </div>
+    </div>
+</div>

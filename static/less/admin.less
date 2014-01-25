@@ -194,23 +194,29 @@
 }
 
 #setting-form {
-  width: 520px;
+  width: 820px;
   .admin;
   .ipt {
-    width: 280px;
+    width: 480px;
   }
   .invalid {
     margin-left: 75px;
   }
+  label{
+    min-width: 10em;
+  }
+  .tip.block{
+    margin-left: 12em;
+  }
 }
 
 #setting-form.custom{
-  width: 800px;
+  width: 1000px;
   input.key{
-    width: 200px;
+    width: 250px;
   }
   input.value{
-    width: 500px;
+    width: 650px;
   }
   .item{
     .bottom-line(12px);
@@ -332,5 +338,74 @@
   .size{
     width: 4em;
     display: inline-block;
+  }
+}
+
+#plugin-list{
+  li{
+    .bottom-line(16px);
+    .desc{
+      margin-bottom: 0;
+      width: 99%;
+      color: @black3;
+    }
+    a.lbl{
+      padding: 0 8px;
+      margin-left: 16px;
+    }
+    .version{
+      color: @green3;
+      margin-left: 16px;
+    }
+    .name{
+      font-size: 16px;
+    }
+    .active{
+      width: 12px;
+      height: 12px;
+      margin-right: 16px;
+      padding: 0;
+      margin-top: 10px;
+    }
+    .setting{
+      margin-left: 16px;
+    }
+  }
+}
+
+#plugin-setting-form{
+  p.item{
+    clear: both;
+  }
+  label{
+    float: left;
+    min-width: 6em;
+    text-align: right;
+    margin-right: 2em;
+  }
+  .title{
+    padding-top: 0;
+    margin-bottom: 18px;
+  }
+  input.ipt{
+    width: 600px;
+  }
+}
+
+#dashboard{
+  .grid-1-5{
+    margin-right: 4%;
+  }
+  .quick-link{
+    li{
+      list-style: inside disc;
+      .bottom-line(6px);
+    }
+  }
+  .stats{
+    .lbl{
+      padding: 1px 5px;
+      margin: 0 3px;
+    }
   }
 }
