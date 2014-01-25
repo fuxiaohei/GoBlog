@@ -280,7 +280,5 @@ func (p *EmailPlugin) sendSmtp(from mail.Address, to mail.Address, title string,
 		[]string{to.Address},
 		[]byte(message),
 	)
-	if err != nil {
-		fmt.Println(err)
-	}
+	println("send to email ", to.String(), fmt.Sprint(err))
 }

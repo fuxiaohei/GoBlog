@@ -108,6 +108,7 @@ func Activate(name string) {
 	p.Activate()
 	pluginStorage[p.Key()] = p.ToStorage()
 	model.Storage.Set("plugins", pluginStorage)
+	println("activate", p.Key())
 }
 
 func Deactivate(name string) {
@@ -119,4 +120,5 @@ func Deactivate(name string) {
 	p.Deactivate()
 	pluginStorage[p.Key()] = p.ToStorage()
 	model.Storage.Set("plugins", pluginStorage)
+	println("deactivate", p.Key())
 }
