@@ -7,13 +7,16 @@ import (
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"strconv"
 	"strings"
+	"fmt"
 )
 
 func Admin(context *GoInk.Context) {
 	context.Layout("admin")
 	context.Render("admin/home", map[string]interface{}{
-		"Title": "控制台",
+		"Title":  "控制台",
+		"Statis": model.NewStatis(),
 	})
+	fmt.Println(model.NewStatis())
 }
 
 func AdminProfile(context *GoInk.Context) {
@@ -305,7 +308,7 @@ func AdminComments(context *GoInk.Context) {
 		co.IsAdmin = true
 		model.CreateComment(cid, co)
 		Json(context, true).Set("comment", co.ToJson()).End()
-		go context.Do("comment_reply",co)
+		go context.Do("comment_reply", co)
 		return
 	}
 	page := context.IntOr("page", 1)
