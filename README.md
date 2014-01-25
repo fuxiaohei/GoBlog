@@ -2,7 +2,7 @@
 
 A fast and simple blog engine with GoInk framework in Golang.
 
-Current version is **0.1.1-beta**
+Current version is **0.1.5-beta** on 2014.01.30
 
 ### Overview
 
@@ -14,7 +14,11 @@ Fxh.Go contains two kinds of content as article and page. They can be customized
 
 Documentation is writing.
 
-### Installation
+### Requirement
+
+* >= Golang 1.2
+
+### Setup
 
 Fxh.Go is written in Golang with support for Windows, Linux and Mac OSX.
 
