@@ -7,16 +7,17 @@ import (
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"strconv"
 	"strings"
-	"fmt"
 )
 
 func Admin(context *GoInk.Context) {
+	uid, _ := strconv.Atoi(context.Cookie("token-user"))
+	user := model.GetUserById(uid)
 	context.Layout("admin")
 	context.Render("admin/home", map[string]interface{}{
 		"Title":  "控制台",
 		"Statis": model.NewStatis(),
+		"User":   user,
 	})
-	fmt.Println(model.NewStatis())
 }
 
 func AdminProfile(context *GoInk.Context) {
