@@ -22,10 +22,12 @@ func upgrade_20140130(app *GoInk.App) bool {
 	model.SetSetting("enable_go_markdown_def", "false")
 	model.SetSetting("site_theme", "default")
 	model.SetSetting("site_theme_def", "default")
+	model.SetSetting("c_home_avatar","/static/img/site.png")
 	model.SyncSettings()
 
 	// init plugin
 	plugin.Init()
+	model.Storage.Dir("plugin")
 
 	// remove static files
 	os.RemoveAll(app.Get("view_dir"))
