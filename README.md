@@ -2,7 +2,7 @@
 
 A fast and simple blog engine with GoInk framework in Golang.
 
-Current version is **0.1.5-beta** on 2014.01.30
+Current version is **0.1.6-beta** on 2014.01.31
 
 ### Overview
 

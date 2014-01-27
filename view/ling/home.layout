@@ -39,6 +39,7 @@
         <span class="right">Proudly published with Fxh.Go.</span>
     </div>
     <a id="go-top" href="#" class="lbl hide lbl-blue" title="回到顶部"><i class="fa fa-arrow-up fa-lg"></i></a>
+    {{Setting `c_footer_ga` | Html}}
 </footer>
 <script src="/static/js/home.js"></script>
 </body>

@@ -11,7 +11,7 @@ import (
 
 var (
 	appVersion int
-	Storage *jsonStorage
+	Storage    *jsonStorage
 )
 
 type jsonStorage struct {
@@ -48,7 +48,10 @@ func (jss *jsonStorage) Get(key string, v interface{}) {
 }
 
 func (jss *jsonStorage) Set(key string, v interface{}) {
-	bytes, e := json.MarshalIndent(v, "", "  ")
+	locker.Lock()
+	defer locker.Unlock()
+
+	bytes, e := json.Marshal(v)
 	if e != nil {
 		println("json encode '" + key + "' error")
 		return
@@ -58,6 +61,10 @@ func (jss *jsonStorage) Set(key string, v interface{}) {
 	if e != nil {
 		println("write storage '" + key + "' error")
 	}
+}
+
+func (jss *jsonStorage) Dir(name string) {
+	os.MkdirAll(path.Join(jss.dir, name), os.ModePerm)
 }
 
 func writeDefaultData() {
@@ -207,7 +214,7 @@ func Init(v int) {
 	Storage.Init("data")
 }
 
-func All(){
+func All() {
 	loadAllData()
 	StartContentsTimer()
 }

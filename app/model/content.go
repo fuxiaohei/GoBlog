@@ -53,17 +53,18 @@ func (cnt *Content) TagString() string {
 // get content link.
 func (cnt *Content) Link() string {
 	if cnt.IsLinked {
-		return "/"+cnt.Slug + ".html"
+		return "/" + cnt.Slug + ".html"
 	}
 	return fmt.Sprintf("/%s/%d/%s.html", cnt.Type, cnt.Id, cnt.Slug)
 }
 
 // get content text.
 func (cnt *Content) Content() string {
+	txt := strings.Replace(cnt.Text, "<!--more-->", "", -1)
 	if GetSetting("enable_go_markdown") == "true" {
-		return utils.Markdown2Html(cnt.Text)
+		return utils.Markdown2Html(txt)
 	}
-	return cnt.Text
+	return txt
 }
 
 // get content summary.
@@ -211,30 +212,30 @@ func LoadContents() {
 	articleIndex := make([]int, 0)
 	pageIndex := make([]int, 0)
 	filepath.Walk(filepath.Join(Storage.dir, "content"), func(_ string, info os.FileInfo, err error) error {
-			if err == nil {
-				if info.IsDir() {
-					return nil
+		if err == nil {
+			if info.IsDir() {
+				return nil
+			}
+			c := new(Content)
+			file := strings.Replace("content/"+info.Name(), filepath.Ext(info.Name()), "", -1)
+			Storage.Get(file, c)
+			if c.Id > 0 {
+				if c.Status != "DELETE" {
+					contents[c.Id] = c
+					if c.Type == "article" {
+						articleIndex = append(articleIndex, c.Id)
+					}
+					if c.Type == "page" {
+						pageIndex = append(pageIndex, c.Id)
+					}
 				}
-				c := new(Content)
-				file := strings.Replace("content/" + info.Name(), filepath.Ext(info.Name()), "", -1)
-				Storage.Get(file, c)
-				if c.Id > 0 {
-					if c.Status != "DELETE" {
-						contents[c.Id] = c
-						if c.Type == "article" {
-							articleIndex = append(articleIndex, c.Id)
-						}
-						if c.Type == "page" {
-							pageIndex = append(pageIndex, c.Id)
-						}
-					}
-					if c.Id > contentMaxId {
-						contentMaxId = c.Id
-					}
+				if c.Id > contentMaxId {
+					contentMaxId = c.Id
 				}
 			}
-			return nil
-		})
+		}
+		return nil
+	})
 	sort.Sort(sort.Reverse(sort.IntSlice(articleIndex)))
 	sort.Sort(sort.Reverse(sort.IntSlice(pageIndex)))
 	contentsIndex["article"] = articleIndex
@@ -242,9 +243,9 @@ func LoadContents() {
 }
 
 func StartContentsTimer() {
-	time.AfterFunc(time.Duration(10) * time.Minute, func() {
-			println("write contents in 10 min timer")
-			SyncContents()
-			StartContentsTimer()
-		})
+	time.AfterFunc(time.Duration(10)*time.Minute, func() {
+		println("write contents in 10 min timer")
+		SyncContents()
+		StartContentsTimer()
+	})
 }
