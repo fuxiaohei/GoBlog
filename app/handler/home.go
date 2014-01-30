@@ -71,7 +71,7 @@ func Article(context *GoInk.Context) {
 	id, _ := strconv.Atoi(context.Param("id"))
 	slug := context.Param("slug")
 	article := model.GetContentById(id)
-	if article == nil {
+	if article == nil || article.Status != "publish"{
 		context.Redirect("/")
 		return
 	}
@@ -91,7 +91,7 @@ func Page(context *GoInk.Context) {
 	id, _ := strconv.Atoi(context.Param("id"))
 	slug := context.Param("slug")
 	article := model.GetContentById(id)
-	if article == nil {
+	if article == nil || article.Status != "publish"{
 		context.Redirect("/")
 		return
 	}
@@ -110,7 +110,7 @@ func Page(context *GoInk.Context) {
 func TopPage(context *GoInk.Context) {
 	slug := context.Param("slug")
 	page := model.GetContentBySlug(slug)
-	if page == nil {
+	if page == nil || page.Status != "publish"{
 		context.Redirect("/")
 		return
 	}

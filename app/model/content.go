@@ -52,6 +52,9 @@ func (cnt *Content) TagString() string {
 
 // get content link.
 func (cnt *Content) Link() string {
+	if cnt.Status != "publish"{
+		return "#"
+	}
 	if cnt.IsLinked {
 		return "/" + cnt.Slug + ".html"
 	}
