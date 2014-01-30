@@ -193,7 +193,26 @@
   }
 }
 
-#setting-form {
+#setting-nav{
+  margin-top: 24px;
+  li{
+    display: inline-block;
+    margin: 0 12px;
+    a{
+      padding:3px 10px;
+    }
+    a:hover,a.current{
+      border-bottom: 2px solid @blue2;
+    }
+  }
+  .bottom-line(12px);
+}
+
+.setting-panel{
+  display: none;
+}
+
+.setting-form {
   width: 820px;
   .admin;
   .ipt {
@@ -210,7 +229,7 @@
   }
 }
 
-#setting-form.custom{
+#setting-custom-form{
   width: 1000px;
   input.key{
     width: 250px;

@@ -180,7 +180,7 @@ func registerAdminHandler() {
 	App.Route("GET,POST,PUT,DELETE", "/admin/comments/", handler.Auth, handler.AdminComments)
 
 	App.Route("GET,POST", "/admin/setting/", handler.Auth, handler.AdminSetting)
-	App.Route("GET,POST", "/admin/setting/custom/", handler.Auth, handler.CustomSetting)
+	App.Route("POST", "/admin/setting/custom/", handler.Auth, handler.CustomSetting)
 
 	App.Route("GET,DELETE", "/admin/files/", handler.Auth, handler.AdminFiles)
 	App.Post("/admin/files/upload/", handler.Auth, handler.FileUpload)

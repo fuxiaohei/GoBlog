@@ -251,26 +251,23 @@ func AdminSetting(context *GoInk.Context) {
 	}
 	context.Layout("admin")
 	context.Render("admin/setting", map[string]interface{}{
-		"Title": "配置",
+		"Title":  "配置",
+		"Custom": model.GetCustomSettings(),
 	})
 }
 
 func CustomSetting(context *GoInk.Context) {
-	if context.Method == "POST" {
-		keys := context.Strings("key")
-		values := context.Strings("value")
-		for i, k := range keys {
-			model.SetSetting("c_"+k, values[i])
+	keys := context.Strings("key")
+	values := context.Strings("value")
+	for i, k := range keys {
+		if len(k) < 1 {
+			continue
 		}
-		model.SyncSettings()
-		Json(context, true).End()
-		return
+		model.SetSetting("c_"+k, values[i])
 	}
-	context.Layout("admin")
-	context.Render("admin/custom_setting", map[string]interface{}{
-		"Title":    "自定义配置",
-		"Settings": model.GetCustomSettings(),
-	})
+	model.SyncSettings()
+	Json(context, true).End()
+	return
 }
 
 func AdminComments(context *GoInk.Context) {
