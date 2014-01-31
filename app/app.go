@@ -9,10 +9,12 @@ import (
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"net/http"
 	"os"
+	"os/signal"
 	"path"
 	"runtime/debug"
 	"strconv"
 	"strings"
+	"syscall"
 )
 
 var (
@@ -111,6 +113,26 @@ func init() {
 			os.Exit(1)
 		}
 	}()
+
+	// catch exit command
+	go catchExit()
+}
+
+// code from https://github.com/Unknwon/gowalker/blob/master/gowalker.go
+func catchExit() {
+	sigTerm := syscall.Signal(15)
+	sig := make(chan os.Signal)
+	signal.Notify(sig, os.Interrupt, sigTerm)
+
+	for {
+		switch <-sig {
+		case os.Interrupt, sigTerm:
+			println("before exit, saving data")
+			model.SyncAll()
+			println("ready to exit")
+			os.Exit(0)
+		}
+	}
 }
 
 func Init() {
