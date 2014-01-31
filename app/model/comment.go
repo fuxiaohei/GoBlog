@@ -3,6 +3,7 @@ package model
 import (
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"sort"
+	"time"
 )
 
 var (
@@ -59,8 +60,8 @@ func (c *Comment) ParentMd() string {
 	if co == nil {
 		return "> 已失效"
 	}
-	str := "> @"+co.Author + "\n\n"
-	str += "> "+co.Content + "\n"
+	str := "> @" + co.Author + "\n\n"
+	str += "> " + co.Content + "\n"
 	return str
 }
 
@@ -91,6 +92,18 @@ func (c *Comment) IsValid() bool {
 		}
 	}
 	return true
+}
+
+func (c *Comment) IsRemovable() bool {
+	if GetContentById(c.Cid) == nil {
+		return true
+	}
+	if c.Pid > 0 {
+		if GetCommentById(c.Pid) == nil {
+			return true
+		}
+	}
+	return false
 }
 
 func (c *Comment) GetReader() *Reader {
@@ -154,7 +167,7 @@ func SaveComment(c *Comment) {
 	go SyncReaders()
 }
 
-func RemoveComment(cid int, id int) {
+func removeOneComment(cid int, id int) {
 	delete(comments, id)
 	for n, c := range commentsIndex {
 		if c == id {
@@ -170,6 +183,14 @@ func RemoveComment(cid int, id int) {
 		if c.Id == id {
 			cnt.Comments = append(cnt.Comments[:n], cnt.Comments[n+1:]...)
 		}
+	}
+}
+
+func RemoveComment(cid int, id int) {
+	removeOneComment(cid, id)
+	cnt := GetContentById(cid)
+	if cnt == nil {
+		return
 	}
 	go SyncContent(cnt)
 }
@@ -217,4 +238,32 @@ func LoadComments() {
 		}
 	}
 	sort.Sort(sort.Reverse(sort.IntSlice(commentsIndex)))
+}
+
+func UpdateCommentAdmin(user *User) {
+	for _, co := range comments {
+		if co.IsAdmin {
+			co.Author = user.Nick
+			co.Email = user.Email
+			co.Url = user.Url
+			co.Avatar = utils.Gravatar(co.Email, "50")
+		}
+	}
+}
+
+func RecycleComments() {
+	for _, co := range comments {
+		if co.IsRemovable() {
+			removeOneComment(co.Cid, co.Id)
+		}
+	}
+	SyncContents()
+}
+
+func StartCommentsTimer() {
+	time.AfterFunc(time.Duration(6)*time.Hour, func() {
+		println("recycle comments in 6 hours timer")
+		RecycleComments()
+		StartCommentsTimer()
+	})
 }

@@ -217,4 +217,15 @@ func Init(v int) {
 func All() {
 	loadAllData()
 	StartContentsTimer()
+	StartCommentsTimer()
+}
+
+func SyncAll(){
+	SyncContents()
+	SyncFiles()
+	SyncReaders()
+	SyncSettings()
+	SyncTokens()
+	SyncUsers()
+	SyncVersion()
 }

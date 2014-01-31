@@ -37,6 +37,7 @@ func AdminProfile(context *GoInk.Context) {
 		user.Bio = data["bio"]
 		Json(context, true).End()
 		go model.SyncUsers()
+		go model.UpdateCommentAdmin(user)
 		return
 	}
 	context.Layout("admin")
