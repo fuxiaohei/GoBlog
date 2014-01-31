@@ -27,6 +27,7 @@ var (
 	pluginMap     map[string]PluginInterface
 	middleHandler map[string]GoInk.Handler
 	interHandler  map[string]GoInk.Handler
+	usedHandler   map[string]map[string]bool
 )
 
 func init() {
@@ -37,6 +38,9 @@ func init() {
 	pluginStorage = make(map[string]map[string]interface{})
 	middleHandler = make(map[string]GoInk.Handler)
 	interHandler = make(map[string]GoInk.Handler)
+	usedHandler = make(map[string]map[string]bool)
+	usedHandler["middle"] = make(map[string]bool)
+	usedHandler["inter"] = make(map[string]bool)
 }
 
 func Init() {
@@ -121,4 +125,42 @@ func Deactivate(name string) {
 	pluginStorage[p.Key()] = p.ToStorage()
 	model.Storage.Set("plugins", pluginStorage)
 	println("deactivate", p.Key())
+}
+
+func Update(app *GoInk.App) {
+	pluginHandlers := Handlers()
+	if len(pluginHandlers["middle"]) > 0 {
+		for n, h := range pluginHandlers["middle"] {
+			if usedHandler["middle"][n] {
+				continue
+			}
+			app.Use(h)
+			usedHandler["middle"][n] = true
+			//println("use plugin middle handler",n)
+		}
+		//fmt.Println(usedHandler)
+	}
+
+	if len(pluginHandlers["inter"]) > 0 {
+		for name, h := range pluginHandlers["inter"] {
+			if usedHandler["inter"][name] {
+				continue
+			}
+			if name == "static" {
+				app.Static(h)
+				usedHandler["inter"][name] = true
+				continue
+			}
+			if name == "recover" {
+				app.Recover(h)
+				usedHandler["inter"][name] = true
+				continue
+			}
+			if name == "notfound" {
+				app.NotFound(h)
+				usedHandler["inter"][name] = true
+				continue
+			}
+		}
+	}
 }

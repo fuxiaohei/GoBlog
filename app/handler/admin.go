@@ -306,7 +306,7 @@ func AdminComments(context *GoInk.Context) {
 		co.IsAdmin = true
 		model.CreateComment(cid, co)
 		Json(context, true).Set("comment", co.ToJson()).End()
-		go context.Do("comment_reply", co)
+		context.Do("comment_reply", co)
 		return
 	}
 	page := context.IntOr("page", 1)
@@ -329,6 +329,7 @@ func AdminPlugin(context *GoInk.Context) {
 		pln := context.String("plugin")
 		if action == "activate" {
 			plugin.Activate(pln)
+			go plugin.Update(context.App())
 			Json(context, true).End()
 			return
 		}

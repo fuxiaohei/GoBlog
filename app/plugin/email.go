@@ -95,18 +95,28 @@ func (p *EmailPlugin) Activate() {
 	}
 	fn := func(context *GoInk.Context) {
 		context.On("comment_created", func(co interface{}) {
-			if len(p.settings["smtp_host"]) < 1 || len(p.settings["smtp_email_user"]) < 1 || len(p.settings["smtp_email_password"]) < 1 {
-				println("no setting in smtp email plugin")
+			if !p.isActive {
 				return
 			}
-			p.sendEmail(co.(*model.Comment), true)
+			go func() {
+				if len(p.settings["smtp_host"]) < 1 || len(p.settings["smtp_email_user"]) < 1 || len(p.settings["smtp_email_password"]) < 1 {
+					println("no setting in smtp email plugin")
+					return
+				}
+				p.sendEmail(co.(*model.Comment), true)
+			}()
 		})
 		context.On("comment_reply", func(co interface{}) {
-			if len(p.settings["smtp_host"]) < 1 || len(p.settings["smtp_email_user"]) < 1 || len(p.settings["smtp_email_password"]) < 1 {
-				fmt.Println("no setting in smtp email plugin")
+			if !p.isActive {
 				return
 			}
-			p.sendEmail(co.(*model.Comment), false)
+			go func() {
+				if len(p.settings["smtp_host"]) < 1 || len(p.settings["smtp_email_user"]) < 1 || len(p.settings["smtp_email_password"]) < 1 {
+					fmt.Println("no setting in smtp email plugin")
+					return
+				}
+				p.sendEmail(co.(*model.Comment), false)
+			}()
 		})
 	}
 	Handler("comment_email_notify", fn, false)

@@ -124,30 +124,7 @@ func Init() {
 	// init plugin
 	plugin.Init()
 
-	pluginHandlers := plugin.Handlers()
-
-	if len(pluginHandlers["middle"]) > 0 {
-		for _, h := range pluginHandlers["middle"] {
-			App.Use(h)
-		}
-	}
-
-	if len(pluginHandlers["inter"]) > 0 {
-		for name, h := range pluginHandlers["inter"] {
-			if name == "static" {
-				App.Static(h)
-				continue
-			}
-			if name == "recover" {
-				App.Recover(h)
-				continue
-			}
-			if name == "notfound" {
-				App.NotFound(h)
-				continue
-			}
-		}
-	}
+	plugin.Update(App)
 
 	App.View().FuncMap["DateInt64"] = utils.DateInt64
 	App.View().FuncMap["DateString"] = utils.DateString
