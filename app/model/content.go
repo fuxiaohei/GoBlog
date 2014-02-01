@@ -52,7 +52,7 @@ func (cnt *Content) TagString() string {
 
 // get content link.
 func (cnt *Content) Link() string {
-	if cnt.Status != "publish"{
+	if cnt.Status != "publish" {
 		return "#"
 	}
 	if cnt.IsLinked {
@@ -63,6 +63,9 @@ func (cnt *Content) Link() string {
 
 // get content text.
 func (cnt *Content) Content() string {
+	if cnt.Status != "publish" {
+		return ""
+	}
 	txt := strings.Replace(cnt.Text, "<!--more-->", "", -1)
 	if GetSetting("enable_go_markdown") == "true" {
 		return utils.Markdown2Html(txt)
@@ -72,6 +75,9 @@ func (cnt *Content) Content() string {
 
 // get content summary.
 func (cnt *Content) Summary() string {
+	if cnt.Status != "publish" {
+		return ""
+	}
 	text := strings.Split(cnt.Text, "<!--more-->")[0]
 	if GetSetting("enable_go_markdown") == "true" {
 		return utils.Markdown2Html(text)

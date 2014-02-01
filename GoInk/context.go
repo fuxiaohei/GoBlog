@@ -322,6 +322,13 @@ func (ctx *Context) Download(file string) {
 		ctx.Status = 403
 		return
 	}
+	output := ctx.Response.Header()
+	output.Set("Content-Type", "application/octet-stream")
+	output.Set("Content-Disposition", "attachment; filename="+path.Base(file))
+	output.Set("Content-Transfer-Encoding", "binary")
+	output.Set("Expires", "0")
+	output.Set("Cache-Control", "must-revalidate")
+	output.Set("Pragma", "public")
 	http.ServeFile(ctx.Response, ctx.Request, file)
 	ctx.IsSend = true
 }

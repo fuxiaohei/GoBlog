@@ -1,5 +1,5 @@
 <div id="article-container" class="clear">
-    <article class="clear article-single relative" id="article-{{.Article.Id}}">{{with .Article}}
+    <article class="clear article-single relative {{.Article.Status}}" id="article-{{.Article.Id}}">{{with .Article}}
         <div class="meta absolute text-center">
             <p class="lbl lbl-green views absolute">{{.Hits}}</p>
         </div>

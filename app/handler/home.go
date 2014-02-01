@@ -71,7 +71,7 @@ func Article(context *GoInk.Context) {
 	id, _ := strconv.Atoi(context.Param("id"))
 	slug := context.Param("slug")
 	article := model.GetContentById(id)
-	if article == nil || article.Status != "publish"{
+	if article == nil{
 		context.Redirect("/")
 		return
 	}

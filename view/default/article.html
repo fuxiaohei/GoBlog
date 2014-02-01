@@ -1,5 +1,5 @@
 <div id="article-container" class="clear">
-    <article class="clear" id="article-{{.Article.Id}}">{{with .Article}}
+    <article class="clear {{.Article.Status}}" id="article-{{.Article.Id}}">{{with .Article}}
         <h3 class="title"><a href="{{.Link}}" title="{{.Title}}">{{.Title}}</a></h3>
         <section class="content markdown">{{Html .Content}}</section>
         <p class="info clear">
