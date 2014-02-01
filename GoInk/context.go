@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"net/http"
+	"os"
 	"path"
 	"reflect"
 	"strconv"
@@ -309,4 +310,18 @@ func (ctx *Context) Func(name string, fn interface{}) {
 
 func (ctx *Context) App() *App {
 	return ctx.app
+}
+
+func (ctx *Context) Download(file string) {
+	f, e := os.Stat(file)
+	if e != nil {
+		ctx.Status = 404
+		return
+	}
+	if f.IsDir() {
+		ctx.Status = 403
+		return
+	}
+	http.ServeFile(ctx.Response, ctx.Request, file)
+	ctx.IsSend = true
 }

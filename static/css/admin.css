@@ -141,7 +141,7 @@ a.lbl-green:hover{background-color:#649462;color:#fbfbfb}
 #comment-list .comment{margin-bottom:12px;padding-bottom:12px;border-bottom:1px dashed #ddd}
 #comment-list .c-meta>*{margin-right:16px}
 #comment-list .c-time{color:#999;font-family:Verdana,Tahoma,'微软雅黑','宋体',sans-serif}#comment-list .c-time .fa{margin-right:6px}
-#comment-list .c-cnt{color:#999}
+#comment-list .c-cnt,#comment-list .c-email{color:#999;font-size:12px}
 #comment-list .c-reply{color:#999}#comment-list .c-reply:hover{color:#333}
 #comment-list .c-author{font-size:13px}
 #comment-list .c-author.admin{background-color:#e64346;color:#fbfbfb}

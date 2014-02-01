@@ -31,3 +31,8 @@ func CmdBackup(context *GoInk.Context) {
 		"Files": files,
 	})
 }
+
+func CmdBackupFile(context *GoInk.Context){
+	file := context.String("file")
+	context.Download(cmd.GetBackupFileAbsPath(file))
+}

@@ -146,6 +146,7 @@ func Init() {
 	// init plugin
 	plugin.Init()
 
+	// update plugin handlers
 	plugin.Update(App)
 
 	App.View().FuncMap["DateInt64"] = utils.DateInt64
@@ -179,7 +180,7 @@ func registerAdminHandler() {
 	App.Route("GET,POST,PUT,DELETE", "/admin/comments/", handler.Auth, handler.AdminComments)
 
 	App.Route("GET,POST", "/admin/setting/", handler.Auth, handler.AdminSetting)
-	App.Route("POST", "/admin/setting/custom/", handler.Auth, handler.CustomSetting)
+	App.Post("/admin/setting/custom/", handler.Auth, handler.CustomSetting)
 
 	App.Route("GET,DELETE", "/admin/files/", handler.Auth, handler.AdminFiles)
 	App.Post("/admin/files/upload/", handler.Auth, handler.FileUpload)
@@ -190,6 +191,7 @@ func registerAdminHandler() {
 
 func registerCmdHandler() {
 	App.Route("GET,POST,DELETE", "/cmd/backup/", handler.Auth, handler.CmdBackup)
+	App.Get("/cmd/backup/file", handler.Auth, handler.CmdBackupFile)
 }
 
 func registerHomeHandler() {
@@ -202,6 +204,9 @@ func registerHomeHandler() {
 	App.Post("/comment/:id/", handler.Comment)
 
 	App.Get("/rss", handler.Feed)
+	App.Get("/rss/", handler.Feed)
+	App.Get("/feed", handler.Feed)
+	App.Get("/feed/", handler.Feed)
 
 	App.Get("/:slug", handler.TopPage)
 	App.Get("/", handler.Home)

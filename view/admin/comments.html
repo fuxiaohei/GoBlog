@@ -4,7 +4,8 @@
         <div class="c-section left">
             <div class="c-meta">
                 <a class="lbl lbl-blue c-author{{if .IsAdmin}} admin{{end}}" href="{{.Url}}" target="_blank">{{.Author}}{{if .IsAdmin}}&nbsp;&nbsp;(admin){{end}}</a>
-                <span class="c-time"><i class="fa fa-clock-o"></i>{{DateInt64 .CreateTime "MM.DD HH:mm"}}</span>{{if .GetContent}}
+                <span class="c-time"><i class="fa fa-clock-o"></i>{{DateInt64 .CreateTime "MM.DD HH:mm"}}</span>
+                <span class="c-email">{{.Email}}</span>{{if .GetContent}}
                 <span class="c-cnt">@{{.GetContent.Title}}</span>{{else}}
                 <span class="c-cnt">@无效</span>{{end}}{{if ne .Status "approved"}}
                 <a class="c-check" href="#" rel="{{.Id}}" title="审核"><i class="fa fa-exclamation-triangle"></i>审核中</a>{{end}}

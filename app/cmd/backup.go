@@ -48,6 +48,10 @@ func RemoveBackupFile(file string) {
 	os.Remove(file)
 }
 
+func GetBackupFileAbsPath(name string) string {
+	return path.Join(backupDir, name)
+}
+
 func GetBackupFiles() ([]os.FileInfo, error) {
 	fi := make([]os.FileInfo, 0)
 	e := filepath.Walk(backupDir, func(_ string, info os.FileInfo, _ error) error {
