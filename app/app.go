@@ -203,9 +203,7 @@ func registerHomeHandler() {
 	App.Get("/p/:page/", handler.Home)
 	App.Post("/comment/:id/", handler.Comment)
 
-	App.Get("/rss", handler.Feed)
 	App.Get("/rss/", handler.Feed)
-	App.Get("/feed", handler.Feed)
 	App.Get("/feed/", handler.Feed)
 
 	App.Get("/:slug", handler.TopPage)

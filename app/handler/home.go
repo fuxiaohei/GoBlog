@@ -60,7 +60,7 @@ func Home(context *GoInk.Context) {
 	context.Layout("home")
 	page, _ := strconv.Atoi(context.Param("page"))
 	size, _ := strconv.Atoi(model.GetSetting("article_size"))
-	articles, pager := model.GetArticleList(page, size)
+	articles, pager := model.GetPublishArticleList(page, size)
 	Theme(context).Layout("home").Render("index", map[string]interface{}{
 		"Articles": articles,
 		"Pager":    pager,

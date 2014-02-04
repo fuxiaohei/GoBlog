@@ -63,9 +63,6 @@ func (cnt *Content) Link() string {
 
 // get content text.
 func (cnt *Content) Content() string {
-	if cnt.Status != "publish" {
-		return ""
-	}
 	txt := strings.Replace(cnt.Text, "<!--more-->", "", -1)
 	if GetSetting("enable_go_markdown") == "true" {
 		return utils.Markdown2Html(txt)
@@ -75,9 +72,6 @@ func (cnt *Content) Content() string {
 
 // get content summary.
 func (cnt *Content) Summary() string {
-	if cnt.Status != "publish" {
-		return ""
-	}
 	text := strings.Split(cnt.Text, "<!--more-->")[0]
 	if GetSetting("enable_go_markdown") == "true" {
 		return utils.Markdown2Html(text)
@@ -130,6 +124,23 @@ func GetContentBySlug(slug string) *Content {
 	return nil
 }
 
+func GetPublishArticleList(page, size int) ([]*Content, *utils.Pager) {
+	index := contentsIndex["article-publish"]
+	pager := utils.NewPager(page, size, len(index))
+	articles := make([]*Content, 0)
+	if page > pager.Pages {
+		return articles, pager
+	}
+	for i := pager.Begin; i <= pager.End; i++ {
+		a := GetContentById(index[i-1])
+		if a.Status != "publish" {
+			continue
+		}
+		articles = append(articles, GetContentById(index[i-1]))
+	}
+	return articles, pager
+}
+
 // get articles list.
 func GetArticleList(page, size int) ([]*Content, *utils.Pager) {
 	index := contentsIndex["article"]
@@ -174,6 +185,7 @@ func CreateContent(c *Content, t string) (*Content, error) {
 	c.Hits = 1
 	contents[c.Id] = c
 	contentsIndex[c.Type] = append([]int{c.Id}, contentsIndex[c.Type]...)
+	generatePublishArticleIndex()
 	go SyncContent(c)
 	return c, nil
 }
@@ -181,6 +193,7 @@ func CreateContent(c *Content, t string) (*Content, error) {
 // save changed content.
 func SaveContent(c *Content) {
 	c.EditTime = utils.Now()
+	generatePublishArticleIndex()
 	go SyncContent(c)
 }
 
@@ -196,6 +209,7 @@ func RemoveContent(c *Content) {
 		}
 	}
 	c.Status = "DELETE"
+	generatePublishArticleIndex()
 	go SyncContent(c)
 }
 
@@ -249,6 +263,18 @@ func LoadContents() {
 	sort.Sort(sort.Reverse(sort.IntSlice(pageIndex)))
 	contentsIndex["article"] = articleIndex
 	contentsIndex["page"] = pageIndex
+	generatePublishArticleIndex()
+}
+
+func generatePublishArticleIndex() {
+	arr := make([]int, 0)
+	for _, id := range contentsIndex["article"] {
+		c := GetContentById(id)
+		if c.Status == "publish" {
+			arr = append(arr, id)
+		}
+	}
+	contentsIndex["article-publish"] = arr
 }
 
 func StartContentsTimer() {
