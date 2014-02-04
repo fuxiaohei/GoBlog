@@ -199,6 +199,7 @@ func loadAllData() {
 	LoadUsers()
 	LoadTokens()
 	LoadContents()
+	LoadMessages()
 	LoadReaders()
 	LoadComments()
 	LoadFiles()
@@ -216,12 +217,17 @@ func Init(v int) {
 
 func All() {
 	loadAllData()
+	// content timer, save visit hits and comment numbers
 	StartContentsTimer()
+	// comment timer, recycle invalid comments whose parents or contents are removed
 	StartCommentsTimer()
+	// message timer, recycle old messages and save read status
+	StartMessageTimer()
 }
 
 func SyncAll(){
 	SyncContents()
+	SyncMessages()
 	SyncFiles()
 	SyncReaders()
 	SyncSettings()
