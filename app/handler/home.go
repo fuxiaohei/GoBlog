@@ -155,5 +155,6 @@ func Comment(context *GoInk.Context) {
 	co.IsAdmin = false
 	model.CreateComment(cid, co)
 	Json(context, true).Set("comment", co.ToJson()).End()
+	model.CreateMessage("comment",co)
 	context.Do("comment_created", co)
 }

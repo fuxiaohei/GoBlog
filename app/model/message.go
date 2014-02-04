@@ -109,8 +109,17 @@ func generateCommentMessage(co interface{}) string {
 		return ""
 	}
 	cnt := GetContentById(c.Cid)
-	s := "<p>" + c.Author + "同学，在文章《" + cnt.Title + "》发表评论：</p>"
-	s += "<p>" + c.Content + "</p>"
+	s := ""
+	if c.Pid < 1 {
+		s = "<p>" + c.Author + "同学，在文章《" + cnt.Title + "》发表评论：</p>"
+		s += "<p>" + c.Content + "</p>"
+	} else {
+		p := GetCommentById(c.Pid)
+		s = "<p>" + p.Author + "同学，在文章《" + cnt.Title + "》的评论：</p>"
+		s += "<p>" + p.Content + "</p>"
+		s += "<p>" + c.Author + "同学的回复：</p>"
+		s += "<p>" + c.Content + "</p>"
+	}
 	return s
 }
 

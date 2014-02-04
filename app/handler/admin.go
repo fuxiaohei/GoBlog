@@ -317,6 +317,7 @@ func AdminComments(context *GoInk.Context) {
 		co.IsAdmin = true
 		model.CreateComment(cid, co)
 		Json(context, true).Set("comment", co.ToJson()).End()
+		model.CreateMessage("comment",co)
 		context.Do("comment_reply", co)
 		return
 	}
