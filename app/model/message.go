@@ -8,11 +8,11 @@ import (
 var (
 	messages         []*Message
 	messageMaxId     int
-	messageGenerator map[string]func(v interface{}) map[string]interface{}
+	messageGenerator map[string]func(v interface{}) string
 )
 
 func init() {
-	messageGenerator = make(map[string]func(v interface{}) map[string]interface{})
+	messageGenerator = make(map[string]func(v interface{}) string)
 	messageGenerator["comment"] = generateCommentMessage
 }
 
@@ -20,7 +20,7 @@ type Message struct {
 	Id         int
 	Type       string
 	CreateTime int64
-	Data       map[string]interface{}
+	Data       string
 	IsRead     bool
 }
 
@@ -28,6 +28,10 @@ func CreateMessage(tp string, data interface{}) *Message {
 	m := new(Message)
 	m.Type = tp
 	m.Data = messageGenerator[tp](data)
+	if m.Data == "" {
+		println("message generator returns empty")
+		return nil
+	}
 	m.CreateTime = utils.Now()
 	m.IsRead = false
 	messageMaxId += Storage.TimeInc(3)
@@ -43,6 +47,31 @@ func GetMessage(id int) *Message {
 		}
 	}
 	return nil
+}
+
+func GetUnreadMessages() []*Message {
+	for n, m := range messages {
+		if m.IsRead {
+			return messages[:n]
+		}
+	}
+	return make([]*Message, 0)
+}
+
+func GetTypedMessages(tp string, unread bool) []*Message {
+	ms := make([]*Message, 0)
+	for _, m := range messages {
+		if m.Type == tp {
+			if unread {
+				if !m.IsRead {
+					ms = append(ms, m)
+				}
+			} else {
+				ms = append(ms, m)
+			}
+		}
+	}
+	return ms
 }
 
 func SaveMessageRead(m *Message) {
@@ -74,9 +103,15 @@ func RecycleMessages() {
 	}
 }
 
-func generateCommentMessage(co interface{}) map[string]interface{} {
-	m := make(map[string]interface{})
-	return m
+func generateCommentMessage(co interface{}) string {
+	c, ok := co.(*Comment)
+	if !ok {
+		return ""
+	}
+	cnt := GetContentById(c.Cid)
+	s := "<p>" + c.Author + "同学，在文章《" + cnt.Title + "》发表评论：</p>"
+	s += "<p>" + c.Content + "</p>"
+	return s
 }
 
 func StartMessageTimer() {
