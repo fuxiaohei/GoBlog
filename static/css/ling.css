@@ -102,6 +102,7 @@ html,body{background:#f3f3f3}
 #header{background:#0093c4;min-width:120px;padding:40px 0 48px 0;color:#fbfbfb}#header a:hover{color:#fff;text-shadow:0 0 3px #333;-moz-text-shadow:0 0 3px #333;-webkit-text-shadow:0 0 3px #333}
 #header-img{width:96px;height:96px;border-radius:50px;-moz-border-radius:50px;-webkit-border-radius:50px}
 #header-h{line-height:94px;color:#fbfbfb;padding:0;margin-left:24px}#header-h a{color:#fbfbfb}
+#header-sub{color:#f3f3f3;margin-left:1.2em;font-size:16px}
 #nav{line-height:90px}#nav li{line-height:50px;margin-left:44px}#nav li a{font-size:18px;color:#f3f3f3;display:block}#nav li a:hover{color:#fff;text-shadow:0 0 3px #333;-moz-text-shadow:0 0 3px #333;-webkit-text-shadow:0 0 3px #333}
 #footer{padding:30px 40px;color:#999}
 #main{margin:30px auto}

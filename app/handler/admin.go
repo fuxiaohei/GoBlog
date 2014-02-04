@@ -38,6 +38,7 @@ func AdminProfile(context *GoInk.Context) {
 		Json(context, true).End()
 		go model.SyncUsers()
 		go model.UpdateCommentAdmin(user)
+		context.Do("profile_update", user)
 		return
 	}
 	context.Layout("admin")
@@ -58,6 +59,7 @@ func AdminPassword(context *GoInk.Context) {
 		user.ChangePassword(context.String("new"))
 		go model.SyncUsers()
 		Json(context, true).End()
+		context.Do("password_update", user)
 		return
 	}
 	context.Layout("admin")
@@ -103,6 +105,7 @@ func ArticleWrite(context *GoInk.Context) {
 			return
 		}
 		Json(context, true).Set("content", c).End()
+		context.Do("article_created", c)
 		//c.Type = "article"
 		return
 	}
@@ -141,6 +144,7 @@ func ArticleEdit(context *GoInk.Context) {
 		//c.Format = "markdown"
 		model.SaveContent(c)
 		Json(context, true).Set("content", c).End()
+		context.Do("article_modified", c)
 		//c.Type = "article"
 		return
 	}
@@ -178,6 +182,7 @@ func PageWrite(context *GoInk.Context) {
 		}
 		Json(context, true).Set("content", c).End()
 		//c.Type = "article"
+		context.Do("page_created", c)
 		return
 	}
 	context.Layout("admin")
@@ -225,6 +230,7 @@ func PageEdit(context *GoInk.Context) {
 		//c.Format = "markdown"
 		model.SaveContent(c)
 		Json(context, true).Set("content", c).End()
+		context.Do("page_modified", c)
 		//c.Type = "article"
 		return
 	}
@@ -248,6 +254,7 @@ func AdminSetting(context *GoInk.Context) {
 		}
 		model.SyncSettings()
 		Json(context, true).End()
+		context.Do("setting_saved")
 		return
 	}
 	context.Layout("admin")
@@ -268,6 +275,7 @@ func CustomSetting(context *GoInk.Context) {
 	}
 	model.SyncSettings()
 	Json(context, true).End()
+	context.Do("setting_saved")
 	return
 }
 
@@ -277,6 +285,7 @@ func AdminComments(context *GoInk.Context) {
 		cmt := model.GetCommentById(id)
 		model.RemoveComment(cmt.Cid, id)
 		Json(context, true).End()
+		context.Do("comment_delete", id)
 		return
 	}
 	if context.Method == "PUT" {
@@ -286,6 +295,7 @@ func AdminComments(context *GoInk.Context) {
 		cmt2.GetReader().Active = true
 		model.SaveComment(cmt2)
 		Json(context, true).End()
+		context.Do("comment_change_status", cmt2)
 		return
 	}
 	if context.Method == "POST" {
@@ -332,11 +342,13 @@ func AdminPlugin(context *GoInk.Context) {
 			plugin.Activate(pln)
 			go plugin.Update(context.App())
 			Json(context, true).End()
+			context.Do("plugin_activated", pln)
 			return
 		}
 		if action == "deactivate" {
 			plugin.Deactivate(pln)
 			Json(context, true).End()
+			context.Do("plugin_deactivated", pln)
 			return
 		}
 		context.Status = 405
@@ -364,6 +376,7 @@ func PluginSetting(context *GoInk.Context) {
 	if context.Method == "POST" {
 		p.SetSetting(context.Input())
 		Json(context, true).End()
+		context.Do("plugin_setting_saved", p)
 		return
 	}
 	context.Layout("admin")

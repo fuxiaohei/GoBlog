@@ -20,7 +20,7 @@
     <div class="container960">
         <img src="{{Setting `c_home_avatar`}}" alt="site" id="header-img" class="left"/>
         <h1 id="header-h" class="left"><a href="/">{{Setting "site_title"}}</a></h1>
-        {{Html `<!--<h4 id="header-sub" class="left">{{Setting "site_sub_title"}}</h4>-->`}}
+        <h4 id="header-sub" class="left">{{Setting "site_sub_title"}}</h4>
         <nav id="nav" class="right">
             <ul>
                 <li class="inline-block"><a href="/">文章</a></li>

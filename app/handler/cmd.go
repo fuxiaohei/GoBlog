@@ -13,6 +13,7 @@ func CmdBackup(context *GoInk.Context) {
 			return
 		}
 		Json(context, true).Set("file", file).End()
+		context.Do("bakcup_success", file)
 		return
 	}
 	if context.Method == "DELETE" {
@@ -23,6 +24,7 @@ func CmdBackup(context *GoInk.Context) {
 		}
 		cmd.RemoveBackupFile(file)
 		Json(context, true).End()
+		context.Do("backup_delete", file)
 		return
 	}
 	files, _ := cmd.GetBackupFiles()
@@ -32,7 +34,8 @@ func CmdBackup(context *GoInk.Context) {
 	})
 }
 
-func CmdBackupFile(context *GoInk.Context){
+func CmdBackupFile(context *GoInk.Context) {
 	file := context.String("file")
 	context.Download(cmd.GetBackupFileAbsPath(file))
+	context.Do("backup_download", file)
 }
