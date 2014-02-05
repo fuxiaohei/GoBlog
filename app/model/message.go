@@ -35,9 +35,14 @@ func CreateMessage(tp string, data interface{}) *Message {
 	m.CreateTime = utils.Now()
 	m.IsRead = false
 	messageMaxId += Storage.TimeInc(3)
+	m.Id = messageMaxId
 	messages = append([]*Message{m}, messages...)
 	SyncMessages()
 	return m
+}
+
+func SetMessageGenerator(name string,fn func(v interface {})string){
+	messageGenerator[name] = fn
 }
 
 func GetMessage(id int) *Message {
@@ -50,12 +55,18 @@ func GetMessage(id int) *Message {
 }
 
 func GetUnreadMessages() []*Message {
-	for n, m := range messages {
+	ms := make([]*Message, 0)
+	for _, m := range messages {
 		if m.IsRead {
-			return messages[:n]
+			continue
 		}
+		ms = append(ms, m)
 	}
-	return make([]*Message, 0)
+	return ms
+}
+
+func GetMessages()[]*Message{
+	return messages
 }
 
 func GetTypedMessages(tp string, unread bool) []*Message {
@@ -111,14 +122,14 @@ func generateCommentMessage(co interface{}) string {
 	cnt := GetContentById(c.Cid)
 	s := ""
 	if c.Pid < 1 {
-		s = "<p>" + c.Author + "同学，在文章《" + cnt.Title + "》发表评论：</p>"
-		s += "<p>" + c.Content + "</p>"
+		s = "<p>" + c.Author + "同学，在文章《" + cnt.Title + "》发表评论："
+		s += utils.Html2str(c.Content) + "</p>"
 	} else {
 		p := GetCommentById(c.Pid)
-		s = "<p>" + p.Author + "同学，在文章《" + cnt.Title + "》的评论：</p>"
-		s += "<p>" + p.Content + "</p>"
-		s += "<p>" + c.Author + "同学的回复：</p>"
-		s += "<p>" + c.Content + "</p>"
+		s = "<p>" + p.Author + "同学，在文章《" + cnt.Title + "》的评论："
+		s += utils.Html2str(p.Content) + "</p>"
+		s += "<p>" + c.Author + "同学的回复："
+		s += utils.Html2str(c.Content) + "</p>"
 	}
 	return s
 }

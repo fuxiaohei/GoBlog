@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/fuxiaohei/GoBlog/GoInk"
 	"github.com/fuxiaohei/GoBlog/app/cmd"
+	"github.com/fuxiaohei/GoBlog/app/model"
 )
 
 func CmdBackup(context *GoInk.Context) {
@@ -31,6 +32,7 @@ func CmdBackup(context *GoInk.Context) {
 	context.Layout("cmd")
 	context.Render("admin/cmd/backup", map[string]interface{}{
 		"Files": files,
+		"Title": "备份",
 	})
 }
 
@@ -38,4 +40,12 @@ func CmdBackupFile(context *GoInk.Context) {
 	file := context.String("file")
 	context.Download(cmd.GetBackupFileAbsPath(file))
 	context.Do("backup_download", file)
+}
+
+func CmdMessage(context *GoInk.Context) {
+	context.Layout("cmd")
+	context.Render("admin/cmd/message",map[string]interface {}{
+			"Title":"消息",
+			"Messages":model.GetMessages(),
+	})
 }

@@ -414,7 +414,7 @@
 
 #dashboard{
   .grid-1-5{
-    margin-right: 4%;
+    margin-right: 2%;
   }
   .quick-link{
     li{
@@ -426,6 +426,39 @@
     .lbl{
       padding: 1px 5px;
       margin: 0 3px;
+    }
+  }
+  .activity{
+    .msg{
+      padding: 8px 12px;
+      .bottom-line(8px);
+      line-height: 24px;
+      font-size: 12px;
+      .time{
+        font-family: Verdana, Tahoma, '微软雅黑', '宋体', sans-serif;
+      }
+      .data{
+        color: @black2;
+        margin-left: 1.2em;
+        p{
+          margin-bottom: 0;
+          line-height: 24px;
+        }
+      }
+      .read{
+        top:0;
+        right:12px;
+        opacity: 0;
+        &:hover{
+          color: @red1;
+        }
+      }
+      &:hover{
+        background: fade(@blue0,6%);
+        .read{
+          opacity: 1;
+        }
+      }
     }
   }
 }

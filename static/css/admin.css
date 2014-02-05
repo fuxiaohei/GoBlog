@@ -168,6 +168,10 @@ a.lbl-green:hover{background-color:#649462;color:#fbfbfb}
 #plugin-setting-form label{float:left;min-width:6em;text-align:right;margin-right:2em}
 #plugin-setting-form .title{padding-top:0;margin-bottom:18px}
 #plugin-setting-form input.ipt{width:600px}
-#dashboard .grid-1-5{margin-right:4%}
+#dashboard .grid-1-5{margin-right:2%}
 #dashboard .quick-link li{list-style:inside disc;margin-bottom:6px;padding-bottom:6px;border-bottom:1px dashed #ddd}
 #dashboard .stats .lbl{padding:1px 5px;margin:0 3px}
+#dashboard .activity .msg{padding:8px 12px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px dashed #ddd;line-height:24px;font-size:12px}#dashboard .activity .msg .time{font-family:Verdana,Tahoma,'微软雅黑','宋体',sans-serif}
+#dashboard .activity .msg .data{color:#666;margin-left:1.2em}#dashboard .activity .msg .data p{margin-bottom:0;line-height:24px}
+#dashboard .activity .msg .read{top:0;right:12px;opacity:0}#dashboard .activity .msg .read:hover{color:#e64346}
+#dashboard .activity .msg:hover{background:rgba(0,150,223,0.06)}#dashboard .activity .msg:hover .read{opacity:1}

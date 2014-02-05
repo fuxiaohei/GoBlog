@@ -14,9 +14,10 @@ func Admin(context *GoInk.Context) {
 	user := model.GetUserById(uid)
 	context.Layout("admin")
 	context.Render("admin/home", map[string]interface{}{
-		"Title":  "控制台",
-		"Statis": model.NewStatis(),
-		"User":   user,
+		"Title":    "控制台",
+		"Statis":   model.NewStatis(),
+		"User":     user,
+		"Messages": model.GetUnreadMessages(),
 	})
 }
 
@@ -317,7 +318,7 @@ func AdminComments(context *GoInk.Context) {
 		co.IsAdmin = true
 		model.CreateComment(cid, co)
 		Json(context, true).Set("comment", co.ToJson()).End()
-		model.CreateMessage("comment",co)
+		model.CreateMessage("comment", co)
 		context.Do("comment_reply", co)
 		return
 	}
@@ -385,4 +386,19 @@ func PluginSetting(context *GoInk.Context) {
 		"Title": "插件 - " + p.Name(),
 		"Form":  p.Form(),
 	})
+}
+
+func AdminMessageRead(context *GoInk.Context) {
+	id := context.Int("id")
+	if id < 0 {
+		Json(context, false).End()
+		return
+	}
+	m := model.GetMessage(id)
+	if m == nil {
+		Json(context, false).End()
+		return
+	}
+	model.SaveMessageRead(m)
+	Json(context, true).End()
 }

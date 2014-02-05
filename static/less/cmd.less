@@ -37,3 +37,36 @@
     }
   }
 }
+
+#message-list{
+  .message{
+    padding: 8px 12px;
+    .bottom-line(8px);
+    line-height: 24px;
+    font-size: 12px;
+    .time{
+      font-family: Verdana, Tahoma, '微软雅黑', '宋体', sans-serif;
+    }
+    .data{
+      color: @black2;
+      margin-left: 1.2em;
+      p{
+        margin-bottom: 0;
+        line-height: 24px;
+      }
+    }
+    .read{
+      top:0;
+      right:12px;
+      opacity: 0;
+      &:hover{
+        color: @red1;
+      }
+    }
+    &:hover{
+      .read{
+        opacity: 1;
+      }
+    }
+  }
+}

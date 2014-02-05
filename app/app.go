@@ -187,11 +187,15 @@ func registerAdminHandler() {
 
 	App.Route("GET,POST", "/admin/plugins/", handler.Auth, handler.AdminPlugin)
 	App.Route("GET,POST", "/admin/plugins/:plugin_key/", handler.Auth, handler.PluginSetting)
+
+	App.Post("/admin/message/read/", handler.Auth, handler.AdminMessageRead)
 }
 
 func registerCmdHandler() {
 	App.Route("GET,POST,DELETE", "/cmd/backup/", handler.Auth, handler.CmdBackup)
 	App.Get("/cmd/backup/file", handler.Auth, handler.CmdBackupFile)
+
+	App.Route("GET,POST,DELETE","/cmd/message/",handler.Auth,handler.CmdMessage)
 }
 
 func registerHomeHandler() {

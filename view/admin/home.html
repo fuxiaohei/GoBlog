@@ -17,8 +17,14 @@
     </div>
     <div class="grid-1-2 left">
         <div class="activity">
-            <h4>最新活动</h4>
-            <p>内容开发中...</p>
+            <h4>最新活动</h4>{{range .Messages}}
+            <div class="msg relative {{.Type}}">
+                <span class="time">{{DateInt64 .CreateTime "MM.DD HH:mm"}}</span>
+                <div class="data">{{Html .Data}}</div>
+                <a class="read absolute" href="/admin/message/read?id={{.Id}}" rel="{{.Id}}"><i class="fa fa-check"></i></a>
+            </div>{{end}}{{if lt (len .Messages) 1}}
+            <p>没有新的活动信息</p>
+            {{end}}
         </div>
     </div>
     <div class="grid-1-4 right">
@@ -36,3 +42,16 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function(){
+       $(".read").on("click",function(){
+           var $this = $(this);
+           $.post($this.attr("href"),function(json){
+              if(json.res){
+                  $this.parent().remove();
+              }
+           });
+           return false;
+       });
+    });
+</script>
