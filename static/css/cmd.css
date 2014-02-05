@@ -110,3 +110,8 @@ a.lbl-green:hover{background-color:#649462;color:#fbfbfb}
 #message-list .message .data{color:#666;margin-left:1.2em}#message-list .message .data p{margin-bottom:0;line-height:24px}
 #message-list .message .read{top:0;right:12px;opacity:0}#message-list .message .read:hover{color:#e64346}
 #message-list .message:hover .read{opacity:1}
+#log-list .log{font-size:12px}
+#log-list .name{margin-right:1.5em;font-weight:bold}
+#log-list .time,#log-list .name{font-family:Verdana,Tahoma,'微软雅黑','宋体',sans-serif}
+#log-list .text{line-height:20px;font-family:Consolas,"Courier New",Arial;color:#666;padding:8px 12px;background:#f3f3f3}
+#log-list .remove{top:0;right:12px;color:#e64346}

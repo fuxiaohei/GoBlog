@@ -1,0 +1,30 @@
+<header class="cmd-header">
+    <h1 class="cmd-title">错误日志</h1>
+</header>
+<ul class="cmd-list" id="log-list">{{range .Logs}}
+    <li class="log relative">
+        <span class="name inline-block">{{.Name}}</span>
+        <span class="time inline-block">{{DateInt64 .CreateTime "MM.DD HH:mm"}}</span>
+        <pre class="text">{{.Text}}</pre>
+        <a class="remove absolute" href="/cmd/logs/?file={{.Name}}"><i class="fa fa-times"></i></a>
+    </li>{{end}}
+</ul>
+<script>
+    $(document).ready(function () {
+        $('.remove').on("click", function () {
+            if (confirm("确认删除记录")) {
+                var $this = $(this);
+                $.ajax({
+                    type:"delete",
+                    url:$this.attr("href"),
+                   success:function(json){
+                       if(json.res){
+                           $this.parent().remove();
+                       }
+                   }
+                })
+            }
+            return false;
+        });
+    });
+</script>

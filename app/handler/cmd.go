@@ -44,8 +44,21 @@ func CmdBackupFile(context *GoInk.Context) {
 
 func CmdMessage(context *GoInk.Context) {
 	context.Layout("cmd")
-	context.Render("admin/cmd/message",map[string]interface {}{
-			"Title":"消息",
-			"Messages":model.GetMessages(),
+	context.Render("admin/cmd/message", map[string]interface{}{
+		"Title":    "消息",
+		"Messages": model.GetMessages(),
+	})
+}
+
+func CmdLogs(context *GoInk.Context) {
+	if context.Method == "DELETE" {
+		cmd.RemoveLogFile(context.App(), context.String("file"))
+		Json(context, true).End()
+		return
+	}
+	context.Layout("cmd")
+	context.Render("admin/cmd/log", map[string]interface{}{
+		"Title": "日志",
+		"Logs":  cmd.GetLogs(context.App()),
 	})
 }

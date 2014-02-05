@@ -195,7 +195,8 @@ func registerCmdHandler() {
 	App.Route("GET,POST,DELETE", "/cmd/backup/", handler.Auth, handler.CmdBackup)
 	App.Get("/cmd/backup/file", handler.Auth, handler.CmdBackupFile)
 
-	App.Route("GET,POST,DELETE","/cmd/message/",handler.Auth,handler.CmdMessage)
+	App.Route("GET,POST,DELETE", "/cmd/message/", handler.Auth, handler.CmdMessage)
+	App.Route("GET,DELETE", "/cmd/logs/", handler.Auth, handler.CmdLogs)
 }
 
 func registerHomeHandler() {

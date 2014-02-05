@@ -41,7 +41,7 @@ func CreateMessage(tp string, data interface{}) *Message {
 	return m
 }
 
-func SetMessageGenerator(name string,fn func(v interface {})string){
+func SetMessageGenerator(name string, fn func(v interface{}) string) {
 	messageGenerator[name] = fn
 }
 
@@ -65,7 +65,7 @@ func GetUnreadMessages() []*Message {
 	return ms
 }
 
-func GetMessages()[]*Message{
+func GetMessages() []*Message {
 	return messages
 }
 
@@ -136,8 +136,9 @@ func generateCommentMessage(co interface{}) string {
 
 func StartMessageTimer() {
 	time.AfterFunc(time.Duration(1)*time.Hour, func() {
-		println("write messages in 1 hours timer")
+		println("write messages in 1 hour timer")
 		RecycleMessages()
 		SyncMessages()
+		StartMessageTimer()
 	})
 }
