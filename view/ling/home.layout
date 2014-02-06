@@ -22,10 +22,8 @@
         <h1 id="header-h" class="left"><a href="/">{{Setting "site_title"}}</a></h1>
         <h4 id="header-sub" class="left">{{Setting "site_sub_title"}}</h4>
         <nav id="nav" class="right">
-            <ul>
-                <li class="inline-block"><a href="/">文章</a></li>
-                <li class="inline-block"><a href="/about-me.html">关于</a></li>
-                <li class="inline-block"><a href="/friends.html">好友</a></li>
+            <ul>{{range Navigator}}
+                <li class="inline-block"><a href="{{.Link}}" title="{{.Title}}">{{.Text}}</a></li>{{end}}
             </ul>
         </nav>
     </div>

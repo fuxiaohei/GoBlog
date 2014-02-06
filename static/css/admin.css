@@ -125,7 +125,7 @@ a.lbl-green:hover{background-color:#649462;color:#fbfbfb}
 #article-form .form-vertical .btn{margin-right:16px}
 #article-form .file-progress{padding:0 12px;background:rgba(0,150,223,0.2);color:#666;font-family:Verdana,Tahoma,'微软雅黑','宋体',sans-serif;box-sizing:border-box;border-radius:2px;-moz-border-radius:2px;-webkit-border-radius:2px}
 #article-form .file-progress.err{background:rgba(255,68,71,0.2);color:#aa393c}
-#setting-nav{margin-top:24px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px dashed #ddd}#setting-nav li{display:inline-block;margin:0 12px}#setting-nav li a{padding:3px 10px}
+#setting-nav{width:1000px;margin-top:24px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px dashed #ddd}#setting-nav li{display:inline-block;margin:0 12px}#setting-nav li a{padding:3px 10px}
 #setting-nav li a:hover,#setting-nav li a.current{border-bottom:2px solid #005b9b}
 .setting-panel{display:none}
 .setting-form{width:820px;margin:24px auto 48px auto}.setting-form .ipt{width:480px}
@@ -137,6 +137,13 @@ a.lbl-green:hover{background-color:#649462;color:#fbfbfb}
 #setting-custom-form .item{margin-bottom:12px;padding-bottom:12px;border-bottom:1px dashed #ddd}
 #setting-custom-form .del{margin-left:12px;color:#e64346}
 #setting-custom-form .tip{margin-left:0}
+#setting-nav-form{width:1000px}#setting-nav-form .item{margin-bottom:12px;padding-bottom:12px;border-bottom:1px dashed #ddd}
+#setting-nav-form span.label{margin-right:6px}
+#setting-nav-form input.order{width:2.5em;min-width:0}
+#setting-nav-form input.text{width:80px;min-width:0}
+#setting-nav-form input.title{width:150px;min-width:0}
+#setting-nav-form input.link{width:340px}
+#setting-nav-form .del{margin-left:12px;color:#e64346}
 #comment-list .c-avatar{width:48px;height:48px;padding:2px;border:1px solid #ccc;border-radius:2px;-moz-border-radius:2px;-webkit-border-radius:2px;margin-right:18px}
 #comment-list .comment{margin-bottom:12px;padding-bottom:12px;border-bottom:1px dashed #ddd}
 #comment-list .c-meta>*{margin-right:16px}

@@ -156,6 +156,7 @@ func Init() {
 	App.View().FuncMap["Html2str"] = utils.Html2str
 	App.View().FuncMap["FileSize"] = utils.FileSize
 	App.View().FuncMap["Setting"] = model.GetSetting
+	App.View().FuncMap["Navigator"] = model.GetNavigators
 	App.View().FuncMap["Md2html"] = utils.Markdown2HtmlTemplate
 
 	println("app version @ " + strconv.Itoa(model.GetVersion().Version))
@@ -181,6 +182,7 @@ func registerAdminHandler() {
 
 	App.Route("GET,POST", "/admin/setting/", handler.Auth, handler.AdminSetting)
 	App.Post("/admin/setting/custom/", handler.Auth, handler.CustomSetting)
+	App.Post("/admin/setting/nav/", handler.Auth, handler.NavigatorSetting)
 
 	App.Route("GET,DELETE", "/admin/files/", handler.Auth, handler.AdminFiles)
 	App.Post("/admin/files/upload/", handler.Auth, handler.FileUpload)

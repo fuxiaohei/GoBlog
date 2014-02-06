@@ -24,10 +24,8 @@
     </div>
 </header>
 <nav id="nav" class="clear text-center">
-    <ul>
-        <li class="inline-block"><a href="/">文章</a></li>
-        <li class="inline-block"><a href="/about-me.html">关于</a></li>
-        <li class="inline-block"><a href="/friends.html">好友</a></li>
+    <ul>{{range Navigator}}
+        <li class="inline-block"><a href="{{.Link}}" title="{{.Title}}">{{.Text}}</a></li>{{end}}
     </ul>
 </nav>
 <div id="main" class="container960">

@@ -193,12 +193,31 @@ func writeDefaultData() {
 	Storage.Set("files", []*File{})
 
 	// write message
-	Storage.Set("messages",[]*Message{})
+	Storage.Set("messages", []*Message{})
+
+	// write navigators
+	n := new(navItem)
+	n.Order = 1
+	n.Text = "文章"
+	n.Title = "文章"
+	n.Link = "/"
+	n2 := new(navItem)
+	n2.Order = 2
+	n2.Text = "关于"
+	n2.Title = "关于"
+	n2.Link = "/about-me.html"
+	n3 := new(navItem)
+	n3.Order = 3
+	n3.Text = "好友"
+	n3.Title = "好友"
+	n3.Link = "/friends.html"
+	Storage.Set("navigators", []*navItem{n, n2, n3})
 }
 
 func loadAllData() {
 	loadVersion()
 	LoadSettings()
+	LoadNavigators()
 	LoadUsers()
 	LoadTokens()
 	LoadContents()
@@ -228,12 +247,13 @@ func All() {
 	StartMessageTimer()
 }
 
-func SyncAll(){
+func SyncAll() {
 	SyncContents()
 	SyncMessages()
 	SyncFiles()
 	SyncReaders()
 	SyncSettings()
+	SyncNavigators()
 	SyncTokens()
 	SyncUsers()
 	SyncVersion()

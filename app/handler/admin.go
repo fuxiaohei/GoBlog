@@ -260,8 +260,9 @@ func AdminSetting(context *GoInk.Context) {
 	}
 	context.Layout("admin")
 	context.Render("admin/setting", map[string]interface{}{
-		"Title":  "配置",
-		"Custom": model.GetCustomSettings(),
+		"Title":      "配置",
+		"Custom":     model.GetCustomSettings(),
+		"Navigators": model.GetNavigators(),
 	})
 }
 
@@ -275,6 +276,17 @@ func CustomSetting(context *GoInk.Context) {
 		model.SetSetting("c_"+k, values[i])
 	}
 	model.SyncSettings()
+	Json(context, true).End()
+	context.Do("setting_saved")
+	return
+}
+
+func NavigatorSetting(context *GoInk.Context) {
+	order := context.Strings("order")
+	text := context.Strings("text")
+	title := context.Strings("title")
+	link := context.Strings("link")
+	model.SetNavigators(order, text, title, link)
 	Json(context, true).End()
 	context.Do("setting_saved")
 	return

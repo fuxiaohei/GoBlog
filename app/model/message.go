@@ -135,8 +135,8 @@ func generateCommentMessage(co interface{}) string {
 }
 
 func StartMessageTimer() {
-	time.AfterFunc(time.Duration(1)*time.Hour, func() {
-		println("write messages in 1 hour timer")
+	time.AfterFunc(time.Duration(90)*time.Minute, func() {
+		println("write messages in 1.5 hour timer")
 		RecycleMessages()
 		SyncMessages()
 		StartMessageTimer()

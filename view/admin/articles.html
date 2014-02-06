@@ -7,6 +7,7 @@
         <span class="lbl status">草稿</span>{{end}}
         <span class="slug">{{.Slug}}</span>{{if eq .IsComment false}}
         <span class="is-comment"><i class="fa-comments fa"></i><i class="fa fa-times"></i></span>{{end}}
+        <span class="count">{{.CommentNum}} / {{.Hits}}</span>
         <a class="edit lbl lbl-green" href="/admin/article/{{.Id}}/" rel="{{.Id}}">编辑</a>
         <a class="del lbl lbl-red" href="/admin/article/{{.Id}}/" rel="{{.Id}}">删除</a>
     </li>{{end}}
