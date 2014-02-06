@@ -191,6 +191,9 @@ func writeDefaultData() {
 
 	// write files
 	Storage.Set("files", []*File{})
+
+	// write message
+	Storage.Set("messages",[]*Message{})
 }
 
 func loadAllData() {

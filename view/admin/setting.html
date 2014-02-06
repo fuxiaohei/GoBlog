@@ -1,5 +1,6 @@
 <ul id="setting-nav" class="container960 text-center">
     <li><a href="#general">基本</a></li>
+    <li><a href="#nav">导航</a></li>
     <li><a href="#custom">自定义</a></li>
 </ul>
 <div id="setting-panels" class="container960">
@@ -44,6 +45,9 @@
             <label>&nbsp;</label>
             <button class="btn btn-blue">保存</button>
         </p>
+    </form>
+    <form id="setting-nav-form" class="setting-form form-align setting-panel" action="/admin/setting/nav" method="post">
+        nav
     </form>
     <form id="setting-custom-form" class="setting-form form form-align setting-panel" action="/admin/setting/custom/" method="post">{{range $k,$v := .Custom}}
         <p class="item">
