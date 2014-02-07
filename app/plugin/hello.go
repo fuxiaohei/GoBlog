@@ -2,7 +2,7 @@ package plugin
 
 import (
 	"fmt"
-	"github.com/fuxiaohei/GoBlog/GoInk"
+	"github.com/fuxiaohei/GoInk"
 	"time"
 )
 
@@ -77,6 +77,6 @@ func (p *HelloPlugin) Form() string {
 	return ""
 }
 
-func (p *HelloPlugin) SetSetting(settings map[string]string){
+func (p *HelloPlugin) SetSetting(settings map[string]string) {
 
 }

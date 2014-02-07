@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/base64"
 	"fmt"
-	"github.com/fuxiaohei/GoBlog/app/utils"
 	"github.com/Unknwon/cae/zip"
+	"github.com/fuxiaohei/GoBlog/app/utils"
 	"io/ioutil"
 	"os"
 )
@@ -20,7 +20,7 @@ func CheckInstall() bool {
 	return e == nil
 }
 
-func ExtractBundleBytes(){
+func ExtractBundleBytes() {
 	// origin from https://github.com/wendal/gor/blob/master/gor/gor.go
 	decoder := base64.NewDecoder(base64.StdEncoding, bytes.NewBufferString(zipBytes))
 	b, _ := ioutil.ReadAll(decoder)
@@ -47,7 +47,7 @@ func DoInstall() {
 func DoUpdateZipBytes(file string) error {
 	// copy from https://github.com/wendal/gor/blob/master/gor/gor.go
 	bytes, _ := ioutil.ReadFile(file)
-	zipWriter, _ := os.OpenFile("app/cmd/zip.go", os.O_WRONLY | os.O_TRUNC | os.O_CREATE, os.ModePerm)
+	zipWriter, _ := os.OpenFile("app/cmd/zip.go", os.O_WRONLY|os.O_TRUNC|os.O_CREATE, os.ModePerm)
 	header := `package cmd
 const zipBytes="`
 	zipWriter.Write([]byte(header))

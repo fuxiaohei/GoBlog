@@ -2,7 +2,7 @@ package upgrade
 
 import (
 	"github.com/fuxiaohei/GoBlog/app/cmd"
-	"github.com/fuxiaohei/GoBlog/GoInk"
+	"github.com/fuxiaohei/GoInk"
 )
 
 func init() {

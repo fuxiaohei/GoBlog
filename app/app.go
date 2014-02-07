@@ -2,11 +2,11 @@ package app
 
 import (
 	"fmt"
-	"github.com/fuxiaohei/GoBlog/GoInk"
 	"github.com/fuxiaohei/GoBlog/app/handler"
 	"github.com/fuxiaohei/GoBlog/app/model"
 	"github.com/fuxiaohei/GoBlog/app/plugin"
 	"github.com/fuxiaohei/GoBlog/app/utils"
+	"github.com/fuxiaohei/GoInk"
 	"net/http"
 	"os"
 	"os/signal"

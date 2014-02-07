@@ -1,10 +1,10 @@
 package handler
 
 import (
-	"github.com/fuxiaohei/GoBlog/GoInk"
 	"github.com/fuxiaohei/GoBlog/app/model"
 	"github.com/fuxiaohei/GoBlog/app/plugin"
 	"github.com/fuxiaohei/GoBlog/app/utils"
+	"github.com/fuxiaohei/GoInk"
 	"strconv"
 	"strings"
 )
@@ -335,7 +335,7 @@ func AdminComments(context *GoInk.Context) {
 		return
 	}
 	page := context.IntOr("page", 1)
-	comments, pager := model.GetCommentList(page, 6)
+	comments, pager := model.GetCommentList(page, 10)
 	context.Layout("admin")
 	context.Render("admin/comments", map[string]interface{}{
 		"Title":    "评论",

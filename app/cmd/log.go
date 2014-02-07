@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/fuxiaohei/GoBlog/GoInk"
+	"github.com/fuxiaohei/GoInk"
 	"io/ioutil"
 	"os"
 	"path/filepath"

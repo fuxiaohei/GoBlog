@@ -37,7 +37,7 @@ func CreateFile(f *File) *File {
 }
 
 func CreateFilePath(dir string, f *File) string {
-	os.MkdirAll(dir,os.ModePerm)
+	os.MkdirAll(dir, os.ModePerm)
 	name := utils.DateInt64(utils.Now(), "YYYYMMDDHHmmss")
 	name += strconv.Itoa(Storage.TimeInc(10)) + path.Ext(f.Name)
 	return path.Join(dir, name)

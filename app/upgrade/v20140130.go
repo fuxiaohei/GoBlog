@@ -1,10 +1,10 @@
 package upgrade
 
 import (
-	"github.com/fuxiaohei/GoBlog/GoInk"
 	"github.com/fuxiaohei/GoBlog/app/cmd"
 	"github.com/fuxiaohei/GoBlog/app/model"
 	"github.com/fuxiaohei/GoBlog/app/plugin"
+	"github.com/fuxiaohei/GoInk"
 	"os"
 	"path"
 )
@@ -22,7 +22,7 @@ func upgrade_20140130(app *GoInk.App) bool {
 	model.SetSetting("enable_go_markdown_def", "false")
 	model.SetSetting("site_theme", "default")
 	model.SetSetting("site_theme_def", "default")
-	model.SetSetting("c_home_avatar","/static/img/site.png")
+	model.SetSetting("c_home_avatar", "/static/img/site.png")
 	model.SyncSettings()
 
 	// init plugin

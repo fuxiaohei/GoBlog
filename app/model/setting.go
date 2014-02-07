@@ -75,7 +75,7 @@ func SetNavigators(order []string, text []string, title []string, link []string)
 	SyncNavigators()
 }
 
-func SyncNavigators(){
+func SyncNavigators() {
 	Storage.Set("navigators", navigators)
 	SortNavigators()
 }
