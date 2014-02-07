@@ -110,7 +110,7 @@ func (app *App) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 }
 
 func (app *App) Run() {
-	addr := app.config.StringOr("app.server", "localhost:9000")
+	addr := app.config.StringOr("app.server", "localhost:9001")
 	println("http server run at "+addr)
 	e := http.ListenAndServe(addr, app)
 	panic(e)
