@@ -12,7 +12,7 @@ import (
 func Admin(context *GoInk.Context) {
 	uid, _ := strconv.Atoi(context.Cookie("token-user"))
 	user := model.GetUserById(uid)
-	context.Layout("admin")
+	context.Layout("admin/admin")
 	context.Render("admin/home", map[string]interface{}{
 		"Title":    "控制台",
 		"Statis":   model.NewStatis(),
@@ -42,7 +42,7 @@ func AdminProfile(context *GoInk.Context) {
 		context.Do("profile_update", user)
 		return
 	}
-	context.Layout("admin")
+	context.Layout("admin/admin")
 	context.Render("admin/profile", map[string]interface{}{
 		"Title": "个性资料",
 		"User":  user,
@@ -63,7 +63,7 @@ func AdminPassword(context *GoInk.Context) {
 		context.Do("password_update", user)
 		return
 	}
-	context.Layout("admin")
+	context.Layout("admin/admin")
 	context.Render("admin/password", map[string]interface{}{
 		"Title": "修改密码",
 		//"User":user,
@@ -72,7 +72,7 @@ func AdminPassword(context *GoInk.Context) {
 
 func AdminArticle(context *GoInk.Context) {
 	articles, pager := model.GetArticleList(context.Int("page"), 10)
-	context.Layout("admin")
+	context.Layout("admin/admin")
 	context.Render("admin/articles", map[string]interface{}{
 		"Title":    "文章",
 		"Articles": articles,
@@ -110,7 +110,7 @@ func ArticleWrite(context *GoInk.Context) {
 		//c.Type = "article"
 		return
 	}
-	context.Layout("admin")
+	context.Layout("admin/admin")
 	context.Render("admin/write_article", map[string]interface{}{
 		"Title": "撰写文章",
 	})
@@ -149,7 +149,7 @@ func ArticleEdit(context *GoInk.Context) {
 		//c.Type = "article"
 		return
 	}
-	context.Layout("admin")
+	context.Layout("admin/admin")
 	context.Render("admin/edit_article", map[string]interface{}{
 		"Title":   "编辑文章",
 		"Article": c,
@@ -186,7 +186,7 @@ func PageWrite(context *GoInk.Context) {
 		context.Do("page_created", c)
 		return
 	}
-	context.Layout("admin")
+	context.Layout("admin/admin")
 	context.Render("admin/write_page", map[string]interface{}{
 		"Title": "撰写页面",
 	})
@@ -194,7 +194,7 @@ func PageWrite(context *GoInk.Context) {
 
 func AdminPage(context *GoInk.Context) {
 	pages, pager := model.GetPageList(context.Int("page"), 10)
-	context.Layout("admin")
+	context.Layout("admin/admin")
 	context.Render("admin/pages", map[string]interface{}{
 		"Title": "页面",
 		"Pages": pages,
@@ -235,7 +235,7 @@ func PageEdit(context *GoInk.Context) {
 		//c.Type = "article"
 		return
 	}
-	context.Layout("admin")
+	context.Layout("admin/admin")
 	context.Render("admin/edit_page", map[string]interface{}{
 		"Title": "编辑文章",
 		"Page":  c,
@@ -258,7 +258,7 @@ func AdminSetting(context *GoInk.Context) {
 		context.Do("setting_saved")
 		return
 	}
-	context.Layout("admin")
+	context.Layout("admin/admin")
 	context.Render("admin/setting", map[string]interface{}{
 		"Title":      "配置",
 		"Custom":     model.GetCustomSettings(),
@@ -336,7 +336,7 @@ func AdminComments(context *GoInk.Context) {
 	}
 	page := context.IntOr("page", 1)
 	comments, pager := model.GetCommentList(page, 10)
-	context.Layout("admin")
+	context.Layout("admin/admin")
 	context.Render("admin/comments", map[string]interface{}{
 		"Title":    "评论",
 		"Comments": comments,
@@ -369,7 +369,7 @@ func AdminPlugin(context *GoInk.Context) {
 		Json(context, false).End()
 		return
 	}
-	context.Layout("admin")
+	context.Layout("admin/admin")
 	context.Render("admin/plugin", map[string]interface{}{
 		"Title":   "插件",
 		"Plugins": plugin.GetPlugins(),
@@ -393,7 +393,7 @@ func PluginSetting(context *GoInk.Context) {
 		context.Do("plugin_setting_saved", p)
 		return
 	}
-	context.Layout("admin")
+	context.Layout("admin/admin")
 	context.Render("admin/plugin_setting", map[string]interface{}{
 		"Title": "插件 - " + p.Name(),
 		"Form":  p.Form(),
