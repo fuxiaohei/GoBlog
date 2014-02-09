@@ -1,0 +1,16 @@
+{{Html `<?xml version="1.0" encoding="UTF-8"?>`}}
+<rss version="2.0">
+    <channel>
+        <title>{{.Title}}</title>
+        <link>{{.Link}}/</link>
+        <description>{{.Desc}}</description>
+        <pubDate>{{.Created}}</pubDate>{{range .Articles}}
+        <item>
+            <title>{{.Title}}</title>
+            <link>{{.Link}}</link>
+            <description>{{.Desc}}</description>
+            <author>{{.Author}}</author>
+            <pubDate>{{.Created}}</pubDate>
+        </item>{{end}}
+    </channel>
+</rss>

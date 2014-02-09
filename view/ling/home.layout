@@ -10,7 +10,7 @@
     <meta name="generator" content="FxhGo Blog" />
     <link rel="stylesheet" href="/static/css/ling.css"/>
     <link rel="stylesheet" href="http://libs.baidu.com/fontawesome/4.0.3/css/font-awesome.min.css"/>
-    <link rel="alternate" type="application/rss+xml" title="{{Setting `site_title`}} - RSS 2.0" href="/rss.xml"/>
+    <link rel="alternate" type="application/rss+xml" title="{{Setting `site_title`}} - RSS 2.0" href="/feed/"/>
     <script src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
     <script src="/static/lib/jquery.form.min.js"></script>
     <script src="/static/lib/marked.min.js"></script>

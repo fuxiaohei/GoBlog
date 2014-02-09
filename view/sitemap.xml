@@ -1,0 +1,21 @@
+{{Html `<?xml version="1.0" encoding="UTF-8"?>`}}{{Html `<?xml-stylesheet type="text/xsl" href="/static/css/sitemap.xsl"?>`}}
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>{{.Link}}</loc>
+        <lastmod>{{.Created}}</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>{{range .Navigators}}
+    <url>
+        <loc>{{.Link}}</loc>
+        <lastmod>{{.Created}}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+    </url>{{end}}{{range .Articles}}
+    <url>
+        <loc>{{.Link}}</loc>
+        <lastmod>{{.Created}}</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.3</priority>
+    </url>{{end}}
+</urlset>
