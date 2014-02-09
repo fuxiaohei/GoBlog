@@ -354,7 +354,7 @@ func AdminPlugin(context *GoInk.Context) {
 		pln := context.String("plugin")
 		if action == "activate" {
 			plugin.Activate(pln)
-			go plugin.Update(context.App())
+			plugin.Update(context.App())
 			Json(context, true).End()
 			context.Do("plugin_activated", pln)
 			return

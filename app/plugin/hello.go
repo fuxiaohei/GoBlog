@@ -53,6 +53,9 @@ func (p *HelloPlugin) Activate() {
 		})
 	}
 	Handler("hello_plugin", fn, false)
+	/*Route("hello_handler", "GET", "/hello/", func(context *GoInk.Context) {
+		context.Body = []byte("Hello!")
+	})*/
 	p.isHandlerRegistered = true
 	p.isActive = true
 }

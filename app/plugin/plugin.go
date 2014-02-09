@@ -22,12 +22,19 @@ type PluginInterface interface {
 	ToStorage() map[string]interface{}
 }
 
+type pluginRoute struct {
+	Method  string
+	Pattern string
+	Handler GoInk.Handler
+}
+
 var (
 	pluginStorage map[string]map[string]interface{}
 	pluginMap     map[string]PluginInterface
 	middleHandler map[string]GoInk.Handler
 	interHandler  map[string]GoInk.Handler
 	usedHandler   map[string]map[string]bool
+	routeHandler  map[string]pluginRoute
 )
 
 func init() {
@@ -37,10 +44,12 @@ func init() {
 	//pluginMap = make(map[string]PluginInterface)
 	pluginStorage = make(map[string]map[string]interface{})
 	middleHandler = make(map[string]GoInk.Handler)
+	routeHandler = make(map[string]pluginRoute)
 	interHandler = make(map[string]GoInk.Handler)
 	usedHandler = make(map[string]map[string]bool)
 	usedHandler["middle"] = make(map[string]bool)
 	usedHandler["inter"] = make(map[string]bool)
+	usedHandler["route"] = make(map[string]bool)
 }
 
 func Init() {
@@ -88,11 +97,19 @@ func Handler(name string, h GoInk.Handler, inter bool) {
 	}
 }
 
-func Handlers() map[string]map[string]GoInk.Handler {
+func Route(name string, method string, pattern string, handler GoInk.Handler) {
+	pr := pluginRoute{}
+	pr.Method = method
+	pr.Handler = handler
+	pr.Pattern = pattern
+	routeHandler[name] = pr
+}
+
+func Handlers() (map[string]map[string]GoInk.Handler, map[string]pluginRoute) {
 	m := make(map[string]map[string]GoInk.Handler)
 	m["middle"] = middleHandler
 	m["inter"] = interHandler
-	return m
+	return m, routeHandler
 }
 
 func GetPlugins() map[string]PluginInterface {
@@ -128,7 +145,18 @@ func Deactivate(name string) {
 }
 
 func Update(app *GoInk.App) {
-	pluginHandlers := Handlers()
+	pluginHandlers, routeHandlers := Handlers()
+
+	if len(routeHandlers) > 0 {
+		for n, h := range routeHandlers {
+			if usedHandler["route"][n] {
+				continue
+			}
+			app.Route(h.Method, h.Pattern, h.Handler)
+			usedHandler["route"][n] = true
+		}
+	}
+
 	if len(pluginHandlers["middle"]) > 0 {
 		for n, h := range pluginHandlers["middle"] {
 			if usedHandler["middle"][n] {
