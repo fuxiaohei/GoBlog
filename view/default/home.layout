@@ -36,7 +36,7 @@
         <a class="weibo" href="{{Setting `c_footer_weibo`}}" target="_blank"><i class="fa fa-weibo"></i>Weibo</a>
         <a class="git" href="{{Setting `c_footer_github`}}" target="_blank"><i class="fa fa-github"></i>GitHub</a>
         <a class="email" href="{{Setting `c_footer_email`}}" target="_blank"><i class="fa fa-envelope"></i>Email</a>
-        <a class="rss" href="/rss.xml" target="_blank"><i class="fa fa-rss"></i>RSS</a>{{Setting `c_footer_ga` | Html}}
+        <a class="rss" href="/feed/" target="_blank"><i class="fa fa-rss"></i>RSS</a>{{Setting `c_footer_ga` | Html}}
     </p>
     <span>Go © 2014 All rights reserved. Proudly Powered by Fxh.Go.</span>
     <a id="go-top" href="#" class="lbl hide lbl-blue" title="回到顶部"><i class="fa fa-arrow-up fa-lg"></i></a>

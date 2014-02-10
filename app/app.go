@@ -18,7 +18,7 @@ import (
 )
 
 var (
-	VERSION          = 20140131
+	VERSION          = 20140209
 	App              *GoInk.App
 	staticFileSuffix = ".css,.js,.jpg,.jpeg,.png,.gif,.ico,.xml,.zip,.txt,.html,.otf,.svg,.eot,.woff,.ttf,.doc,.ppt,.xls,.docx,.pptx,.xlsx,.xsl"
 	uploadFileSuffix = ".jpg,.png,.gif,.zip,.txt,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
@@ -199,6 +199,7 @@ func registerCmdHandler() {
 
 	App.Route("GET,POST,DELETE", "/cmd/message/", handler.Auth, handler.CmdMessage)
 	App.Route("GET,DELETE", "/cmd/logs/", handler.Auth, handler.CmdLogs)
+	App.Get("/cmd/monitor/", handler.Auth, handler.CmdMonitor)
 }
 
 func registerHomeHandler() {
@@ -211,7 +212,7 @@ func registerHomeHandler() {
 	App.Post("/comment/:id/", handler.Comment)
 
 	App.Get("/feed/", handler.Rss)
-	App.Get("/sitemap",handler.SiteMap)
+	App.Get("/sitemap", handler.SiteMap)
 
 	App.Get("/:slug", handler.TopPage)
 	App.Get("/", handler.Home)

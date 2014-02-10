@@ -23,17 +23,19 @@ func SiteMap(ctx *GoInk.Context) {
 		articleMap[i] = m
 	}
 
-	navMap := make([]map[string]string, len(navigators))
-	for i, n := range navigators {
+	navMap := make([]map[string]string, 0)
+	for _, n := range navigators {
 		m := make(map[string]string)
-		println(baseUrl + n.Link)
+		if n.Link == "/" {
+			continue
+		}
 		if strings.HasPrefix(n.Link, "/") {
 			m["Link"] = strings.Replace(baseUrl+n.Link, baseUrl+"/", baseUrl, -1)
 		} else {
 			m["Link"] = n.Link
 		}
 		m["Created"] = now
-		navMap[i] = m
+		navMap = append(navMap, m)
 	}
 
 	ctx.ContentType("text/xml")

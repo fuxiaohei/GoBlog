@@ -62,3 +62,11 @@ func CmdLogs(context *GoInk.Context) {
 		"Logs":  cmd.GetLogs(context.App()),
 	})
 }
+
+func CmdMonitor(ctx *GoInk.Context) {
+	ctx.Layout("admin/cmd")
+	ctx.Render("admin/cmd/monitor", map[string]interface{}{
+		"Title": "系统监控",
+		"M":     cmd.ReadMemStats(),
+	})
+}
