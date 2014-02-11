@@ -7,6 +7,8 @@ A fast and simple blog engine with [GoInk](https://github.com/fuxiaohei/GoInk) f
 
 Current version is **0.2.0-beta** on 2014.02.09
 
+Development board is in [Trello](https://trello.com/b/7AHrcQL8/fxh-go-with-goink).
+
 ### Overview
 
 `Fxh.Go` is a dynamic blog engine written in Golang. It's fast and very simple configs. Fxh.Go persists data into pieces of json files and support compress them as backup zip for next upgrade or installation.
