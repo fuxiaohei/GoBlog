@@ -20,7 +20,7 @@ func AdminFiles(context *GoInk.Context) {
 		return
 	}
 	files, pager := model.GetFileList(context.Int("page"), 10)
-	context.Layout("admin")
+	context.Layout("admin/admin")
 	context.Render("admin/files", map[string]interface{}{
 		"Title": "媒体文件",
 		"Files": files,
