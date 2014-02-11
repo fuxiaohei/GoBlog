@@ -23,7 +23,7 @@ Current version is **0.2.0-beta** on 2014.02.09
 
 [Gobuild.io](http://gobuild.io/) can build cross-platform executable file for pure go projects. You can download `Fxh.Go` binary from Gobuild.io.
 
-[![Gobuild Download](https://gobuild.io/badge/github.com/shxsun/gobuild/download.png)](http://gobuild.io/github.com/fuxiaohei/GoBlog)
+[![Gobuild Download](http://gobuild.io/badge/github.com/shxsun/gobuild/download.png)](http://gobuild.io/github.com/fuxiaohei/GoBlog)
 
 ##### Manual
 
