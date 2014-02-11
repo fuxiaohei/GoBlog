@@ -1,0 +1,10 @@
+<header class="cmd-header">
+    <h1 class="cmd-title">系统监控</h1>
+</header>
+<ul class="cmd-list" id="monitor-list">
+    <li><span>Goroutine数量</span>： <strong>{{.M.NumGoroutine}}</strong></li>
+    <li><span>系统内存分配</span>： <strong>{{.M.MemSys}}</strong></li>
+    <li><span>实际内存占用</span>： <strong>{{.M.MemHeap}}</strong></li>
+    <li><span>强制回收极限</span>： <strong>{{.M.MemGc}}</strong></li>
+    <li><span>上次回收时间</span>： <strong>{{.M.LastGcTime}}</strong> ago</li>
+</ul>

@@ -1,7 +1,6 @@
 <div id="article-container" class="clear">{{range .Articles}}
-    <article class="clear" id="article-{{.Id}}">
+    <article class="clear {{.Status}}" id="article-{{.Id}}">
         <div class="meta left text-center relative">
-            <!--<p class="lbl lbl-blue author"><i class="fa fa-user"></i>傅小黑</p>-->
             <p class="lbl lbl-red comments"><a href="{{.Link}}#comment">{{.CommentNum}}</a></p>
             <p class="lbl lbl-green views absolute">{{.Hits}}</p>
         </div>

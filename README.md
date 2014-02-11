@@ -1,53 +1,76 @@
 #Fxh.Go
 
-A fast and simple blog engine with GoInk framework in Golang.
+A fast and simple blog engine with [GoInk](https://github.com/fuxiaohei/GoInk) framework in Golang.
 
-Current version is **0.1.6-beta** on 2014.01.31
+[![Build Status](https://drone.io/github.com/fuxiaohei/GoBlog/status.png)](https://drone.io/github.com/fuxiaohei/GoBlog/latest)
+[![GoWalker](https://gowalker.org/api/v1/badge)](https://gowalker.org/github.com/fuxiaohei/GoBlog)
+
+Current version is **0.2.0-beta** on 2014.02.09
 
 ### Overview
 
-Fxh.Go is a dynamic blog engine written in Golang. It's fast and very simple configs. Fxh.Go persists data into pieces of json files and support compress them as backup zip for next upgrade or installation.
+`Fxh.Go` is a dynamic blog engine written in Golang. It's fast and very simple configs. Fxh.Go persists data into pieces of json files and support compress them as backup zip for next upgrade or installation.
 
-Fxh.Go supports markdown contents as articles or pages, ajax comments and dynamic administration.
+`Fxh.Go` supports markdown contents as articles or pages, ajax comments and dynamic administration.
 
-Fxh.Go contains two kinds of content as article and page. They can be customized as you want.
+`Fxh.Go` contains two kinds of content as article and page. They can be customized as you want.
 
-Documentation is writing.
+### Installation
 
-### Requirement
+`Fxh.Go` requires **Go 1.2** or above.
 
-* >= Golang 1.2
+##### Gobuild.io
 
-### Setup
+[Gobuild.io](http://gobuild.io/) can build cross-platform executable file for pure go projects. You can download `Fxh.Go` binary from Gobuild.io.
 
-Fxh.Go is written in Golang with support for Windows, Linux and Mac OSX.
+[![Gobuild Download](http://gobuild.io/badge/github.com/shxsun/gobuild/download.png)](http://gobuild.io/github.com/fuxiaohei/GoBlog)
 
-The stable release can use `go get` to install:
+##### Manual
+
+Use go get command:
 
     go get github.com/fuxiaohei/GoBlog
 
-remember set `$GOPATH/bin` to global environment variables.
+Then you can find binary file `GoBlog(.exe)` in `$GOPATH/bin`.
 
-The newest sources is in branch develop, you can download and build in manual (not-recommended).
+### Run
 
-### Setup
+Make a new dir to run `Fxh.Go`:
 
-If installed, `GoBlog` binary file is built in `$GOPATH/bin`.
-
-make a new dir to install Fxh.Go:
-
-    cd empty_dir
+    cd new_dir
     Goblog
 
-then it will unzip static files in `empty_dir` , initialize original data and start server at `localhost:9000`
+Then it will unzip static files in `new_dir` , initialize raw data and start server at `localhost:9001`.
 
-#### Administration
+##### Admin
 
-visit `localhost:9000/login/` to enter administrator with username `admin` and password `admin`. You'd better change them after installed successfully.
+Visit `localhost:9000/login/` to enter administrator with username `admin` and password `admin`. You'd better change them after installed successfully.
 
-### Suggestion and Contribution
+##### Deployment
 
-create issues or pull requests here.
+I prefer to use nginx as proxy. The server section in `nginx.conf`:
+
+        server {
+                listen       80;
+                server_name  your_domain;
+                charset utf-8;
+                access_log  /var/log/nginx/your_domain.access.log;
+
+                location / {
+                    proxy_pass http://127.0.0.1:9001;
+                }
+
+                location /static {
+                    root            /var/www/your_domain;  # binary file is in this directory
+                    expires         1d;
+                    add_header      Cache-Control public;
+                    access_log      off;
+                }
+        }
+
+### Questions
+
+Create issues or pull requests here.
 
 ### Products
 
@@ -56,7 +79,7 @@ create issues or pull requests here.
 
 ### Thanks
 
-gladly thank for [@Unknwon](https://github.com/Unknwon) on testing and [zip library](https://github.com/Unknwon/cae) support.
+* [@Unknwon](https://github.com/Unknwon) on testing and [zip library](https://github.com/Unknwon/cae) support.
 
 ### License
 

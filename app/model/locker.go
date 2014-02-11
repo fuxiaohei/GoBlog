@@ -4,6 +4,6 @@ import "sync"
 
 var locker sync.Mutex
 
-func init(){
+func init() {
 	locker = sync.Mutex{}
 }

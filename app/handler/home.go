@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"github.com/fuxiaohei/GoBlog/GoInk"
 	"github.com/fuxiaohei/GoBlog/app/model"
 	"github.com/fuxiaohei/GoBlog/app/utils"
+	"github.com/fuxiaohei/GoInk"
 	"strconv"
 	"strings"
 )
@@ -60,7 +60,7 @@ func Home(context *GoInk.Context) {
 	context.Layout("home")
 	page, _ := strconv.Atoi(context.Param("page"))
 	size, _ := strconv.Atoi(model.GetSetting("article_size"))
-	articles, pager := model.GetArticleList(page, size)
+	articles, pager := model.GetPublishArticleList(page, size)
 	Theme(context).Layout("home").Render("index", map[string]interface{}{
 		"Articles": articles,
 		"Pager":    pager,
@@ -91,7 +91,7 @@ func Page(context *GoInk.Context) {
 	id, _ := strconv.Atoi(context.Param("id"))
 	slug := context.Param("slug")
 	article := model.GetContentById(id)
-	if article == nil {
+	if article == nil || article.Status != "publish" {
 		context.Redirect("/")
 		return
 	}
@@ -110,7 +110,7 @@ func Page(context *GoInk.Context) {
 func TopPage(context *GoInk.Context) {
 	slug := context.Param("slug")
 	page := model.GetContentBySlug(slug)
-	if page == nil {
+	if page == nil || page.Status != "publish" {
 		context.Redirect("/")
 		return
 	}
@@ -155,5 +155,6 @@ func Comment(context *GoInk.Context) {
 	co.IsAdmin = false
 	model.CreateComment(cid, co)
 	Json(context, true).Set("comment", co.ToJson()).End()
-	go context.Do("comment_created", co)
+	model.CreateMessage("comment", co)
+	context.Do("comment_created", co)
 }

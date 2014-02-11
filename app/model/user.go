@@ -42,7 +42,7 @@ func (u *User) ChangeEmail(email string) bool {
 
 // change user password.
 func (u *User) ChangePassword(pwd string) {
-	u.Password = utils.Sha1(pwd+"xxxxx")
+	u.Password = utils.Sha1(pwd + "xxxxx")
 }
 
 // get a user by given id.

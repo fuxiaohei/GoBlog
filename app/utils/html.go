@@ -1,10 +1,10 @@
 package utils
 
 import (
-	"regexp"
-	"strings"
 	"github.com/russross/blackfriday"
 	"html/template"
+	"regexp"
+	"strings"
 )
 
 func Html2str(html string) string {

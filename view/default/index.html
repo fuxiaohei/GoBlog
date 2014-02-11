@@ -1,7 +1,6 @@
 <div id="article-container" class="clear">{{range .Articles}}
-    <article class="clear" id="article-{{.Id}}">
-        <div class="meta left text-center">
-            <!--<p class="lbl lbl-blue author"><i class="fa fa-user"></i>傅小黑</p>-->{{if gt .CommentNum 0}}
+    <article class="clear {{.Status}}" id="article-{{.Id}}">
+        <div class="meta left text-center">{{if gt .CommentNum 0}}
             <p class="lbl lbl-red comments"><a href="{{.Link}}#comment"><i class="fa fa-comments"></i><strong>{{.CommentNum}} ℃</strong></a></p>{{end}}
             <p class="lbl lbl-green views"><i class="fa fa-eye"></i><strong>{{.Hits}} ℉</strong></p>
             <p class="lbl lbl-gray time"><i class="fa fa-clock-o"></i><strong>{{DateInt64 .CreateTime "MM.DD"}}</strong></p>

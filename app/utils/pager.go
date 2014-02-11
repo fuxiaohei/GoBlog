@@ -22,7 +22,7 @@ func NewPager(page, size, total int) *Pager {
 	p.Current = page
 	p.Size = size
 	p.Total = total
-	p.Pages = total/size
+	p.Pages = total / size
 	if total%size > 0 {
 		p.Pages += 1
 	}

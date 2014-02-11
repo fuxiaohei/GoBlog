@@ -2,7 +2,7 @@ package plugin
 
 import (
 	"fmt"
-	"github.com/fuxiaohei/GoBlog/GoInk"
+	"github.com/fuxiaohei/GoInk"
 	"time"
 )
 
@@ -53,6 +53,9 @@ func (p *HelloPlugin) Activate() {
 		})
 	}
 	Handler("hello_plugin", fn, false)
+	/*Route("hello_handler", "GET", "/hello/", func(context *GoInk.Context) {
+		context.Body = []byte("Hello!")
+	})*/
 	p.isHandlerRegistered = true
 	p.isActive = true
 }
@@ -77,6 +80,6 @@ func (p *HelloPlugin) Form() string {
 	return ""
 }
 
-func (p *HelloPlugin) SetSetting(settings map[string]string){
+func (p *HelloPlugin) SetSetting(settings map[string]string) {
 
 }

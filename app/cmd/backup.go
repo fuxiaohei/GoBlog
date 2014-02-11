@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"github.com/Unknwon/cae/zip"
-	"github.com/fuxiaohei/GoBlog/GoInk"
 	"github.com/fuxiaohei/GoBlog/app/utils"
+	"github.com/fuxiaohei/GoInk"
 	"os"
 	"path"
 	"path/filepath"
@@ -25,6 +25,16 @@ func DoBackup(app *GoInk.App, withData bool) (string, error) {
 		return "", e
 	}
 	root, _ := os.Getwd()
+	if withData {
+		lockFile := path.Join(root, "install.lock")
+		if utils.IsFile(lockFile) {
+			z.AddFile("install.lock", lockFile)
+		}
+		configFile := path.Join(root, "config.json")
+		if utils.IsFile(configFile) {
+			z.AddFile("config.json", configFile)
+		}
+	}
 	z.AddDir("static/css", path.Join(root, "static", "css"))
 	z.AddDir("static/img", path.Join(root, "static", "img"))
 	z.AddDir("static/js", path.Join(root, "static", "js"))
@@ -46,6 +56,10 @@ func DoBackup(app *GoInk.App, withData bool) (string, error) {
 func RemoveBackupFile(file string) {
 	file = path.Join(backupDir, file)
 	os.Remove(file)
+}
+
+func GetBackupFileAbsPath(name string) string {
+	return path.Join(backupDir, name)
 }
 
 func GetBackupFiles() ([]os.FileInfo, error) {

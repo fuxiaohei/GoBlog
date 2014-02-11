@@ -5,7 +5,7 @@
 <ul class="cmd-list" id="backup-list">{{range .Files}}
     <li>
         <span class="time">{{DateTime .ModTime "MM.DD HH:mm"}}</span>
-        <span class="name">{{.Name}}</span>
+        <span class="name">{{.Name}} <a class="link" href="/cmd/backup/file?file={{.Name}}"><i class="fa fa-external-link"></i></a></span>
         <span class="size">{{FileSize .Size}}</span>
         <a class="del" href="#" rel="{{.Name}}"><i class="fa fa-times-circle-o"></i></a>
     </li>{{end}}

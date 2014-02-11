@@ -2,23 +2,25 @@ package app
 
 import (
 	"fmt"
-	"github.com/fuxiaohei/GoBlog/GoInk"
 	"github.com/fuxiaohei/GoBlog/app/handler"
 	"github.com/fuxiaohei/GoBlog/app/model"
 	"github.com/fuxiaohei/GoBlog/app/plugin"
 	"github.com/fuxiaohei/GoBlog/app/utils"
+	"github.com/fuxiaohei/GoInk"
 	"net/http"
 	"os"
+	"os/signal"
 	"path"
 	"runtime/debug"
 	"strconv"
 	"strings"
+	"syscall"
 )
 
 var (
-	VERSION          = 20140131
+	VERSION          = 20140209
 	App              *GoInk.App
-	staticFileSuffix = ".css,.js,.jpg,.jpeg,.png,.gif,.ico,.xml,.zip,.txt,.html,.otf,.svg,.eot,.woff,.ttf,.doc,.ppt,.xls,.docx,.pptx,.xlsx"
+	staticFileSuffix = ".css,.js,.jpg,.jpeg,.png,.gif,.ico,.xml,.zip,.txt,.html,.otf,.svg,.eot,.woff,.ttf,.doc,.ppt,.xls,.docx,.pptx,.xlsx,.xsl"
 	uploadFileSuffix = ".jpg,.png,.gif,.zip,.txt,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
 )
 
@@ -111,6 +113,26 @@ func init() {
 			os.Exit(1)
 		}
 	}()
+
+	// catch exit command
+	go catchExit()
+}
+
+// code from https://github.com/Unknwon/gowalker/blob/master/gowalker.go
+func catchExit() {
+	sigTerm := syscall.Signal(15)
+	sig := make(chan os.Signal)
+	signal.Notify(sig, os.Interrupt, sigTerm)
+
+	for {
+		switch <-sig {
+		case os.Interrupt, sigTerm:
+			println("before exit, saving data")
+			model.SyncAll()
+			println("ready to exit")
+			os.Exit(0)
+		}
+	}
 }
 
 func Init() {
@@ -124,30 +146,8 @@ func Init() {
 	// init plugin
 	plugin.Init()
 
-	pluginHandlers := plugin.Handlers()
-
-	if len(pluginHandlers["middle"]) > 0 {
-		for _, h := range pluginHandlers["middle"] {
-			App.Use(h)
-		}
-	}
-
-	if len(pluginHandlers["inter"]) > 0 {
-		for name, h := range pluginHandlers["inter"] {
-			if name == "static" {
-				App.Static(h)
-				continue
-			}
-			if name == "recover" {
-				App.Recover(h)
-				continue
-			}
-			if name == "notfound" {
-				App.NotFound(h)
-				continue
-			}
-		}
-	}
+	// update plugin handlers
+	plugin.Update(App)
 
 	App.View().FuncMap["DateInt64"] = utils.DateInt64
 	App.View().FuncMap["DateString"] = utils.DateString
@@ -156,6 +156,7 @@ func Init() {
 	App.View().FuncMap["Html2str"] = utils.Html2str
 	App.View().FuncMap["FileSize"] = utils.FileSize
 	App.View().FuncMap["Setting"] = model.GetSetting
+	App.View().FuncMap["Navigator"] = model.GetNavigators
 	App.View().FuncMap["Md2html"] = utils.Markdown2HtmlTemplate
 
 	println("app version @ " + strconv.Itoa(model.GetVersion().Version))
@@ -180,17 +181,25 @@ func registerAdminHandler() {
 	App.Route("GET,POST,PUT,DELETE", "/admin/comments/", handler.Auth, handler.AdminComments)
 
 	App.Route("GET,POST", "/admin/setting/", handler.Auth, handler.AdminSetting)
-	App.Route("GET,POST", "/admin/setting/custom/", handler.Auth, handler.CustomSetting)
+	App.Post("/admin/setting/custom/", handler.Auth, handler.CustomSetting)
+	App.Post("/admin/setting/nav/", handler.Auth, handler.NavigatorSetting)
 
 	App.Route("GET,DELETE", "/admin/files/", handler.Auth, handler.AdminFiles)
 	App.Post("/admin/files/upload/", handler.Auth, handler.FileUpload)
 
 	App.Route("GET,POST", "/admin/plugins/", handler.Auth, handler.AdminPlugin)
 	App.Route("GET,POST", "/admin/plugins/:plugin_key/", handler.Auth, handler.PluginSetting)
+
+	App.Post("/admin/message/read/", handler.Auth, handler.AdminMessageRead)
 }
 
 func registerCmdHandler() {
 	App.Route("GET,POST,DELETE", "/cmd/backup/", handler.Auth, handler.CmdBackup)
+	App.Get("/cmd/backup/file/", handler.Auth, handler.CmdBackupFile)
+
+	App.Route("GET,POST,DELETE", "/cmd/message/", handler.Auth, handler.CmdMessage)
+	App.Route("GET,DELETE", "/cmd/logs/", handler.Auth, handler.CmdLogs)
+	App.Get("/cmd/monitor/", handler.Auth, handler.CmdMonitor)
 }
 
 func registerHomeHandler() {
@@ -202,7 +211,8 @@ func registerHomeHandler() {
 	App.Get("/p/:page/", handler.Home)
 	App.Post("/comment/:id/", handler.Comment)
 
-	App.Get("/rss", handler.Feed)
+	App.Get("/feed/", handler.Rss)
+	App.Get("/sitemap", handler.SiteMap)
 
 	App.Get("/:slug", handler.TopPage)
 	App.Get("/", handler.Home)

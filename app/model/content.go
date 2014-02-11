@@ -52,6 +52,9 @@ func (cnt *Content) TagString() string {
 
 // get content link.
 func (cnt *Content) Link() string {
+	if cnt.Status != "publish" {
+		return "#"
+	}
 	if cnt.IsLinked {
 		return "/" + cnt.Slug + ".html"
 	}
@@ -121,6 +124,23 @@ func GetContentBySlug(slug string) *Content {
 	return nil
 }
 
+func GetPublishArticleList(page, size int) ([]*Content, *utils.Pager) {
+	index := contentsIndex["article-publish"]
+	pager := utils.NewPager(page, size, len(index))
+	articles := make([]*Content, 0)
+	if page > pager.Pages {
+		return articles, pager
+	}
+	for i := pager.Begin; i <= pager.End; i++ {
+		a := GetContentById(index[i-1])
+		if a.Status != "publish" {
+			continue
+		}
+		articles = append(articles, GetContentById(index[i-1]))
+	}
+	return articles, pager
+}
+
 // get articles list.
 func GetArticleList(page, size int) ([]*Content, *utils.Pager) {
 	index := contentsIndex["article"]
@@ -165,6 +185,7 @@ func CreateContent(c *Content, t string) (*Content, error) {
 	c.Hits = 1
 	contents[c.Id] = c
 	contentsIndex[c.Type] = append([]int{c.Id}, contentsIndex[c.Type]...)
+	generatePublishArticleIndex()
 	go SyncContent(c)
 	return c, nil
 }
@@ -172,6 +193,7 @@ func CreateContent(c *Content, t string) (*Content, error) {
 // save changed content.
 func SaveContent(c *Content) {
 	c.EditTime = utils.Now()
+	generatePublishArticleIndex()
 	go SyncContent(c)
 }
 
@@ -187,6 +209,7 @@ func RemoveContent(c *Content) {
 		}
 	}
 	c.Status = "DELETE"
+	generatePublishArticleIndex()
 	go SyncContent(c)
 }
 
@@ -240,11 +263,23 @@ func LoadContents() {
 	sort.Sort(sort.Reverse(sort.IntSlice(pageIndex)))
 	contentsIndex["article"] = articleIndex
 	contentsIndex["page"] = pageIndex
+	generatePublishArticleIndex()
+}
+
+func generatePublishArticleIndex() {
+	arr := make([]int, 0)
+	for _, id := range contentsIndex["article"] {
+		c := GetContentById(id)
+		if c.Status == "publish" {
+			arr = append(arr, id)
+		}
+	}
+	contentsIndex["article-publish"] = arr
 }
 
 func StartContentsTimer() {
-	time.AfterFunc(time.Duration(10)*time.Minute, func() {
-		println("write contents in 10 min timer")
+	time.AfterFunc(time.Duration(1)*time.Hour, func() {
+		println("write contents in 1 hour timer")
 		SyncContents()
 		StartContentsTimer()
 	})

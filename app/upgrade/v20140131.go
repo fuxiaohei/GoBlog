@@ -1,8 +1,8 @@
 package upgrade
 
 import (
-	"github.com/fuxiaohei/GoBlog/GoInk"
 	"github.com/fuxiaohei/GoBlog/app/cmd"
+	"github.com/fuxiaohei/GoInk"
 	"os"
 	"path"
 )
@@ -26,7 +26,6 @@ func upgrade_20140131(app *GoInk.App) bool {
 	// update ling template
 	os.RemoveAll(path.Join(app.Get("view_dir"), "ling"))
 	cmd.ExtractBundleBytes()
-
 
 	return true
 }

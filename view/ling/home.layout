@@ -10,7 +10,7 @@
     <meta name="generator" content="FxhGo Blog" />
     <link rel="stylesheet" href="/static/css/ling.css"/>
     <link rel="stylesheet" href="http://libs.baidu.com/fontawesome/4.0.3/css/font-awesome.min.css"/>
-    <link rel="alternate" type="application/rss+xml" title="{{Setting `site_title`}} - RSS 2.0" href="/rss.xml"/>
+    <link rel="alternate" type="application/rss+xml" title="{{Setting `site_title`}} - RSS 2.0" href="/feed/"/>
     <script src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
     <script src="/static/lib/jquery.form.min.js"></script>
     <script src="/static/lib/marked.min.js"></script>
@@ -20,12 +20,10 @@
     <div class="container960">
         <img src="{{Setting `c_home_avatar`}}" alt="site" id="header-img" class="left"/>
         <h1 id="header-h" class="left"><a href="/">{{Setting "site_title"}}</a></h1>
-        {{Html `<!--<h4 id="header-sub" class="left">{{Setting "site_sub_title"}}</h4>-->`}}
+        <h4 id="header-sub" class="left">{{Setting "site_sub_title"}}</h4>
         <nav id="nav" class="right">
-            <ul>
-                <li class="inline-block"><a href="/">文章</a></li>
-                <li class="inline-block"><a href="/about-me.html">关于</a></li>
-                <li class="inline-block"><a href="/friends.html">好友</a></li>
+            <ul>{{range Navigator}}
+                <li class="inline-block"><a href="{{.Link}}" title="{{.Title}}">{{.Text}}</a></li>{{end}}
             </ul>
         </nav>
     </div>
@@ -36,7 +34,7 @@
 <footer id="footer" class="text-center">
     <div class="container960 clear">
         <span class="left">Go © 2014 All rights reserved.</span>
-        <span class="right">Proudly published with Fxh.Go.</span>
+        <span class="right">Proudly Powered by Fxh.Go.</span>
     </div>
     <a id="go-top" href="#" class="lbl hide lbl-blue" title="回到顶部"><i class="fa fa-arrow-up fa-lg"></i></a>
     {{Setting `c_footer_ga` | Html}}

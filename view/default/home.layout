@@ -10,7 +10,7 @@
     <meta name="generator" content="FxhGo Blog" />
     <link rel="stylesheet" href="/static/css/style.css"/>
     <link rel="stylesheet" href="http://libs.baidu.com/fontawesome/4.0.3/css/font-awesome.min.css"/>
-    <link rel="alternate" type="application/rss+xml" title="{{Setting `site_title`}} - RSS 2.0" href="/rss.xml"/>
+    <link rel="alternate" type="application/rss+xml" title="{{Setting `site_title`}} - RSS 2.0" href="/feed/"/>
     <script src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
     <script src="/static/lib/jquery.form.min.js"></script>
     <script src="/static/lib/marked.min.js"></script>
@@ -24,10 +24,8 @@
     </div>
 </header>
 <nav id="nav" class="clear text-center">
-    <ul>
-        <li class="inline-block"><a href="/">文章</a></li>
-        <li class="inline-block"><a href="/about-me.html">关于</a></li>
-        <li class="inline-block"><a href="/friends.html">好友</a></li>
+    <ul>{{range Navigator}}
+        <li class="inline-block"><a href="{{.Link}}" title="{{.Title}}">{{.Text}}</a></li>{{end}}
     </ul>
 </nav>
 <div id="main" class="container960">
@@ -38,9 +36,9 @@
         <a class="weibo" href="{{Setting `c_footer_weibo`}}" target="_blank"><i class="fa fa-weibo"></i>Weibo</a>
         <a class="git" href="{{Setting `c_footer_github`}}" target="_blank"><i class="fa fa-github"></i>GitHub</a>
         <a class="email" href="{{Setting `c_footer_email`}}" target="_blank"><i class="fa fa-envelope"></i>Email</a>
-        <a class="rss" href="/rss.xml" target="_blank"><i class="fa fa-rss"></i>RSS</a>{{Setting `c_footer_ga` | Html}}
+        <a class="rss" href="/feed/" target="_blank"><i class="fa fa-rss"></i>RSS</a>{{Setting `c_footer_ga` | Html}}
     </p>
-    <span>Go © 2014 All rights reserved. Proudly published with Fxh.Go.</span>
+    <span>Go © 2014 All rights reserved. Proudly Powered by Fxh.Go.</span>
     <a id="go-top" href="#" class="lbl hide lbl-blue" title="回到顶部"><i class="fa fa-arrow-up fa-lg"></i></a>
 </footer>
 <script src="/static/js/home.js"></script>

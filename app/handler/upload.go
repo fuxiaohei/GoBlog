@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"github.com/fuxiaohei/GoBlog/GoInk"
 	"github.com/fuxiaohei/GoBlog/app/model"
+	"github.com/fuxiaohei/GoInk"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -16,6 +16,7 @@ func AdminFiles(context *GoInk.Context) {
 		id := context.Int("id")
 		model.RemoveFile(id)
 		Json(context, true).End()
+		context.Do("attach_delete", id)
 		return
 	}
 	files, pager := model.GetFileList(context.Int("page"), 10)
@@ -65,4 +66,5 @@ func FileUpload(context *GoInk.Context) {
 	}
 	model.CreateFile(ff)
 	Json(context, true).Set("file", ff).End()
+	context.Do("attach_created", ff)
 }
