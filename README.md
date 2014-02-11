@@ -3,9 +3,11 @@
 A fast and simple blog engine with [GoInk](https://github.com/fuxiaohei/GoInk) framework in Golang.
 
 [![Build Status](https://drone.io/github.com/fuxiaohei/GoBlog/status.png)](https://drone.io/github.com/fuxiaohei/GoBlog/latest)
-[![GoWalker](https://gowalker.org/api/v1/badge)](https://gowalker.org/github.com/fuxiaohei/GoBlog)
+[![GoWalker](http://b.repl.ca/v1/Go_Walker-API_Documentation-green.png)](http://gowalker.org/github.com/fuxiaohei/GoBlog)
 
 Current version is **0.2.0-beta** on 2014.02.09
+
+Development board is in [Trello](https://trello.com/b/7AHrcQL8/fxh-go-with-goink).
 
 ### Overview
 
@@ -23,7 +25,7 @@ Current version is **0.2.0-beta** on 2014.02.09
 
 [Gobuild.io](http://gobuild.io/) can build cross-platform executable file for pure go projects. You can download `Fxh.Go` binary from Gobuild.io.
 
-[![Gobuild Download](http://gobuild.io/badge/github.com/shxsun/gobuild/download.png)](http://gobuild.io/github.com/fuxiaohei/GoBlog)
+[![Gobuild Download](http://gobuild.io/badge/github.com/fuxiaohei/GoBlog/download.png)](http://gobuild.io/github.com/fuxiaohei/GoBlog)
 
 ##### Manual
 
@@ -44,7 +46,7 @@ Then it will unzip static files in `new_dir` , initialize raw data and start ser
 
 ##### Admin
 
-Visit `localhost:9000/login/` to enter administrator with username `admin` and password `admin`. You'd better change them after installed successfully.
+Visit `localhost:9001/login/` to enter administrator with username `admin` and password `admin`. You'd better change them after installed successfully.
 
 ##### Deployment
 
