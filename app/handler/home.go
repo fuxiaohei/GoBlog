@@ -143,6 +143,11 @@ func Comment(context *GoInk.Context) {
 		return
 	}
 	data := context.Input()
+	msg := validateComment(data)
+	if msg != "" {
+		Json(context, false).Set("msg", msg).End()
+		return
+	}
 	co := new(model.Comment)
 	co.Author = data["user"]
 	co.Email = data["email"]
@@ -157,4 +162,17 @@ func Comment(context *GoInk.Context) {
 	Json(context, true).Set("comment", co.ToJson()).End()
 	model.CreateMessage("comment", co)
 	context.Do("comment_created", co)
+}
+
+func validateComment(data map[string]string) string {
+	if utils.IsEmptyString(data["user"]) || utils.IsEmptyString(data["content"]) {
+		return "称呼，邮箱，内容必填"
+	}
+	if !utils.IsEmail(data["email"]) {
+		return "邮箱格式错误"
+	}
+	if !utils.IsEmptyString(data["url"]) && !utils.IsURL(data["url"]) {
+		return "网址格式错误"
+	}
+	return ""
 }
