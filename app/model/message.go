@@ -2,6 +2,7 @@ package model
 
 import (
 	"github.com/fuxiaohei/GoBlog/app/utils"
+	"strings"
 	"time"
 )
 
@@ -14,6 +15,7 @@ var (
 func init() {
 	messageGenerator = make(map[string]func(v interface{}) string)
 	messageGenerator["comment"] = generateCommentMessage
+	messageGenerator["backup"] = generateBackupMessage
 }
 
 type Message struct {
@@ -132,6 +134,14 @@ func generateCommentMessage(co interface{}) string {
 		s += utils.Html2str(c.Content) + "</p>"
 	}
 	return s
+}
+
+func generateBackupMessage(co interface{}) string {
+	str := co.(string)
+	if strings.HasPrefix(str, "[0]") {
+		return "备份全站失败: " + strings.TrimPrefix(str, "[0]") + "."
+	}
+	return "备份全站到 " + strings.TrimPrefix(str, "[1]") + " 成功."
 }
 
 func StartMessageTimer() {
