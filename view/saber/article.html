@@ -1,0 +1,16 @@
+<div id="article-container" class="clear">
+    <article class="clear article-single relative {{.Article.Status}}" id="article-{{.Article.Id}}">{{with .Article}}
+        <div class="meta absolute text-center">
+            <p class="lbl lbl-green views absolute">{{.Hits}}</p>
+        </div>
+        <div class="main">
+            <h3 class="title"><a href="{{.Link}}" title="{{.Title}}">{{.Title}}</a></h3>
+            <p class="time-info">{{if .User}}<strong>{{.User.Nick}}</strong>&nbsp;&nbsp;&nbsp;{{end}}发表于&nbsp;&nbsp;&nbsp;{{DateInt64 .CreateTime "YYYY 年 MM 月 DD 日"}}</p>
+            <section class="content markdown">{{Html .Content}}</section>
+            <p class="info clear">
+                <span class="tag inline-block">标签：{{.TagString}}</span>
+            </p>
+        </div>{{end}}
+    </article>
+    {{Html .CommentHtml}}
+</div>
