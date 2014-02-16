@@ -13,6 +13,8 @@ var (
 	commentMaxId  int
 )
 
+// Comment Reader struct.
+// Saving comment reader for visiting wall usage or other statics.
 type Reader struct {
 	Author   string
 	Email    string
@@ -22,6 +24,7 @@ type Reader struct {
 	Rank     int
 }
 
+// Inc increases Reader's rank.
 func (r *Reader) Inc() {
 	r.Rank++
 	if r.Rank > 1 {
@@ -29,6 +32,7 @@ func (r *Reader) Inc() {
 	}
 }
 
+// Dec decreases Reader's rank.
 func (r *Reader) Dec() {
 	r.Rank--
 	if r.Rank < 1 {
@@ -36,6 +40,7 @@ func (r *Reader) Dec() {
 	}
 }
 
+// Comment struct defines a comment item data.
 type Comment struct {
 	Id         int
 	Author     string
@@ -44,14 +49,18 @@ type Comment struct {
 	Avatar     string
 	Content    string
 	CreateTime int64
-	Cid        int
-	Pid        int
-	Status     string
-	Ip         string
-	UserAgent  string
-	IsAdmin    bool
+	// Content id
+	Cid int
+	// Parent Comment id
+	Pid       int
+	Status    string
+	Ip        string
+	UserAgent string
+	// Is comment of admin
+	IsAdmin bool
 }
 
+// ParentMd returns parent comment simple message as markdown text.
 func (c *Comment) ParentMd() string {
 	if c.Pid < 1 {
 		return ""
@@ -65,6 +74,8 @@ func (c *Comment) ParentMd() string {
 	return str
 }
 
+// ToJson converts comment struct to public json map.
+// It can hide some private fields, such as email.
 func (c *Comment) ToJson() map[string]interface{} {
 	m := make(map[string]interface{})
 	m["id"] = c.Id
@@ -82,6 +93,8 @@ func (c *Comment) ToJson() map[string]interface{} {
 	return m
 }
 
+// IsValid returns whether this comment is valid to show.
+// If this comment is not approved or its parent is missing, return false.
 func (c *Comment) IsValid() bool {
 	if c.Status != "approved" {
 		return false
@@ -94,6 +107,8 @@ func (c *Comment) IsValid() bool {
 	return true
 }
 
+// IsRemovable returns whether this comment can remove.
+// If content or parent comment of this comment is removed, return true.
 func (c *Comment) IsRemovable() bool {
 	if GetContentById(c.Cid) == nil {
 		return true
@@ -106,6 +121,7 @@ func (c *Comment) IsRemovable() bool {
 	return false
 }
 
+// GetReader returns the reader item of this comment.
 func (c *Comment) GetReader() *Reader {
 	for _, r := range readers {
 		if r.Email == c.Email {
@@ -115,10 +131,12 @@ func (c *Comment) GetReader() *Reader {
 	return nil
 }
 
+// GetContent returns the content item of this comment.
 func (c *Comment) GetContent() *Content {
 	return GetContentById(c.Cid)
 }
 
+// CreateReader creates a reader from a comment.
 func CreateReader(c *Comment) {
 	r := new(Reader)
 	r.Author = c.Author
@@ -131,18 +149,22 @@ func CreateReader(c *Comment) {
 	go SyncReaders()
 }
 
+// CreateComment creates a comment and links it to the cid content.
 func CreateComment(cid int, c *Comment) {
 	commentMaxId += Storage.TimeInc(4)
 	c.Id = commentMaxId
 	c.CreateTime = utils.Now()
 	c.Status = "check"
 	c.Cid = cid
+	// if empty url, use # instead.
 	if c.Url == "" {
 		c.Url = "#"
 	}
+	// if admin comment, must be approved.
 	if c.IsAdmin {
 		c.Status = "approved"
 	} else {
+		// if common comment, get reader status for checking status.
 		r := c.GetReader()
 		if r != nil {
 			if r.Active {
@@ -161,6 +183,7 @@ func CreateComment(cid int, c *Comment) {
 	go SyncContent(content)
 }
 
+// SaveComment saves a comment and related updates content and reader data.
 func SaveComment(c *Comment) {
 	cnt := GetContentById(c.Cid)
 	go SyncContent(cnt)
@@ -186,6 +209,7 @@ func removeOneComment(cid int, id int) {
 	}
 }
 
+// RemoveComment removes a comment by id and updates content iten by cid.
 func RemoveComment(cid int, id int) {
 	removeOneComment(cid, id)
 	cnt := GetContentById(cid)
@@ -195,10 +219,13 @@ func RemoveComment(cid int, id int) {
 	go SyncContent(cnt)
 }
 
+// GetCommentById returns a comment by id.
 func GetCommentById(id int) *Comment {
 	return comments[id]
 }
 
+// GetCommentList returns a comments list and pager.
+// This list scans all comments no matter its status.
 func GetCommentList(page, size int) ([]*Comment, *utils.Pager) {
 	index := commentsIndex
 	pager := utils.NewPager(page, size, len(index))
@@ -212,15 +239,18 @@ func GetCommentList(page, size int) ([]*Comment, *utils.Pager) {
 	return comments, pager
 }
 
+// SyncReaders writes all readers data.
 func SyncReaders() {
 	Storage.Set("readers", readers)
 }
 
+// LoadReaders loads all readers from storage json.
 func LoadReaders() {
 	readers = make(map[string]*Reader)
 	Storage.Get("readers", &readers)
 }
 
+// LoadComments loads all comments from contents.
 func LoadComments() {
 	comments = make(map[int]*Comment)
 	commentsIndex = make([]int, 0)
@@ -240,6 +270,8 @@ func LoadComments() {
 	sort.Sort(sort.Reverse(sort.IntSlice(commentsIndex)))
 }
 
+// UpdateCommentAdmin updates comment author data if admin user data updated.
+// It only updates admin comments.
 func UpdateCommentAdmin(user *User) {
 	for _, co := range comments {
 		if co.IsAdmin {
@@ -251,6 +283,7 @@ func UpdateCommentAdmin(user *User) {
 	}
 }
 
+// RecycleComments cleans removable comments.
 func RecycleComments() {
 	for _, co := range comments {
 		if co.IsRemovable() {
@@ -260,6 +293,7 @@ func RecycleComments() {
 	SyncContents()
 }
 
+// StartCommentsTimers starts a timer to recycle comments.
 func StartCommentsTimer() {
 	time.AfterFunc(time.Duration(6)*time.Hour, func() {
 		println("recycle comments in 6 hours timer")
