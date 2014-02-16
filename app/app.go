@@ -32,6 +32,7 @@ func init() {
 	App.Config().StringOr("app.static_dir", "static")
 	App.Config().StringOr("app.log_dir", "tmp/log")
 	os.MkdirAll(App.Get("log_dir"), os.ModePerm)
+	os.MkdirAll("tmp/data", os.ModePerm)
 
 	App.Config().IntOr("app.upload_size", 1024*1024*10)
 	App.Config().StringOr("app.upload_files", uploadFileSuffix)

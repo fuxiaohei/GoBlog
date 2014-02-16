@@ -146,10 +146,6 @@ func GetPublishArticleList(page, size int) ([]*Content, *utils.Pager) {
 		return articles, pager
 	}
 	for i := pager.Begin; i <= pager.End; i++ {
-		a := GetContentById(index[i-1])
-		if a.Status != "publish" {
-			continue
-		}
 		articles = append(articles, GetContentById(index[i-1]))
 	}
 	return articles, pager
@@ -297,12 +293,99 @@ func generatePublishArticleIndex() {
 	contentsIndex["article-publish"] = arr
 }
 
-// StartContentsTimer starts some timers for contents.
-// An hour timer is for sync all contents because their hits number are changing.
-func StartContentsTimer() {
+func startContentSyncTimer() {
 	time.AfterFunc(time.Duration(1)*time.Hour, func() {
 		println("write contents in 1 hour timer")
 		SyncContents()
-		StartContentsTimer()
+		startContentSyncTimer()
 	})
+}
+
+func generateContentTmpIndexes() {
+	var (
+		popTmp     = make([][2]int, 0)
+		popIndex   = make([]int, 0)
+		tagIndexes = make(map[string][]int)
+		data       = make(map[string][]int)
+	)
+	for _, c := range contents {
+		if c.Status == "publish" && c.Type == "article" {
+			// pop temp index
+			popTmp = append(popTmp, [2]int{c.Id, c.CommentNum()})
+			if len(c.Tags) > 0 {
+				for _, t := range c.Tags {
+					if tagIndexes[t] == nil {
+						tagIndexes[t] = make([]int, 0)
+					}
+					tagIndexes[t] = append(tagIndexes[t], c.Id)
+				}
+			}
+		}
+	}
+
+	// sort popular list
+	utils.SortInt(popTmp)
+	for _, p := range popTmp {
+		popIndex = append(popIndex, p[0])
+	}
+	contentsIndex["article-pop"] = popIndex
+
+	// assemble indexes map
+	data["pop-index"] = popIndex
+	for tag, index := range tagIndexes {
+		sort.Sort(sort.Reverse(sort.IntSlice(index)))
+		data["t-"+tag] = index
+		contentsIndex["t-"+tag] = index
+	}
+
+	// write to tmp data
+	TmpStorage.Set("contents", data)
+	fmt.Println(data)
+}
+
+// GetPopularArticleList returns popular articles list.
+// Popular articles are ordered by comment number.
+func GetPopularArticleList(size int) []*Content {
+	index := contentsIndex["article-pop"]
+	pager := utils.NewPager(1, size, len(index))
+	articles := make([]*Content, 0)
+	if 1 > pager.Pages {
+		return articles
+	}
+	for i := pager.Begin; i <= pager.End; i++ {
+		articles = append(articles, GetContentById(index[i-1]))
+	}
+	return articles
+}
+
+// GetTaggedArticleList returns tagged articles list.
+// These articles contains same one tag.
+func GetTaggedArticleList(tag string,page, size int) ([]*Content, *utils.Pager) {
+	index := contentsIndex["t"+tag]
+	pager := utils.NewPager(page, size, len(index))
+	articles := make([]*Content, 0)
+	if page > pager.Pages {
+		return articles, pager
+	}
+	for i := pager.Begin; i <= pager.End; i++ {
+		articles = append(articles, GetContentById(index[i-1]))
+	}
+	return articles, pager
+}
+
+
+func startContentTmpIndexesTimer() {
+	time.AfterFunc(time.Duration(6)*time.Hour, func() {
+		println("write content indexes in 6 hours timer")
+		generateContentTmpIndexes()
+		startContentTmpIndexesTimer()
+	})
+}
+
+// StartContentsTimer starts some timers for contents.
+// An hour timer is for sync all contents because their hits number are changing.
+func StartContentsTimer() {
+	startContentSyncTimer()
+	generateContentTmpIndexes()
+	startContentTmpIndexesTimer()
 }

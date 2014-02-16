@@ -11,7 +11,10 @@ import (
 
 var (
 	appVersion int
+	// global data storage instance
 	Storage    *jsonStorage
+	// global tmp data storage instance. Temp data are generated for special usages, will not backup.
+	TmpStorage *jsonStorage
 )
 
 type jsonStorage struct {
@@ -212,6 +215,13 @@ func writeDefaultData() {
 	n3.Title = "好友"
 	n3.Link = "/friends.html"
 	Storage.Set("navigators", []*navItem{n, n2, n3})
+
+	// write default tmp data
+	writeDefaultTmpData()
+}
+
+func writeDefaultTmpData(){
+	TmpStorage.Set("contents",make(map[string][]int))
 }
 
 func loadAllData() {
@@ -227,16 +237,24 @@ func loadAllData() {
 	LoadFiles()
 }
 
+// TimeInc returns time step value devided by d int with time unix stamp.
 func (jss *jsonStorage) TimeInc(d int) int {
 	return int(utils.Now())%d + 1
 }
 
+// Init does model initialization.
+// If first run, write default data.
+// v means app.Version number. It's needed for version data.
 func Init(v int) {
 	appVersion = v
 	Storage = new(jsonStorage)
 	Storage.Init("data")
+	TmpStorage = new(jsonStorage)
+	TmpStorage.dir = "tmp/data"
 }
 
+// All loads all data from storage to memory.
+// Start timers for content, comment and message.
 func All() {
 	loadAllData()
 	// content timer, save visit hits and comment numbers
@@ -247,6 +265,7 @@ func All() {
 	StartMessageTimer()
 }
 
+// SyncAll writes all current memory data to storage files.
 func SyncAll() {
 	SyncContents()
 	SyncMessages()
