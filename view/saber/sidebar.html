@@ -1,1 +1,11 @@
-sidebar
+<div id="article-sidebar" class="grid-1-5 right">
+    <div class="sidebar" id="pop-article-sidebar">
+        <h5 class="title">热评文章</h5>
+        <ul class="list">{{range .Popular}}
+            <li>
+                <a href="{{.Link}}" title="{{.Title}}">{{.Title}}</a>
+                <span class="pop-num lbl">{{.CommentNum}}</span>
+            </li>{{end}}
+        </ul>
+    </div>
+</div>

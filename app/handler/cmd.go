@@ -15,6 +15,7 @@ func CmdBackup(context *GoInk.Context) {
 		}
 		Json(context, true).Set("file", file).End()
 		context.Do("bakcup_success", file)
+		model.CreateMessage("backup", "[1]"+file)
 		return
 	}
 	if context.Method == "DELETE" {

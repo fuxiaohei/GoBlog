@@ -340,7 +340,6 @@ func generateContentTmpIndexes() {
 
 	// write to tmp data
 	TmpStorage.Set("contents", data)
-	fmt.Println(data)
 }
 
 // GetPopularArticleList returns popular articles list.
@@ -360,7 +359,7 @@ func GetPopularArticleList(size int) []*Content {
 
 // GetTaggedArticleList returns tagged articles list.
 // These articles contains same one tag.
-func GetTaggedArticleList(tag string,page, size int) ([]*Content, *utils.Pager) {
+func GetTaggedArticleList(tag string, page, size int) ([]*Content, *utils.Pager) {
 	index := contentsIndex["t"+tag]
 	pager := utils.NewPager(page, size, len(index))
 	articles := make([]*Content, 0)
@@ -372,7 +371,6 @@ func GetTaggedArticleList(tag string,page, size int) ([]*Content, *utils.Pager) 
 	}
 	return articles, pager
 }
-
 
 func startContentTmpIndexesTimer() {
 	time.AfterFunc(time.Duration(6)*time.Hour, func() {

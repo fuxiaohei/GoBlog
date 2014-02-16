@@ -64,6 +64,7 @@ func Home(context *GoInk.Context) {
 	Theme(context).Layout("home").Render("index", map[string]interface{}{
 		"Articles": articles,
 		"Pager":    pager,
+		"SidebarHtml":  SidebarHtml(context),
 	})
 }
 
@@ -83,7 +84,7 @@ func Article(context *GoInk.Context) {
 	Theme(context).Layout("home").Render("article", map[string]interface{}{
 		"Title":       article.Title,
 		"Article":     article,
-		"CommentHtml": Comments(context, article),
+		"CommentHtml": CommentHtml(context, article),
 	})
 }
 
@@ -123,13 +124,6 @@ func TopPage(context *GoInk.Context) {
 		return
 	}
 	context.Redirect("/")
-}
-
-func Comments(context *GoInk.Context, c *model.Content) string {
-	return Theme(context).Tpl("comment", map[string]interface{}{
-		"Content":  c,
-		"Comments": c.Comments,
-	})
 }
 
 func Comment(context *GoInk.Context) {

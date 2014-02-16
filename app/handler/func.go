@@ -11,6 +11,7 @@ type jsonContext struct {
 	data    map[string]interface{}
 }
 
+// Json creates a json context response.
 func Json(context *GoInk.Context, res bool) *jsonContext {
 	c := new(jsonContext)
 	c.context = context
@@ -33,6 +34,7 @@ type themeContext struct {
 	theme   string
 }
 
+// Theme creates themed context response.
 func Theme(context *GoInk.Context) *themeContext {
 	t := new(themeContext)
 	t.context = context
@@ -63,4 +65,19 @@ func (tc *themeContext) Tpl(tpl string, data map[string]interface{}) string {
 func (tc *themeContext) Has(tpl string) bool {
 	file := path.Join(tc.theme, tpl)
 	return tc.context.App().View().Has(file)
+}
+
+// CommentHtml returns rendered comment template html with own content.
+func CommentHtml(context *GoInk.Context, c *model.Content) string {
+	return Theme(context).Tpl("comment", map[string]interface{}{
+		"Content":  c,
+		"Comments": c.Comments,
+	})
+}
+
+// SidebarHtml returns rendered sidebar template html.
+func SidebarHtml(context *GoInk.Context) string {
+	return Theme(context).Tpl("sidebar", map[string]interface{}{
+		"Popular": model.GetPopularArticleList(4),
+	})
 }

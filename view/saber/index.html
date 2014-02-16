@@ -1,4 +1,4 @@
-<div id="article-container" class="clear grid-2-3 left">{{range .Articles}}
+<div id="article-container" class="clear grid-3-4 left">{{range .Articles}}
     <article class="clear {{.Status}}" id="article-{{.Id}}">
         <div class="meta left text-center relative">
             <p class="lbl lbl-red comments"><a href="{{.Link}}#comment">{{.CommentNum}}</a></p>
@@ -19,6 +19,4 @@
         {{if .Pager.IsPrev}}<a href="/p/{{.Pager.Prev}}/" class="item right">较新的文章</a>{{end}}
     </div>
 </div>
-<div id="article-sidebar" class="grid-1-4 right">
-    right
-</div>
+{{Html .SidebarHtml}}
