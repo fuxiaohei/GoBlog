@@ -5,7 +5,6 @@ import (
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"github.com/fuxiaohei/GoInk"
 	"strconv"
-	"strings"
 )
 
 func Login(context *GoInk.Context) {
@@ -62,9 +61,9 @@ func Home(context *GoInk.Context) {
 	size, _ := strconv.Atoi(model.GetSetting("article_size"))
 	articles, pager := model.GetPublishArticleList(page, size)
 	Theme(context).Layout("home").Render("index", map[string]interface{}{
-		"Articles": articles,
-		"Pager":    pager,
-		"SidebarHtml":  SidebarHtml(context),
+		"Articles":    articles,
+		"Pager":       pager,
+		"SidebarHtml": SidebarHtml(context),
 	})
 }
 
@@ -146,7 +145,7 @@ func Comment(context *GoInk.Context) {
 	co.Author = data["user"]
 	co.Email = data["email"]
 	co.Url = data["url"]
-	co.Content = strings.Replace(utils.Html2str(data["content"]), "\n", "<br/>", -1)
+	co.Content = data["content"]
 	co.Avatar = utils.Gravatar(co.Email, "50")
 	co.Pid, _ = strconv.Atoi(data["pid"])
 	co.Ip = context.Ip

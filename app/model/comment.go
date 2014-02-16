@@ -2,7 +2,9 @@ package model
 
 import (
 	"github.com/fuxiaohei/GoBlog/app/utils"
+	"html/template"
 	"sort"
+	"strings"
 	"time"
 )
 
@@ -156,6 +158,8 @@ func CreateComment(cid int, c *Comment) {
 	c.CreateTime = utils.Now()
 	c.Status = "check"
 	c.Cid = cid
+	// escape content
+	c.Content = strings.Replace(utils.Html2str(template.HTMLEscapeString(c.Content)), "\n", "<br/>", -1)
 	// if empty url, use # instead.
 	if c.Url == "" {
 		c.Url = "#"

@@ -322,7 +322,7 @@ func AdminComments(context *GoInk.Context) {
 		co.Author = user.Nick
 		co.Email = user.Email
 		co.Url = user.Url
-		co.Content = strings.Replace(utils.Html2str(context.String("content")), "\n", "<br/>", -1)
+		co.Content = context.String("content")
 		co.Avatar = utils.Gravatar(co.Email, "50")
 		co.Pid = pid
 		co.Ip = context.Ip
