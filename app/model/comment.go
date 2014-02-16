@@ -239,6 +239,24 @@ func GetCommentList(page, size int) ([]*Comment, *utils.Pager) {
 	return comments, pager
 }
 
+// GetCommentRecentList returns a comments list of recent comments.
+// Recent comments are approved and no parent and not admin comment.
+// It's ordered by comment id desc.
+func GetCommentRecentList(size int) []*Comment {
+	comments, i := make([]*Comment, 0), 0
+	for _, id := range commentsIndex {
+		if i >= size {
+			return comments
+		}
+		c := GetCommentById(id)
+		if c.Pid < 1 && c.IsAdmin == false && c.Status == "approved" {
+			comments = append(comments, c)
+			i++
+		}
+	}
+	return comments
+}
+
 // SyncReaders writes all readers data.
 func SyncReaders() {
 	Storage.Set("readers", readers)

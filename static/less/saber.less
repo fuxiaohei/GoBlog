@@ -4,36 +4,36 @@ html, body {
   background: @white2;
 }
 
-#header{
+#header {
   background: #FFF;
   box-shadow: 0 0 4px @black2;
   line-height: 60px;
   padding: 12px 0 18px 0;
 }
 
-#header-img{
+#header-img {
   width: 60px;
   height: 60px;
   margin-right: 24px;
   border-radius: 30px;
 }
 
-#header-h,#header-sub{
+#header-h, #header-sub {
   padding: 0 18px 0 0;
 }
 
-#header-sub{
+#header-sub {
   font-size: 13px;
   color: @black3;
 }
 
-#nav{
+#nav {
   margin-right: -18px;
-  li{
-    a{
+  li {
+    a {
       margin-left: 24px;
       padding: 0 18px;
-      &:hover{
+      &:hover {
         .lbl;
         .lbl-blue;
         padding: 6px 18px;
@@ -62,43 +62,43 @@ html, body {
   opacity: 0.4;
 }
 
-#article-container{
-  article{
-    .bottom-line(40px,@black4);
+#article-container {
+  article {
+    .bottom-line(40px, @black4);
     margin-bottom: 50px;
   }
-  .meta{
-    .comments{
+  .meta {
+    .comments {
       margin-bottom: 0;
       margin-top: 8px;
       margin-right: 18px;
       font-family: Verdana, Tahoma, '微软雅黑', '宋体', sans-serif;
       padding-bottom: 2px;
-      a{
+      a {
         color: @white0;
         font-size: 18px;
       }
     }
-    .views{
-      top:-8px;
+    .views {
+      top: -8px;
       left: -12px;
-      padding:2px 6px;
+      padding: 2px 6px;
       line-height: 20px;
       text-align: center;
       font-size: 12px;
       font-family: Verdana, Tahoma, '微软雅黑', '宋体', sans-serif;
     }
   }
-  .title{
+  .title {
     .bottom-line(24px);
     font-size: 24px;
   }
-  .content{
+  .content {
     margin-top: -12px;
   }
-  .info{
+  .info {
     margin-bottom: 0;
-    span{
+    span {
       border-right: 1px dashed @black3;
       padding-right: 12px;
       margin-right: 12px;
@@ -108,33 +108,46 @@ html, body {
   }
 }
 
-#article-pager{
-  a{
+#article-pager {
+  a {
     margin: 0;
   }
-  a:hover{
+  a:hover {
     color: @white1;
   }
 }
 
-#article-sidebar{
-  .sidebar{
-    .title{
+#article-sidebar {
+  .sidebar {
+    .title {
       padding-top: 0;
     }
+    margin-bottom: 24px;
   }
-  .pop-num{
-    padding:4px;
+}
+
+#pop-article-sidebar {
+  .list {
+    li {
+      .bottom-line(8px);
+    }
+  }
+  .pop-num {
+    padding: 4px;
     margin-left: 12px;
     font-family: Verdana, Tahoma, '微软雅黑', '宋体', sans-serif;
     font-size: 12px;
   }
 }
 
-#pop-article-sidebar{
-  .list{
-    li{
+#recent-comment-sidebar {
+  .list {
+    li {
       .bottom-line(8px);
     }
+  }
+  .author {
+    padding: 4px 6px;
+    margin-right: 6px;
   }
 }

@@ -78,6 +78,7 @@ func CommentHtml(context *GoInk.Context, c *model.Content) string {
 // SidebarHtml returns rendered sidebar template html.
 func SidebarHtml(context *GoInk.Context) string {
 	return Theme(context).Tpl("sidebar", map[string]interface{}{
-		"Popular": model.GetPopularArticleList(4),
+		"Popular":       model.GetPopularArticleList(4),
+		"RecentComment": model.GetCommentRecentList(3),
 	})
 }
