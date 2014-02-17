@@ -52,7 +52,7 @@
             <span class="label">文本</span><input class="ipt text" type="text" name="text" value="{{.Text}}" required="required"/>&nbsp;&nbsp;&nbsp;&nbsp;
             <span class="label">标题</span><input class="ipt title" type="text" name="title" value="{{.Title}}"/>&nbsp;&nbsp;&nbsp;&nbsp;
             <span class="label">链接</span><input class="ipt link" type="text" name="link" value="{{.Link}}" required="required"/>&nbsp;&nbsp;&nbsp;&nbsp;
-            <a class="del" href="#"><i class="fa fa-times"></i></a>
+            <a class="del" href="#">删除</a>
         </p>{{end}}
         <p>
             <button class="btn btn-blue">保存</button>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -64,7 +64,7 @@
                 <span class="label">文本</span><input class="ipt text" type="text" name="text" value="" required="required"/>&nbsp;&nbsp;&nbsp;&nbsp;
                 <span class="label">标题</span><input class="ipt title" type="text" name="title" value=""/>&nbsp;&nbsp;&nbsp;&nbsp;
                 <span class="label">链接</span><input class="ipt link" type="text" name="link" value="" required="required"/>&nbsp;&nbsp;&nbsp;&nbsp;
-                <a class="del" href="#"><i class="fa fa-times"></i></a>
+                <a class="del" href="#">删除</a>
             </p>
         </script>
     </form>
@@ -72,7 +72,7 @@
         <p class="item">
             <input class="ipt key" type="text" name="key" value="{{$k}}"/>&nbsp;&nbsp;&nbsp;&nbsp;
             <input name="value" class="ipt value" type="text" value="{{$v}}"/>
-            <a class="del" href="#"><i class="fa fa-times"></i></a>
+            <a class="del" href="#">删除</a>
         </p>{{end}}
         <p>
             <button class="btn btn-blue">保存</button>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -83,7 +83,7 @@
             <p class="item">
                 <input class="ipt key" type="text" name="key" placeholder="字段名"/>&nbsp;&nbsp;&nbsp;&nbsp;
                 <input name="value" class="ipt value" type="text" placeholder="字段值"/>
-                <a class="del" href="#"><i class="fa fa-times"></i></a>
+                <a class="del" href="#">删除</a>
             </p>
         </script>
     </form>

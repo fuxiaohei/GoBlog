@@ -21,7 +21,7 @@
             <div class="msg relative {{.Type}}">
                 <span class="time">{{DateInt64 .CreateTime "MM.DD HH:mm"}}</span>
                 <div class="data">{{Html .Data}}</div>
-                <a class="read absolute" href="/admin/message/read?id={{.Id}}" rel="{{.Id}}"><i class="fa fa-check"></i></a>
+                <a class="read absolute" href="/admin/message/read?id={{.Id}}" rel="{{.Id}}">隐藏</a>
             </div>{{end}}{{if lt (len .Messages) 1}}
             <p>没有新的活动信息</p>
             {{end}}

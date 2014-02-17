@@ -4,7 +4,6 @@
     <meta charset="utf-8"/>
     <title>{{.Title}} - Fxh.Go</title>
     <link rel="stylesheet" href="/static/css/admin.css"/>
-    <link rel="stylesheet" href="http://libs.baidu.com/fontawesome/4.0.3/css/font-awesome.min.css"/>
     <script src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
     <script src="/static/lib/jquery.form.min.js"></script>
     <script src="/static/lib/validate.min.js"></script>
@@ -14,17 +13,17 @@
     <div class="container clear">
         <h3 class="logo left">Fxh.Go - <span>{{.Title}}</span></h3>
         <div class="nav left relative">
-            <a class="dashboard left" href="/admin/"><i class="fa fa-dashboard"></i></a>
-            <a class="article left" href="/admin/articles/" title="文章"><i class="fa fa-copy"></i></a></a>
-            <a class="pages left" href="/admin/pages/" title="独立页面"><i class="fa fa-paste"></i></a>
-            <a class="comments left" href="/admin/comments/" title="评论"><i class="fa fa-comments"></i></a>
-            <a class="files left" href="/admin/files/" title="媒体文件"><i class="fa fa-inbox"></i></a>
-            <a class="plugins left" href="/admin/plugins/" title="插件"><i class="fa fa-gears"></i></a>
-            <a class="setting left" href="/admin/setting/" title="设置"><i class="fa fa-cog"></i></a>
+            <a class="dashboard left" href="/admin/">控制台</a>
+            <a class="article left" href="/admin/articles/" title="文章">文章</a></a>
+            <a class="pages left" href="/admin/pages/" title="独立页面">页面</a>
+            <a class="comments left" href="/admin/comments/" title="评论">评论</a>
+            <a class="files left" href="/admin/files/" title="媒体文件">文件</a>
+            <a class="plugins left" href="/admin/plugins/" title="插件">插件</a>
+            <a class="setting left" href="/admin/setting/" title="设置">设置</a>
         </div>
-        <a class="out nav-item right" href="/logout/" title="退出"><i class="fa fa-power-off fa-lg"></i></a>
-        <a class="profile nav-item right" href="/admin/profile/" title="我"><i class="fa fa-user"></i></a>
-        <a class="front nav-item right" href="/" target="_blank" title="查看网站"><i class="fa fa-external-link"></i></a>
+        <a class="out nav-item right" href="/logout/" title="退出">退出</a>
+        <a class="profile nav-item right" href="/admin/profile/" title="我">我</a>
+        <a class="front nav-item right" href="/" target="_blank" title="查看网站">前台</a>
     </div>
 </div>
 {@Content}
