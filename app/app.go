@@ -18,7 +18,9 @@ import (
 )
 
 var (
+	// APP VERSION, as date version
 	VERSION          = 20140209
+	// Global GoInk application
 	App              *GoInk.App
 	staticFileSuffix = ".css,.js,.jpg,.jpeg,.png,.gif,.ico,.xml,.zip,.txt,.html,.otf,.svg,.eot,.woff,.ttf,.doc,.ppt,.xls,.docx,.pptx,.xlsx,.xsl"
 	uploadFileSuffix = ".jpg,.png,.gif,.zip,.txt,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
@@ -136,6 +138,8 @@ func catchExit() {
 	}
 }
 
+// Init starts Fxh.Go application preparation.
+// Load models and plugins, update views.
 func Init() {
 
 	// init storage
@@ -219,6 +223,7 @@ func registerHomeHandler() {
 	App.Get("/", handler.Home)
 }
 
+// Run begins Fxh.Go http server.
 func Run() {
 
 	registerAdminHandler()

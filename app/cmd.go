@@ -6,6 +6,9 @@ import (
 	"os"
 )
 
+// Cmd starts command line application.
+// It captures command line arguments and executes proper operation.
+// Some operations will exit application when finished.
 func Cmd() {
 	args := os.Args
 	if len(args) > 1 {
