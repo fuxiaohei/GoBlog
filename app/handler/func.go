@@ -80,5 +80,6 @@ func SidebarHtml(context *GoInk.Context) string {
 	return Theme(context).Tpl("sidebar", map[string]interface{}{
 		"Popular":       model.GetPopularArticleList(4),
 		"RecentComment": model.GetCommentRecentList(3),
+		"Tags":model.GetContentTags(),
 	})
 }

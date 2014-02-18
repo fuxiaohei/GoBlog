@@ -17,4 +17,12 @@
             </li>{{end}}
         </ul>
     </div>
+    <div class="sidebar" id="tags-sidebar">
+        <h5 class="title">文章标签</h5>
+        <ul class="list">{{range .Tags}}
+            <li class="inline-block">
+                <a class="author lbl lbl-green" href="{{.Link}}">{{.Name}}</a>
+            </li>{{end}}
+        </ul>
+    </div>
 </div>

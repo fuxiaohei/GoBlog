@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/fuxiaohei/GoBlog/app/utils"
+	"net/url"
 	"os"
 	"path/filepath"
 	"sort"
@@ -15,6 +16,7 @@ var (
 	contents      map[int]*Content
 	contentMaxId  int
 	contentsIndex map[string][]int
+	tags          []*Tag
 )
 
 // Content instance, defines content data items.
@@ -54,6 +56,15 @@ type Content struct {
 // TagString returns content tags in a string that's joined by ",".
 func (cnt *Content) TagString() string {
 	return strings.Join(cnt.Tags, ",")
+}
+
+// GetTags returns tags struct in this content.
+func (cnt *Content) GetTags() []*Tag {
+	tgs := make([]*Tag, len(cnt.Tags))
+	for i, t := range cnt.Tags {
+		tgs[i] = &Tag{Name: t}
+	}
+	return tgs
 }
 
 // Link returns content link as {type}/{id}/{slug}.html.
@@ -120,6 +131,17 @@ func (cnt *Content) ChangeSlug(slug string) bool {
 // User returns content author user instance.
 func (cnt *Content) User() *User {
 	return GetUserById(cnt.AuthorId)
+}
+
+// Content Tag struct. It convert tag string to proper struct or link.
+type Tag struct {
+	Name string
+	Cid  []int
+}
+
+// Link returns tag name url-encoded link.
+func (t *Tag) Link() string {
+	return "/tag/" + url.QueryEscape(t.Name)
 }
 
 // GetContentById gets a content by given id.
@@ -332,14 +354,24 @@ func generateContentTmpIndexes() {
 
 	// assemble indexes map
 	data["pop-index"] = popIndex
+	tags = make([]*Tag, 0)
 	for tag, index := range tagIndexes {
 		sort.Sort(sort.Reverse(sort.IntSlice(index)))
 		data["t-"+tag] = index
 		contentsIndex["t-"+tag] = index
+		t := new(Tag)
+		t.Name = tag
+		t.Cid = index
+		tags = append(tags, t)
 	}
 
 	// write to tmp data
 	TmpStorage.Set("contents", data)
+}
+
+// GetContentTags returns all tags.
+func GetContentTags() []*Tag {
+	return tags
 }
 
 // GetPopularArticleList returns popular articles list.

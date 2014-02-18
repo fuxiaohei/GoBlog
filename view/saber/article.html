@@ -8,7 +8,7 @@
             <p class="time-info">{{if .User}}<strong>{{.User.Nick}}</strong>&nbsp;&nbsp;&nbsp;{{end}}发表于&nbsp;&nbsp;&nbsp;{{DateInt64 .CreateTime "YYYY 年 MM 月 DD 日"}}</p>
             <section class="content markdown">{{Html .Content}}</section>
             <p class="info clear">
-                <span class="tag inline-block">标签：{{.TagString}}</span>
+                <span class="tag inline-block">标签：{{range .GetTags}}<a href="{{.Link}}">{{.Name}}</a>{{end}}</span>
             </p>
         </div>{{end}}
     </article>
