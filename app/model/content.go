@@ -140,7 +140,7 @@ type Tag struct {
 
 // Link returns tag name url-encoded link.
 func (t *Tag) Link() string {
-	return "/tag/" + url.QueryEscape(t.Name)
+	return "/tag/" + url.QueryEscape(strings.Replace(t.Name, ".", "-", -1))
 }
 
 // GetContentById gets a content by given id.
@@ -353,6 +353,9 @@ func generateContentTmpIndexes() {
 	data["pop-index"] = popIndex
 	tags = make([]*Tag, 0)
 	for tag, index := range tagIndexes {
+		if strings.TrimSpace(tag) == "" {
+			continue
+		}
 		sort.Sort(sort.Reverse(sort.IntSlice(index)))
 		data["t-"+tag] = index
 		contentsIndex["t-"+tag] = index

@@ -15,8 +15,8 @@
     <script src="/static/lib/marked.min.js"></script>
 </head>
 <body>
-<header id="header" class="clear">
-    <div class="container">
+<header id="header">
+    <div class="container clear">
         <img src="{{Setting `c_home_avatar`}}" alt="site" id="header-img" class="left"/>
         <h1 id="header-h" class="left"><a href="/">{{Setting "site_title"}}</a></h1>
         <h4 id="header-sub" class="left">{{Setting "site_sub_title"}}</h4>

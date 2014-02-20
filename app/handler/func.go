@@ -69,7 +69,11 @@ func (tc *themeContext) Has(tpl string) bool {
 
 // CommentHtml returns rendered comment template html with own content.
 func CommentHtml(context *GoInk.Context, c *model.Content) string {
-	return Theme(context).Tpl("comment", map[string]interface{}{
+	thm := Theme(context)
+	if !thm.Has("comment.html") {
+		return ""
+	}
+	return thm.Tpl("comment", map[string]interface{}{
 		"Content":  c,
 		"Comments": c.Comments,
 	})
@@ -77,9 +81,13 @@ func CommentHtml(context *GoInk.Context, c *model.Content) string {
 
 // SidebarHtml returns rendered sidebar template html.
 func SidebarHtml(context *GoInk.Context) string {
-	return Theme(context).Tpl("sidebar", map[string]interface{}{
+	thm := Theme(context)
+	if !thm.Has("sidebar.html") {
+		return ""
+	}
+	return thm.Tpl("sidebar", map[string]interface{}{
 		"Popular":       model.GetPopularArticleList(4),
 		"RecentComment": model.GetCommentRecentList(3),
-		"Tags":model.GetContentTags(),
+		"Tags":          model.GetContentTags(),
 	})
 }
