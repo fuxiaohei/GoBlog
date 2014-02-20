@@ -1,8 +1,6 @@
-<div id="comment" class="relative">
+<div id="comment" class="relative clear">
+    <span class="right lbl lbl-red comments"><a href="{{.Link}}#comment">{{.Content.CommentNum}}</a></span>
     <h4 id="comment-title">文章评论</h4>
-    <div class="meta absolute text-center">
-        <p class="lbl lbl-red comments"><a href="{{.Link}}#comment">{{.Content.CommentNum}}</a></p>
-    </div>
     <div id="comment-list">{{range .Comments}}{{if .IsValid}}
         <div class="comment clear" id="comment-{{.Id}}">
             <img class="c-avatar left" src="{{.Avatar}}" alt="{{.Author}}"/>

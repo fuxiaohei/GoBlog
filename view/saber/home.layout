@@ -27,13 +27,17 @@
         </nav>
     </div>
 </header>
-<div id="main" class="container grid clear">
+<div id="main" class="container grid clear relative">
     {@Content}
 </div>
 <footer id="footer" class="text-center">
     <div class="container clear">
         <span class="left">Go © 2014 All rights reserved.</span>
-        <span class="right">Proudly Powered by Fxh.Go.</span>
+        <span class="right">
+            <a href="{{Setting `c_footer_github`}}" target="_blank">GitHub</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="/feed/">Feed</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            Proudly Powered by Fxh.Go.
+        </span>
     </div>
     <a id="go-top" href="#" class="lbl hide lbl-blue" title="回到顶部">Top</a>
     {{Setting `c_footer_ga` | Html}}
