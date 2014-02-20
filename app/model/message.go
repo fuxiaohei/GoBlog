@@ -3,7 +3,6 @@ package model
 import (
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"strings"
-	"time"
 )
 
 var (
@@ -144,11 +143,10 @@ func generateBackupMessage(co interface{}) string {
 	return "备份全站到 " + strings.TrimPrefix(str, "[1]") + " 成功."
 }
 
-func StartMessageTimer() {
-	time.AfterFunc(time.Duration(90)*time.Minute, func() {
+func startMessageTimer() {
+	SetTimerFunc("message-sync", 9, func() {
 		println("write messages in 1.5 hour timer")
 		RecycleMessages()
 		SyncMessages()
-		StartMessageTimer()
 	})
 }

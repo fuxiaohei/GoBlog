@@ -5,7 +5,6 @@ import (
 	"html/template"
 	"sort"
 	"strings"
-	"time"
 )
 
 var (
@@ -315,11 +314,9 @@ func RecycleComments() {
 	SyncContents()
 }
 
-// StartCommentsTimers starts a timer to recycle comments.
-func StartCommentsTimer() {
-	time.AfterFunc(time.Duration(6)*time.Hour, func() {
+func startCommentsTimer() {
+	SetTimerFunc("comment-recycle", 36, func() {
 		println("recycle comments in 6 hours timer")
 		RecycleComments()
-		StartCommentsTimer()
 	})
 }

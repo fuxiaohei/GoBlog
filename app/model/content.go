@@ -9,7 +9,6 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
-	"time"
 )
 
 var (
@@ -301,7 +300,9 @@ func LoadContents() {
 	sort.Sort(sort.Reverse(sort.IntSlice(pageIndex)))
 	contentsIndex["article"] = articleIndex
 	contentsIndex["page"] = pageIndex
+	// generate indexes
 	generatePublishArticleIndex()
+	generateContentTmpIndexes()
 }
 
 func generatePublishArticleIndex() {
@@ -316,10 +317,9 @@ func generatePublishArticleIndex() {
 }
 
 func startContentSyncTimer() {
-	time.AfterFunc(time.Duration(1)*time.Hour, func() {
+	SetTimerFunc("content-sync", 6, func() {
 		println("write contents in 1 hour timer")
 		SyncContents()
-		startContentSyncTimer()
 	})
 }
 
@@ -405,17 +405,8 @@ func GetTaggedArticleList(tag string, page, size int) ([]*Content, *utils.Pager)
 }
 
 func startContentTmpIndexesTimer() {
-	time.AfterFunc(time.Duration(6)*time.Hour, func() {
+	SetTimerFunc("content-indexes", 36, func() {
 		println("write content indexes in 6 hours timer")
 		generateContentTmpIndexes()
-		startContentTmpIndexesTimer()
 	})
-}
-
-// StartContentsTimer starts some timers for contents.
-// An hour timer is for sync all contents because their hits number are changing.
-func StartContentsTimer() {
-	startContentSyncTimer()
-	generateContentTmpIndexes()
-	startContentTmpIndexesTimer()
 }

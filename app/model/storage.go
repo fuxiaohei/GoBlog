@@ -12,7 +12,7 @@ import (
 var (
 	appVersion int
 	// global data storage instance
-	Storage    *jsonStorage
+	Storage *jsonStorage
 	// global tmp data storage instance. Temp data are generated for special usages, will not backup.
 	TmpStorage *jsonStorage
 )
@@ -220,8 +220,8 @@ func writeDefaultData() {
 	writeDefaultTmpData()
 }
 
-func writeDefaultTmpData(){
-	TmpStorage.Set("contents",make(map[string][]int))
+func writeDefaultTmpData() {
+	TmpStorage.Set("contents", make(map[string][]int))
 }
 
 func loadAllData() {
@@ -257,12 +257,8 @@ func Init(v int) {
 // Start timers for content, comment and message.
 func All() {
 	loadAllData()
-	// content timer, save visit hits and comment numbers
-	StartContentsTimer()
-	// comment timer, recycle invalid comments whose parents or contents are removed
-	StartCommentsTimer()
-	// message timer, recycle old messages and save read status
-	StartMessageTimer()
+	// start model timer, do all timer stuffs
+	StartModelTimer()
 }
 
 // SyncAll writes all current memory data to storage files.

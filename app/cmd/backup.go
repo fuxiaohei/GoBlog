@@ -92,14 +92,13 @@ func GetBackupFiles() ([]os.FileInfo, error) {
 
 // StartBackupTimer starts backup operation timer for auto backup stuff.
 func StartBackupTimer(app *GoInk.App, t int) {
-	println("backup files after", t, "hours")
-	time.AfterFunc(time.Duration(t)*time.Hour, func() {
+	model.SetTimerFunc("backup-data", 144, func() {
 		filename, e := DoBackup(app, true)
 		if e != nil {
 			model.CreateMessage("backup", "[0]"+e.Error())
 		} else {
 			model.CreateMessage("backup", "[1]"+filename)
 		}
-		StartBackupTimer(app, t)
+		println("backup files in", t, "hours")
 	})
 }
