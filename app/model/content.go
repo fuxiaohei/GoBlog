@@ -300,9 +300,6 @@ func LoadContents() {
 	sort.Sort(sort.Reverse(sort.IntSlice(pageIndex)))
 	contentsIndex["article"] = articleIndex
 	contentsIndex["page"] = pageIndex
-	// generate indexes
-	generatePublishArticleIndex()
-	generateContentTmpIndexes()
 }
 
 func generatePublishArticleIndex() {

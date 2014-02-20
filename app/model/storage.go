@@ -257,8 +257,16 @@ func Init(v int) {
 // Start timers for content, comment and message.
 func All() {
 	loadAllData()
+	// generate indexes
+	SyncIndexes()
 	// start model timer, do all timer stuffs
 	StartModelTimer()
+}
+
+func SyncIndexes() {
+	// generate indexes
+	generatePublishArticleIndex()
+	generateContentTmpIndexes()
 }
 
 // SyncAll writes all current memory data to storage files.
