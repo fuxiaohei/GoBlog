@@ -16,6 +16,7 @@ html, body {
   height: 60px;
   margin-right: 24px;
   border-radius: 30px;
+  vertical-align: middle;
 }
 
 #header-h, #header-sub {
@@ -77,6 +78,8 @@ html, body {
       a {
         color: @white0;
         font-size: 18px;
+        display: block;
+        cursor: pointer;
       }
     }
     .views {
@@ -87,6 +90,7 @@ html, body {
       text-align: center;
       font-size: 12px;
       font-family: Verdana, Tahoma, '微软雅黑', '宋体', sans-serif;
+      margin-bottom: 0;
     }
   }
   .title {
@@ -105,6 +109,15 @@ html, body {
     }
     color: @black3;
     font-size: 12px;
+  }
+  .article-single{
+    h3.title{
+      padding-top: 0;
+    }
+    .views{
+      color: #fff;
+      font-size: 18px;
+    }
   }
 }
 
@@ -150,4 +163,118 @@ html, body {
     padding: 4px 6px;
     margin-right: 6px;
   }
+}
+
+
+#comment {
+  h4{
+    padding-top: 0;
+  }
+  .comments{
+    a{
+      color: #fff;
+      font-size: 18px;
+    }
+  }
+}
+
+#comment-list {
+  .comment {
+    margin-bottom: 32px;
+  }
+  .c-avatar {
+    margin-right: 18px;
+    .border-radius(4px);
+    margin-top: 6px;
+  }
+  .c-meta {
+    p {
+      margin-bottom: 0;
+    }
+    .c-time {
+      color: @black3;
+      font-family: Verdana, Tahoma, '微软雅黑', '宋体', sans-serif;
+    }
+    .c-author {
+      font-size: 16px;
+      color: @black1;
+      display: block;
+      &:hover {
+        color: @blue2;
+      }
+    }
+    .c-reply {
+      color: @white0;
+      background: @gray2;
+      padding: 3px 10px;
+      &:hover {
+        background-color: @blue1;
+      }
+    }
+  }
+  .c-content {
+    padding-top: 4px;
+  }
+  .c-check{
+    font-size: 13px;
+    color: @red1;
+    margin-left: 12px;
+  }
+  .c-p-md{
+    margin-top: 12px;
+    font-size: 12px;
+    line-height: 20px;
+    color: @black2;
+  }
+}
+
+#comment-show {
+  margin-bottom: 32px;
+}
+
+#comment-title {
+  .bottom-line(20px);
+}
+
+#comment-form{
+  width: 80%;
+  margin: auto;
+  margin-bottom: 30px;
+  .c-info{
+    width: 26%;
+    .ipt{
+      width: 100%;
+      box-sizing: border-box;
+      min-width:0;
+    }
+  }
+  .c-content{
+    width: 70%;
+  }
+  .c-avatar{
+    .border-radius(4px);
+    margin-top: 6px;
+    width: 50px;
+  }
+  .reply-md{
+    margin-bottom: 16px;
+    font-size: 12px;
+    line-height: 20px;
+    color: @black2;
+  }
+  .cancel-reply{
+    border: none;
+    &:hover{
+      cursor: pointer;
+    }
+    margin-left: 18px;
+    display: none;
+  }
+}
+
+#comment-content{
+  width: 100%;
+  box-sizing: border-box;
+  height: 180px;
+  resize: none;
 }
