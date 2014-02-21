@@ -34,22 +34,25 @@
 <script src="http://cdn.staticfile.org/jquery.form/3.46/jquery.form.min.js"></script>
 <script src="/static/lib/validate.min.js"></script>
 <script>
-    $(function(){
-        new FormValidator("login-form",[
-            {"name":"user","rules":"alpha_numeric|min_length[4]|max_length[20]"},
-            {"name":"password","rules":"required|min_length[4]|max_length[20]"}
-        ],function(errors,e){
+    $(function () {
+        new FormValidator("login-form", [
+            {"name": "user", "rules": "alpha_numeric|min_length[4]|max_length[20]"},
+            {"name": "password", "rules": "required|min_length[4]|max_length[20]"}
+        ], function (errors, e) {
             e.preventDefault();
             $('.invalid').hide();
-            if(errors.length){
-                $("#"+errors[0].id+"-invalid").removeClass("hide").show();
+            if (errors.length) {
+                $("#" + errors[0].id + "-invalid").removeClass("hide").show();
                 return;
             }
-            $('#login-form').ajaxSubmit(function(json){
-                if(!json.res){
-                    alert("登录错误，请检查用户或密码");
-                }else{
-                    window.location.href = "/admin/";
+            $('#login-form').ajaxSubmit({
+                dataType: "json",
+                success: function (json) {
+                    if (!json.res) {
+                        alert("登录错误，请检查用户或密码");
+                    } else {
+                        window.location.href = "/admin/";
+                    }
                 }
             });
         })

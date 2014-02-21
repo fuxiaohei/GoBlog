@@ -23,12 +23,6 @@ type jsonStorage struct {
 
 func (jss *jsonStorage) Init(dir string) {
 	jss.dir = dir
-	if !jss.Has("version") {
-		os.Mkdir(jss.dir, os.ModePerm)
-		os.Mkdir(path.Join(jss.dir, "content"), os.ModePerm)
-		os.Mkdir(path.Join(jss.dir, "plugin"), os.ModePerm)
-		writeDefaultData()
-	}
 }
 
 func (jss *jsonStorage) Has(key string) bool {
@@ -251,6 +245,12 @@ func Init(v int) {
 	Storage.Init("data")
 	TmpStorage = new(jsonStorage)
 	TmpStorage.dir = "tmp/data"
+	if !Storage.Has("version") {
+		os.Mkdir(Storage.dir, os.ModePerm)
+		os.Mkdir(path.Join(Storage.dir, "content"), os.ModePerm)
+		os.Mkdir(path.Join(Storage.dir, "plugin"), os.ModePerm)
+		writeDefaultData()
+	}
 }
 
 // All loads all data from storage to memory.

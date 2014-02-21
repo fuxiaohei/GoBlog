@@ -163,6 +163,9 @@ func GetPublishArticleList(page, size int) ([]*Content, *utils.Pager) {
 	index := contentsIndex["article-publish"]
 	pager := utils.NewPager(page, size, len(index))
 	articles := make([]*Content, 0)
+	if len(index) < 1 {
+		return articles, pager
+	}
 	if page > pager.Pages {
 		return articles, pager
 	}
@@ -177,6 +180,9 @@ func GetArticleList(page, size int) ([]*Content, *utils.Pager) {
 	index := contentsIndex["article"]
 	pager := utils.NewPager(page, size, len(index))
 	articles := make([]*Content, 0)
+	if len(index) < 1 {
+		return articles, pager
+	}
 	if page > pager.Pages {
 		return articles, pager
 	}
@@ -192,6 +198,9 @@ func GetPageList(page, size int) ([]*Content, *utils.Pager) {
 	index := contentsIndex["page"]
 	pager := utils.NewPager(page, size, len(index))
 	pages := make([]*Content, 0)
+	if len(index) < 1 {
+		return pages, pager
+	}
 	if page > pager.Pages {
 		return pages, pager
 	}
@@ -380,6 +389,9 @@ func GetPopularArticleList(size int) []*Content {
 	index := contentsIndex["article-pop"]
 	pager := utils.NewPager(1, size, len(index))
 	articles := make([]*Content, 0)
+	if len(index) < 1 {
+		return articles
+	}
 	if 1 > pager.Pages {
 		return articles
 	}
@@ -395,6 +407,9 @@ func GetTaggedArticleList(tag string, page, size int) ([]*Content, *utils.Pager)
 	index := contentsIndex["t"+tag]
 	pager := utils.NewPager(page, size, len(index))
 	articles := make([]*Content, 0)
+	if len(index) < 1 {
+		return articles, pager
+	}
 	if page > pager.Pages {
 		return articles, pager
 	}
