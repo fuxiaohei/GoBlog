@@ -19,7 +19,7 @@ import (
 
 var (
 	// APP VERSION, as date version
-	VERSION          = 20140209
+	VERSION = 20140209
 	// Global GoInk application
 	App              *GoInk.App
 	staticFileSuffix = ".css,.js,.jpg,.jpeg,.png,.gif,.ico,.xml,.zip,.txt,.html,.otf,.svg,.eot,.woff,.ttf,.doc,.ppt,.xls,.docx,.pptx,.xlsx,.xsl"
@@ -215,6 +215,8 @@ func registerHomeHandler() {
 	App.Get("/page/:id/:slug", handler.Page)
 	App.Get("/p/:page/", handler.Home)
 	App.Post("/comment/:id/", handler.Comment)
+	App.Get("/tag/:tag/", handler.TagArticles)
+	App.Get("/tag/:tag/p/:page/", handler.TagArticles)
 
 	App.Get("/feed/", handler.Rss)
 	App.Get("/sitemap", handler.SiteMap)

@@ -404,7 +404,7 @@ func GetPopularArticleList(size int) []*Content {
 // GetTaggedArticleList returns tagged articles list.
 // These articles contains same one tag.
 func GetTaggedArticleList(tag string, page, size int) ([]*Content, *utils.Pager) {
-	index := contentsIndex["t"+tag]
+	index := contentsIndex["t-"+tag]
 	pager := utils.NewPager(page, size, len(index))
 	articles := make([]*Content, 0)
 	if len(index) < 1 {

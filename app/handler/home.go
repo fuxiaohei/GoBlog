@@ -4,7 +4,9 @@ import (
 	"github.com/fuxiaohei/GoBlog/app/model"
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"github.com/fuxiaohei/GoInk"
+	"net/url"
 	"strconv"
+	"strings"
 )
 
 func Login(context *GoInk.Context) {
@@ -53,6 +55,24 @@ func Logout(context *GoInk.Context) {
 	context.Cookie("token-user", "", "-3600")
 	context.Cookie("token-value", "", "-3600")
 	context.Redirect("/login/")
+}
+
+func TagArticles(ctx *GoInk.Context) {
+	ctx.Layout("home")
+	page, _ := strconv.Atoi(ctx.Param("page"))
+	tag, _ := url.QueryUnescape(ctx.Param("tag"))
+	size, _ := strconv.Atoi(model.GetSetting("article_size"))
+	articles, pager := model.GetTaggedArticleList(tag, page, size)
+	// fix dotted tag
+	if len(articles) < 1 && strings.Contains(tag, "-") {
+		articles, pager = model.GetTaggedArticleList(strings.Replace(tag, "-", ".", -1), page, size)
+	}
+	Theme(ctx).Layout("home").Render("index", map[string]interface{}{
+		"Articles":    articles,
+		"Pager":       pager,
+		"SidebarHtml": SidebarHtml(ctx),
+		"Tag":         tag,
+	})
 }
 
 func Home(context *GoInk.Context) {
