@@ -24,6 +24,8 @@ type Content struct {
 	Title string
 	Slug  string
 	Text  string
+	// Rendered string
+	textRendered string
 	//Category   string
 	Tags []string
 
@@ -84,7 +86,10 @@ func (cnt *Content) Link() string {
 func (cnt *Content) Content() string {
 	txt := strings.Replace(cnt.Text, "<!--more-->", "", -1)
 	if GetSetting("enable_go_markdown") == "true" {
-		return utils.Markdown2Html(txt)
+		if cnt.textRendered == ""{
+			cnt.textRendered = utils.Markdown2Html(txt)
+		}
+		return cnt.textRendered
 	}
 	return txt
 }
@@ -225,6 +230,7 @@ func CreateContent(c *Content, t string) (*Content, error) {
 	c.Comments = make([]*Comment, 0)
 	c.Type = t
 	c.Hits = 1
+	c.textRendered = ""
 	contents[c.Id] = c
 	contentsIndex[c.Type] = append([]int{c.Id}, contentsIndex[c.Type]...)
 	generatePublishArticleIndex()
@@ -236,6 +242,8 @@ func CreateContent(c *Content, t string) (*Content, error) {
 // It will re-generate related indexes.
 func SaveContent(c *Content) {
 	c.EditTime = utils.Now()
+	// clean rendered cache text
+	c.textRendered = ""
 	generatePublishArticleIndex()
 	go SyncContent(c)
 }
