@@ -71,3 +71,28 @@ func CmdMonitor(ctx *GoInk.Context) {
 		"M":     cmd.ReadMemStats(),
 	})
 }
+
+func CmdTheme(ctx *GoInk.Context) {
+	if ctx.Method == "POST" {
+		change := ctx.String("cache")
+		if change != "" {
+			cmd.SetThemeCache(ctx, change == "true")
+			Json(ctx, true).End()
+			return
+		}
+		theme := ctx.String("theme")
+		if theme != "" {
+			model.SetSetting("site_theme", theme)
+			model.SyncSettings()
+			Json(ctx, true).End()
+			return
+		}
+		return
+	}
+	ctx.Layout("admin/cmd")
+	ctx.Render("admin/cmd/theme", map[string]interface{}{
+		"Title":        "主题",
+		"Themes":       cmd.GetThemes(ctx.App().Get("view_dir")),
+		"CurrentTheme": model.GetSetting("site_theme"),
+	})
+}

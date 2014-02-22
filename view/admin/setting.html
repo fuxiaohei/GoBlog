@@ -30,12 +30,6 @@
             <input id="article-size" class="ipt" type="number" name="article_size" value="{{Setting `article_size`}}" max="10" min="3"/>
         </p>
         <p class="item">
-            <label for="site-theme">主题目录名</label>
-            <input id="site-theme" class="ipt" type="text" name="site_theme" value="{{Setting `site_theme`}}"/>
-            <span class="tip block">主题即指向的模板目录，具体内容请参考 default 目录（即 default 主题）</span>
-            <input type="hidden" name="site_theme_def" value="default"/>
-        </p>
-        <p class="item">
             <label for="go-markdown">Go渲染Markdown</label>
             <input id="go-markdown" class="ipt" type="text" name="enable_go_markdown" value="{{Setting `enable_go_markdown`}}"/>
             <span class="tip block">默认关闭，使用前端marked.js渲染，填true时开启</span>

@@ -1,0 +1,43 @@
+<header class="cmd-header clear">
+    <h1 class="cmd-title left">主题风格</h1>
+    <button class="btn left {{Setting `theme_cache`}}" id="theme-cache-btn">缓存({{Setting "theme_cache"}})</button>
+</header>
+<ul class="cmd-list" id="theme-list">{{range .Themes}}
+    <li>{{if eq .Name $.CurrentTheme}}
+        <h5 class="theme-name inline-block lbl lbl-blue">{{.Name}}</h5>{{else}}
+        <h5 class="theme-name inline-block">{{.Name}}</h5>{{end}}{{range .Layout}}
+        <span class="lbl lbl-green layout">{{.}}</span>{{end}}{{range .Files}}
+        <span class="file">{{.}}</span>{{end}}{{range .ErrorFiles}}
+        <span class="error-file">{{.}}</span>{{end}}
+    </li>{{end}}
+</ul>
+<p>主题名对应视图中的目录。高亮的主题即当前使用的主题。单击主题名即可切换现用主题。</p>
+<script>
+    $(function () {
+        $('#theme-cache-btn').on("click", function (e) {
+            var $this = $(this);
+            var change = "true";
+            if ($this.hasClass("true")) {
+                change = "false";
+            }
+            $.post("/cmd/theme/", {"cache": change}, function (json) {
+                if (json.res) {
+                    $this.removeClass("true").removeClass("false").addClass(change).text("缓存(" + change + ")");
+                }
+            });
+        });
+        $('.theme-name').on("click",function(e){
+            var $this = $(this);
+            if($this.hasClass("lbl")){
+                return false;
+            }
+            $.post("/cmd/theme/",{"theme":$this.text()},function(json){
+               if(json.res){
+                   $(".theme-name.lbl").removeClass("lbl").removeClass("lbl-blue");
+                   $this.addClass("lbl").addClass("lbl-blue");
+               }
+            });
+            return false;
+        })
+    });
+</script>

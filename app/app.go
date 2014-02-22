@@ -163,6 +163,7 @@ func Init() {
 	App.View().FuncMap["Setting"] = model.GetSetting
 	App.View().FuncMap["Navigator"] = model.GetNavigators
 	App.View().FuncMap["Md2html"] = utils.Markdown2HtmlTemplate
+	App.View().IsCache = (model.GetSetting("theme_cache") == "true")
 
 	println("app version @ " + strconv.Itoa(model.GetVersion().Version))
 }
@@ -205,6 +206,7 @@ func registerCmdHandler() {
 	App.Route("GET,POST,DELETE", "/cmd/message/", handler.Auth, handler.CmdMessage)
 	App.Route("GET,DELETE", "/cmd/logs/", handler.Auth, handler.CmdLogs)
 	App.Get("/cmd/monitor/", handler.Auth, handler.CmdMonitor)
+	App.Route("GET,POST","/cmd/theme/",handler.Auth,handler.CmdTheme)
 }
 
 func registerHomeHandler() {
