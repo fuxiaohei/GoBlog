@@ -45,6 +45,15 @@ func DelTimerFunc(name string) {
 	delete(timerFuncs, name)
 }
 
+// GetTimerFuncs returns registered timer func with its name and ticker int.
+func GetTimerFuncs() map[string]int {
+	m := make(map[string]int)
+	for n, f := range timerFuncs {
+		m[n] = f.Ticker
+	}
+	return m
+}
+
 // StartModelTimer adds models' timer and starts time ticker.
 // The default step is 10 min once.
 func StartModelTimer() {
