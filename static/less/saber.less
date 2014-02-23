@@ -9,6 +9,10 @@ html, body {
   box-shadow: 0 0 4px @black2;
   line-height: 60px;
   padding: 12px 0 18px 0;
+  position: fixed;
+  width: 100%;
+  top:0;
+  z-index: 99;
 }
 
 #header-img {
@@ -50,7 +54,8 @@ html, body {
 }
 
 #main {
-  margin: 48px auto;
+  margin-top: 132px;
+  margin-bottom: 48px;
 }
 
 #go-top {
@@ -286,4 +291,78 @@ html, body {
   box-sizing: border-box;
   height: 180px;
   resize: none;
+}
+
+@media only screen and (max-width: 1248px) {
+  .container {
+    padding: 0 24px;
+    width: auto;
+  }
+}
+
+@media only screen and (max-width: 960px) {
+  .container960 {
+    padding: 0 24px;
+    width: auto;
+  }
+  #article-container.left{
+    width: 100%;
+  }
+  #article-sidebar{
+    display: none;
+  }
+}
+
+
+@media only screen and (max-width: 760px) {
+
+  #header-sub{
+    display: none;
+  }
+
+  #header{
+    padding: 12px 0;
+  }
+
+  #article-container {
+    .main {
+      margin-left: 0;
+    }
+    .meta {
+      display: none;
+    }
+    .main:before {
+      display: none;
+    }
+  }
+
+  #comment-form {
+    .c-info, .c-content {
+      width: 100%;
+      float: left;
+    }
+    .c-info {
+      text-align: left;
+    }
+  }
+
+  #footer {
+    span {
+      display: block;
+      float: none;
+      text-align: center;
+    }
+  }
+
+  #article-pager {
+    margin-left: 0;
+  }
+}
+
+@media only screen and (max-width: 560px) {
+  #article-container{
+    .views{
+      display: none;
+    }
+  }
 }
