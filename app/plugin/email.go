@@ -39,6 +39,7 @@ var (
 </td></tr></tbody></table>`
 )
 
+// Email plugin instance, contains activation status, handler status, settings and templates.
 type EmailPlugin struct {
 	isActive            bool
 	isHandlerRegistered bool
@@ -52,6 +53,7 @@ func init() {
 	EmailPlugin.isHandlerRegistered = false
 	EmailPlugin.settings = make(map[string]string)
 	EmailPlugin.templates = make(map[string]*template.Template)
+	// load templates
 	t1, e := template.New("reply").Parse(emailReplyTemplate)
 	if e != nil {
 		panic(e)
@@ -65,18 +67,22 @@ func init() {
 	register(EmailPlugin)
 }
 
+// Name returns email plugin name
 func (p *EmailPlugin) Name() string {
 	return "邮件提醒"
 }
 
+// Key returns email plugin unique key.
 func (p *EmailPlugin) Key() string {
 	return "email_notify_plugin"
 }
 
+// Desc returns email plugin descripition.
 func (p *EmailPlugin) Desc() string {
 	return "评论及回复等邮件提醒"
 }
 
+// ToStorage creates plugin storage map for plugin list json.
 func (p *EmailPlugin) ToStorage() map[string]interface{} {
 	m := make(map[string]interface{})
 	m["name"] = p.Name()
@@ -85,6 +91,9 @@ func (p *EmailPlugin) ToStorage() map[string]interface{} {
 	return m
 }
 
+// Activate activates email plugin.
+// It will change activate status to on.
+// If the handlers are not registered, it will add handlers to router table.
 func (p *EmailPlugin) Activate() {
 	if p.isHandlerRegistered {
 		p.isActive = true
@@ -93,6 +102,7 @@ func (p *EmailPlugin) Activate() {
 	if model.Storage.Has("plugin/" + p.Key()) {
 		model.Storage.Get("plugin/"+p.Key(), &p.settings)
 	}
+	// email middleware handler
 	fn := func(context *GoInk.Context) {
 		context.On("comment_created", func(co interface{}) {
 			if !p.isActive {
@@ -125,22 +135,27 @@ func (p *EmailPlugin) Activate() {
 	p.isHandlerRegistered = true
 }
 
+// Deactivate closes this email plugin.
 func (p *EmailPlugin) Deactivate() {
 	p.isActive = false
 }
 
+// IsActive returns plugin activation status.
 func (p *EmailPlugin) IsActive() bool {
 	return p.isActive
 }
 
+// Version returns plugin version string.
 func (p *EmailPlugin) Version() string {
 	return "0.1.5"
 }
 
+// HasSetting returns bool of setting form existing.
 func (p *EmailPlugin) HasSetting() bool {
 	return true
 }
 
+// Form returns the form template string for email plugin.
 func (p *EmailPlugin) Form() string {
 	return `<h4 class="title">
         SMTP 邮箱提醒设置
@@ -164,6 +179,7 @@ func (p *EmailPlugin) Form() string {
     </p>`
 }
 
+// SetSettings saves plugin settings to json.
 func (p *EmailPlugin) SetSetting(settings map[string]string) {
 	p.settings = settings
 	model.Storage.Set("plugin/"+p.Key(), p.settings)
@@ -182,11 +198,13 @@ func (p *EmailPlugin) sendEmail(co *model.Comment, isCreate bool) {
 		to      mail.Address
 	)
 
+	// get article or page content instance
 	content = model.GetContentById(co.Cid)
 	if content == nil {
 		println("error content getting in email plugin")
 		return
 	}
+	// email for notify new commment creation
 	if co.Pid < 1 {
 		tpl = p.templates["created"]
 
@@ -209,6 +227,7 @@ func (p *EmailPlugin) sendEmail(co *model.Comment, isCreate bool) {
 		p.sendSmtp(from, to, title, buff.Bytes())
 		return
 	}
+	// send mail for the author of comment replying to
 	pco = model.GetCommentById(co.Pid)
 	tpl = p.templates["reply"]
 	err = tpl.Execute(&buff, map[string]interface{}{
@@ -231,6 +250,8 @@ func (p *EmailPlugin) sendEmail(co *model.Comment, isCreate bool) {
 	to = mail.Address{pco.Author, pco.Email}
 	title = "您的评论有了回复"
 	p.sendSmtp(from, to, title, buff.Bytes())
+	// send email to notice admin new comment creation
+	// this comment is a reply comment
 	if isCreate {
 		go func() {
 			tpl = p.templates["created"]
@@ -256,6 +277,7 @@ func (p *EmailPlugin) sendEmail(co *model.Comment, isCreate bool) {
 	}
 }
 
+// send email via smtp
 func (p *EmailPlugin) sendSmtp(from mail.Address, to mail.Address, title string, body []byte) {
 	// set email vars
 	b64 := base64.NewEncoding("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/")
