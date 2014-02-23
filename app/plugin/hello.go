@@ -48,7 +48,9 @@ func (p *HelloPlugin) Activate() {
 		context.On(GoInk.CONTEXT_RENDERED, func() {
 			if p.isActive {
 				duration := time.Since(now)
-				context.Body = append(context.Body, []byte(fmt.Sprint("\n<!-- execute ", duration, " -->"))...)
+				str := fmt.Sprint(duration)
+				//context.Body = append(context.Body, []byte(str)...)
+				context.Header["X-Exec-Time"] = str
 			}
 		})
 	}
