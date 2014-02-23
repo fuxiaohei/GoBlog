@@ -6,7 +6,7 @@
             <span class="share weibo inline-block"><i class="fa fa-weibo fa-lg"></i></span>{{if .User}}
             <span class="author inline-block"><i class="fa fa-user"></i>{{.User.Nick}}</span>{{end}}
             <span class="time inline-block"><i class="fa fa-clock-o"></i>{{DateInt64 .CreateTime "MM.DD"}}</span>{{if .TagString}}
-            <span class="tag inline-block"><i class="fa fa-tags"></i>{{.TagString}}</span>{{end}}
+            <span class="tag inline-block"><i class="fa fa-tags"></i>{{range .GetTags}}<a href="{{.Link}}">{{.Name}}</a>{{end}}</span>{{end}}
             <span class="views inline-block right">阅读&nbsp;&nbsp;<span>{{.Hits}}</span>&nbsp;&nbsp;次</span>
         </p>{{end}}
     </article>

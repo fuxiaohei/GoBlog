@@ -1,4 +1,5 @@
-<div id="article-container" class="clear">{{range .Articles}}
+<div id="article-container" class="clear">{{if .Tag}}
+    <div class="tag-banner">标签：{{.Tag}}</div>{{end}}{{range .Articles}}
     <article class="clear {{.Status}}" id="article-{{.Id}}">
         <div class="meta left text-center">{{if gt .CommentNum 0}}
             <p class="lbl lbl-red comments"><a href="{{.Link}}#comment"><i class="fa fa-comments"></i><strong>{{.CommentNum}} ℃</strong></a></p>{{end}}
@@ -11,7 +12,7 @@
             <p class="info clear">
                 <span class="share weibo inline-block"><i class="fa fa-weibo fa-lg"></i></span>{{if .User}}
                 <span class="author inline-block"><i class="fa fa-user"></i>{{.User.Nick}}</span>{{end}}{{if .TagString}}
-                <span class="tag inline-block"><i class="fa fa-tags"></i>{{.TagString}}</span>{{end}}
+                <span class="tag inline-block"><i class="fa fa-tags"></i>标签：{{range .GetTags}}<a href="{{.Link}}">{{.Name}}</a>{{end}}</span>{{end}}
                 <a class="inline-block read right" href="{{.Link}}"><i class="fa fa-search"></i>继续阅读</a>
             </p>
         </div>

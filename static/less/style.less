@@ -62,12 +62,14 @@ html,body{
   color: @gray1;
   background-color: #1c2429;
   padding: 24px 0;
+  a{
+    color: @gray1;
+  }
   p{
     margin-bottom: 9px;
     font-weight: bold;
     letter-spacing: 1px;
     a{
-      color: @gray1;
       margin: 0 16px;
       &:hover{
         color: @white1;
@@ -168,9 +170,21 @@ html,body{
     .time,.views span{
       font-family: Verdana, Tahoma, '微软雅黑', '宋体', sans-serif;
     }
+    .tag a{
+      margin: 0 4px;
+      color: @black3;
+      &:hover{
+        color: @black1;
+      }
+    }
   }
   article{
     margin-bottom: 48px;
+  }
+  .tag-banner{
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 30px;
   }
 }
 
@@ -325,10 +339,12 @@ html,body{
     float: left;
     width: 64px;
     height: 64px;
+    margin-left: 24px;
   }
   #header-h{
-    padding:17px 0;
+    padding:17px;
     font-size: 24px;
+    float: left;
   }
   #header-sub{
     display: none;
@@ -348,6 +364,9 @@ html,body{
     padding:0;
     width: auto;
   }
+  #header-h{
+    float: none;
+  }
   #header-img{
     display: none;
   }
@@ -358,5 +377,8 @@ html,body{
     .c-avatar{
       display: none;
     }
+  }
+  #nav li a{
+    padding: 0 16px;
   }
 }
