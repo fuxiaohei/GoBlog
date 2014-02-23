@@ -72,6 +72,7 @@ func TagArticles(ctx *GoInk.Context) {
 		"Pager":       pager,
 		"SidebarHtml": SidebarHtml(ctx),
 		"Tag":         tag,
+		"Title":       tag,
 	})
 }
 

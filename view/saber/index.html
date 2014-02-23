@@ -1,4 +1,5 @@
-<div id="article-container" class="clear grid-3-4 left">{{range .Articles}}
+<div id="article-container" class="clear grid-3-4 left">{{if .Tag}}
+    <div class="tag-banner">标签：{{.Tag}}</div>{{end}}{{range .Articles}}
     <article class="clear {{.Status}}" id="article-{{.Id}}">
         <div class="meta left text-center relative">
             <p class="lbl lbl-red comments"><a href="{{.Link}}#comment">{{.CommentNum}}</a></p>
