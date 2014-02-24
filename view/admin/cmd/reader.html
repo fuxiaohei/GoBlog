@@ -1,0 +1,10 @@
+<header class="cmd-header clear">
+    <h1 class="cmd-title left">读者</h1>
+</header>
+<ul class="cmd-list" id="reader-list">{{range .Readers}}
+    <li>
+        <a class="lbl lbl-blue author" href="{{.Url}}" target="_blank">{{.Author}}</a>
+        <span class="email">{{.Email}}</span>
+        <span class="lbl lbl-red comments">{{.Comments}}</span>
+    </li>{{end}}
+</ul>
