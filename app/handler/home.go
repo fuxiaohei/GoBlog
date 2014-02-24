@@ -61,8 +61,8 @@ func TagArticles(ctx *GoInk.Context) {
 	ctx.Layout("home")
 	page, _ := strconv.Atoi(ctx.Param("page"))
 	tag, _ := url.QueryUnescape(ctx.Param("tag"))
-	size, _ := strconv.Atoi(model.GetSetting("article_size"))
-	articles, pager := model.GetTaggedArticleList(tag, page, size)
+	size := getArticleListSize()
+	articles, pager := model.GetTaggedArticleList(tag, page, getArticleListSize())
 	// fix dotted tag
 	if len(articles) < 1 && strings.Contains(tag, "-") {
 		articles, pager = model.GetTaggedArticleList(strings.Replace(tag, "-", ".", -1), page, size)
@@ -79,13 +79,16 @@ func TagArticles(ctx *GoInk.Context) {
 func Home(context *GoInk.Context) {
 	context.Layout("home")
 	page, _ := strconv.Atoi(context.Param("page"))
-	size, _ := strconv.Atoi(model.GetSetting("article_size"))
-	articles, pager := model.GetPublishArticleList(page, size)
-	Theme(context).Layout("home").Render("index", map[string]interface{}{
+	articles, pager := model.GetPublishArticleList(page, getArticleListSize())
+	data := map[string]interface{}{
 		"Articles":    articles,
 		"Pager":       pager,
 		"SidebarHtml": SidebarHtml(context),
-	})
+	}
+	if page > 1 {
+		data["Title"] = "第 " + strconv.Itoa(page) + " 页"
+	}
+	Theme(context).Layout("home").Render("index", data)
 }
 
 func Article(context *GoInk.Context) {
@@ -189,4 +192,12 @@ func validateComment(data map[string]string) string {
 		return "网址格式错误"
 	}
 	return ""
+}
+
+func getArticleListSize() int {
+	size, _ := strconv.Atoi(model.GetSetting("article_size"))
+	if size < 1 {
+		size = 5
+	}
+	return size
 }
