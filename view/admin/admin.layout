@@ -31,6 +31,7 @@
     <div class="container clear">
        <p class="links text-center">
            <a class="theme" href="/cmd/theme/">主题</a>
+           <a class="reader" href="/cmd/reader/">读者</a>
            <a class="stat" href="/cmd/message/">消息</a>
            <a class="backup" href="/cmd/backup/">备份</a>
            <a class="err" href="/cmd/logs/">日志</a>

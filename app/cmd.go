@@ -2,6 +2,7 @@ package app
 
 import (
 	"github.com/fuxiaohei/GoBlog/app/cmd"
+	"github.com/fuxiaohei/GoBlog/app/handler"
 	_ "github.com/fuxiaohei/GoBlog/app/upgrade"
 	"os"
 )
@@ -38,4 +39,15 @@ func Cmd() {
 
 	// begin cmd init
 	cmd.Init(App)
+}
+
+func registerCmdHandler() {
+	App.Route("GET,POST,DELETE", "/cmd/backup/", handler.Auth, handler.CmdBackup)
+	App.Get("/cmd/backup/file/", handler.Auth, handler.CmdBackupFile)
+
+	App.Route("GET,POST,DELETE", "/cmd/message/", handler.Auth, handler.CmdMessage)
+	App.Route("GET,DELETE", "/cmd/logs/", handler.Auth, handler.CmdLogs)
+	App.Get("/cmd/monitor/", handler.Auth, handler.CmdMonitor)
+	App.Route("GET,POST", "/cmd/theme/", handler.Auth, handler.CmdTheme)
+	App.Route("GET,POST","/cmd/reader/",handler.Auth,handler.CmdReader)
 }

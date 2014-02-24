@@ -271,6 +271,22 @@ func LoadReaders() {
 	Storage.Get("readers", &readers)
 }
 
+// GetReaders returns slice of all readers
+func GetReaders() []*Reader {
+	r, i := make([]*Reader, len(readers)), 0
+	for _, rd := range readers {
+		r[i] = rd
+		i++
+	}
+	return r
+}
+
+// RemoveReader removes a reader by his email.
+func RemoveReader(email string) {
+	delete(readers, email)
+	SyncReaders()
+}
+
 // LoadComments loads all comments from contents.
 func LoadComments() {
 	comments = make(map[int]*Comment)

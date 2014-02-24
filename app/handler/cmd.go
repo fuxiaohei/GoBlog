@@ -96,3 +96,11 @@ func CmdTheme(ctx *GoInk.Context) {
 		"CurrentTheme": model.GetSetting("site_theme"),
 	})
 }
+
+func CmdReader(ctx *GoInk.Context) {
+	ctx.Layout("admin/cmd")
+	ctx.Render("admin/cmd/reader", map[string]interface{}{
+		"Title":   "读者",
+		"Readers": model.GetReaders(),
+	})
+}
