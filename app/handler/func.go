@@ -4,6 +4,7 @@ import (
 	"github.com/fuxiaohei/GoBlog/app/model"
 	"github.com/fuxiaohei/GoInk"
 	"path"
+	"strconv"
 )
 
 type jsonContext struct {
@@ -85,9 +86,17 @@ func SidebarHtml(context *GoInk.Context) string {
 	if !thm.Has("sidebar.html") {
 		return ""
 	}
+	popSize, _ := strconv.Atoi(model.GetSetting("popular_size"))
+	if popSize < 1 {
+		popSize = 4
+	}
+	cmtSize, _ := strconv.Atoi(model.GetSetting("recent_comment_size"))
+	if cmtSize < 1 {
+		cmtSize = 3
+	}
 	return thm.Tpl("sidebar", map[string]interface{}{
-		"Popular":       model.GetPopularArticleList(4),
-		"RecentComment": model.GetCommentRecentList(3),
+		"Popular":       model.GetPopularArticleList(popSize),
+		"RecentComment": model.GetCommentRecentList(cmtSize),
 		"Tags":          model.GetContentTags(),
 	})
 }

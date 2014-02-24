@@ -1,5 +1,6 @@
 <ul id="setting-nav" class="container text-center">
     <li><a href="#general">基本</a></li>
+    <li><a href="#content">内容</a></li>
     <li><a href="#nav">导航</a></li>
     <li><a href="#custom">自定义</a></li>
 </ul>
@@ -25,9 +26,23 @@
             <label for="site-desc">Meta站点介绍</label>
             <input id="site-desc" class="ipt" type="text" name="site_description" value="{{Setting `site_description`}}"/>
         </p>
+        <p>
+            <label>&nbsp;</label>
+            <button class="btn btn-blue">保存</button>
+        </p>
+    </form>
+    <form id="setting-content-form" class="setting-form form form-align setting-panel" action="/admin/setting/" method="post">
         <p class="item">
             <label for="article-size">单页文章列表数</label>
-            <input id="article-size" class="ipt" type="number" name="article_size" value="{{Setting `article_size`}}" max="10" min="3"/>
+            <input id="article-size" class="ipt" type="number" name="article_size" value="{{Setting `article_size`}}" max="10" min="3" required="required"/>
+        </p>
+        <p class="item">
+            <label for="popular-size">热评文章列表数</label>
+            <input id="popular-size" class="ipt" type="number" name="popular_size" value="{{Setting `popular_size`}}" max="10" min="3"  required="required"/>
+        </p>
+        <p class="item">
+            <label for="recent-comment-size">最近评论列表数</label>
+            <input id="recent-comment-size" class="ipt" type="number" name="recent_comment_size" value="{{Setting `recent_comment_size`}}" max="10" min="3" required="required"/>
         </p>
         <p class="item">
             <label for="go-markdown">Go渲染Markdown</label>
