@@ -98,6 +98,12 @@ func CmdTheme(ctx *GoInk.Context) {
 }
 
 func CmdReader(ctx *GoInk.Context) {
+	if ctx.Method == "POST" {
+		email := ctx.String("email")
+		model.RemoveReader(email)
+		Json(ctx, true).End()
+		return
+	}
 	ctx.Layout("admin/cmd")
 	ctx.Render("admin/cmd/reader", map[string]interface{}{
 		"Title":   "读者",

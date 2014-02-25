@@ -322,12 +322,28 @@ func UpdateCommentAdmin(user *User) {
 
 // RecycleComments cleans removable comments.
 func RecycleComments() {
+	readerTmp := make(map[string][]int)
 	for _, co := range comments {
 		if co.IsRemovable() {
 			removeOneComment(co.Cid, co.Id)
+			continue
+		}
+		r := co.GetReader()
+		if r == nil {
+			continue
+		}
+		if _, ok := readerTmp[r.Email]; !ok {
+			readerTmp[r.Email] = make([]int, 0)
+		}
+		readerTmp[r.Email] = append(readerTmp[r.Email], co.Id)
+	}
+	for _, r := range readers {
+		if _, ok := readerTmp[r.Email]; ok {
+			r.Comments = len(readerTmp[r.Email])
 		}
 	}
 	SyncContents()
+	SyncReaders()
 }
 
 func startCommentsTimer() {
