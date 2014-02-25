@@ -86,7 +86,7 @@ func (cnt *Content) Link() string {
 func (cnt *Content) Content() string {
 	txt := strings.Replace(cnt.Text, "<!--more-->", "", -1)
 	if GetSetting("enable_go_markdown") == "true" {
-		if cnt.textRendered == ""{
+		if cnt.textRendered == "" {
 			cnt.textRendered = utils.Markdown2Html(txt)
 		}
 		return cnt.textRendered
@@ -161,58 +161,6 @@ func GetContentBySlug(slug string) *Content {
 		}
 	}
 	return nil
-}
-
-// GetPublishArticleList gets published article list and pager.
-func GetPublishArticleList(page, size int) ([]*Content, *utils.Pager) {
-	index := contentsIndex["article-publish"]
-	pager := utils.NewPager(page, size, len(index))
-	articles := make([]*Content, 0)
-	if len(index) < 1 {
-		return articles, pager
-	}
-	if page > pager.Pages {
-		return articles, pager
-	}
-	for i := pager.Begin; i <= pager.End; i++ {
-		articles = append(articles, GetContentById(index[i-1]))
-	}
-	return articles, pager
-}
-
-// GetArticleList gets articles list and pager no matter article status.
-func GetArticleList(page, size int) ([]*Content, *utils.Pager) {
-	index := contentsIndex["article"]
-	pager := utils.NewPager(page, size, len(index))
-	articles := make([]*Content, 0)
-	if len(index) < 1 {
-		return articles, pager
-	}
-	if page > pager.Pages {
-		return articles, pager
-	}
-	for i := pager.Begin; i <= pager.End; i++ {
-		articles = append(articles, GetContentById(index[i-1]))
-	}
-	return articles, pager
-}
-
-// GetPageList gets pages list and pager no matter page status.
-// In common cases, no need to get a list or pagers for public page.
-func GetPageList(page, size int) ([]*Content, *utils.Pager) {
-	index := contentsIndex["page"]
-	pager := utils.NewPager(page, size, len(index))
-	pages := make([]*Content, 0)
-	if len(index) < 1 {
-		return pages, pager
-	}
-	if page > pager.Pages {
-		return pages, pager
-	}
-	for i := pager.Begin; i <= pager.End; i++ {
-		pages = append(pages, GetContentById(index[i-1]))
-	}
-	return pages, pager
 }
 
 // CreateContent creates new content.
@@ -319,17 +267,6 @@ func LoadContents() {
 	contentsIndex["page"] = pageIndex
 }
 
-func generatePublishArticleIndex() {
-	arr := make([]int, 0)
-	for _, id := range contentsIndex["article"] {
-		c := GetContentById(id)
-		if c.Status == "publish" {
-			arr = append(arr, id)
-		}
-	}
-	contentsIndex["article-publish"] = arr
-}
-
 func startContentSyncTimer() {
 	SetTimerFunc("content-sync", 6, func() {
 		println("write contents in 1 hour timer")
@@ -389,42 +326,6 @@ func generateContentTmpIndexes() {
 // GetContentTags returns all tags.
 func GetContentTags() []*Tag {
 	return tags
-}
-
-// GetPopularArticleList returns popular articles list.
-// Popular articles are ordered by comment number.
-func GetPopularArticleList(size int) []*Content {
-	index := contentsIndex["article-pop"]
-	pager := utils.NewPager(1, size, len(index))
-	articles := make([]*Content, 0)
-	if len(index) < 1 {
-		return articles
-	}
-	if 1 > pager.Pages {
-		return articles
-	}
-	for i := pager.Begin; i <= pager.End; i++ {
-		articles = append(articles, GetContentById(index[i-1]))
-	}
-	return articles
-}
-
-// GetTaggedArticleList returns tagged articles list.
-// These articles contains same one tag.
-func GetTaggedArticleList(tag string, page, size int) ([]*Content, *utils.Pager) {
-	index := contentsIndex["t-"+tag]
-	pager := utils.NewPager(page, size, len(index))
-	articles := make([]*Content, 0)
-	if len(index) < 1 {
-		return articles, pager
-	}
-	if page > pager.Pages {
-		return articles, pager
-	}
-	for i := pager.Begin; i <= pager.End; i++ {
-		articles = append(articles, GetContentById(index[i-1]))
-	}
-	return articles, pager
 }
 
 func startContentTmpIndexesTimer() {
