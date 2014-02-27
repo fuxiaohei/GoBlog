@@ -9,8 +9,7 @@
         <div class="main">
             <h3 class="title"><a href="{{.Link}}" title="{{.Title}}">{{.Title}}</a></h3>
             <section class="content markdown">{{Html .Summary}}</section>
-            <p class="info clear">
-                <span class="share weibo inline-block"><i class="fa fa-weibo fa-lg"></i></span>{{if .User}}
+            <p class="info clear">{{if .User}}
                 <span class="author inline-block"><i class="fa fa-user"></i>{{.User.Nick}}</span>{{end}}{{if .TagString}}
                 <span class="tag inline-block"><i class="fa fa-tags"></i>标签：{{range .GetTags}}<a href="{{.Link}}">{{.Name}}</a>{{end}}</span>{{end}}
                 <a class="inline-block read right" href="{{.Link}}"><i class="fa fa-search"></i>继续阅读</a>

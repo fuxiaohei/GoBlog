@@ -2,8 +2,7 @@
     <article class="clear {{.Article.Status}}" id="article-{{.Article.Id}}">{{with .Article}}
         <h3 class="title"><a href="{{.Link}}" title="{{.Title}}">{{.Title}}</a></h3>
         <section class="content markdown">{{Html .Content}}</section>
-        <p class="info clear">
-            <span class="share weibo inline-block"><i class="fa fa-weibo fa-lg"></i></span>{{if .User}}
+        <p class="info clear">{{if .User}}
             <span class="author inline-block"><i class="fa fa-user"></i>{{.User.Nick}}</span>{{end}}
             <span class="time inline-block"><i class="fa fa-clock-o"></i>{{DateInt64 .CreateTime "MM.DD"}}</span>{{if .TagString}}
             <span class="tag inline-block"><i class="fa fa-tags"></i>{{range .GetTags}}<a href="{{.Link}}">{{.Name}}</a>{{end}}</span>{{end}}
