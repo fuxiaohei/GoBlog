@@ -32,7 +32,7 @@ func Cmd() {
 		return
 	}
 	// check app version
-	if cmd.CheckUpgrade(VERSION) {
+	if cmd.CheckUpgrade(VERSION, true) {
 		os.Exit(1)
 		return
 	}
@@ -49,5 +49,5 @@ func registerCmdHandler() {
 	App.Route("GET,DELETE", "/cmd/logs/", handler.Auth, handler.CmdLogs)
 	App.Get("/cmd/monitor/", handler.Auth, handler.CmdMonitor)
 	App.Route("GET,POST", "/cmd/theme/", handler.Auth, handler.CmdTheme)
-	App.Route("GET,POST","/cmd/reader/",handler.Auth,handler.CmdReader)
+	App.Route("GET,POST", "/cmd/reader/", handler.Auth, handler.CmdReader)
 }
