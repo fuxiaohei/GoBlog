@@ -37,10 +37,11 @@
                 <option value="1">允许</option>
             </select>
         </p>
-        <p class="submit text-right" id="article-submit">
-            <button class="btn btn-blue">保存文章</button>
-        </p>
     </div>
+    <p class="submit text-right" id="article-submit">
+        <span class="invalid lbl lbl-red hide" id="slug-invalid">固定链接由字母，数字和-组成</span>
+        <button class="btn btn-blue">保存文章</button>
+    </p>
 </form>
 <form class="form hide" id="attach-form" action="/admin/files/upload/" enctype="multipart/form-data" method="post">
     <input id="attach-upload" type="file" name="file"/>
@@ -64,13 +65,23 @@
                 hljs.highlightBlock(e);
             });
         });
-        $('#article-form').ajaxForm(function (json) {
-            if (json.res) {
-                alert("已保存");
-                window.location.href = "/admin/pages/";
-            } else {
-                alert(json.msg);
+        new FormValidator("article-form", [
+            {"name": "slug", "rules": "alpha_dash"}
+        ],function (errors, e) {
+            e.preventDefault();
+            $('.invalid').hide();
+            if (errors.length) {
+                $("#" + errors[0].id + "-invalid").removeClass("hide").show();
+                return;
             }
+            $('#article-form').ajaxSubmit(function (json) {
+                if (json.res) {
+                    alert("已保存");
+                    window.location.href = "/admin/pages/";
+                } else {
+                    alert(json.msg);
+                }
+            });
         });
         initUpload("#article-submit");
     });
