@@ -1,0 +1,28 @@
+<div id="article-sidebar" class="grid-1-5 right">
+    <div class="sidebar" id="pop-article-sidebar">
+        <h5 class="title">热评文章</h5>
+        <ul class="list">{{range .Popular}}
+            <li>
+                <a href="{{.Link}}" title="{{.Title}}">{{.Title}}</a>
+                <span class="pop-num lbl">{{.CommentNum}}</span>
+            </li>{{end}}
+        </ul>
+    </div>
+    <div class="sidebar" id="recent-comment-sidebar">
+        <h5 class="title">最新评论</h5>
+        <ul class="list">{{range .RecentComment}}
+            <li>
+                <a class="author lbl lbl-blue" href="{{.GetContent.Link}}#comment-{{.Id}}">{{.Author}}</a>
+                <span class="content">{{Html2str .Content}}</span>
+            </li>{{end}}
+        </ul>
+    </div>
+    <div class="sidebar" id="tags-sidebar">
+        <h5 class="title">文章标签</h5>
+        <ul class="list">{{range .Tags}}
+            <li class="inline-block">
+                <a class="author lbl lbl-green" href="{{.Link}}">{{.Name}}</a>
+            </li>{{end}}
+        </ul>
+    </div>
+</div>

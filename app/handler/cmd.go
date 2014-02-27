@@ -15,6 +15,7 @@ func CmdBackup(context *GoInk.Context) {
 		}
 		Json(context, true).Set("file", file).End()
 		context.Do("bakcup_success", file)
+		model.CreateMessage("backup", "[1]"+file)
 		return
 	}
 	if context.Method == "DELETE" {
@@ -68,5 +69,44 @@ func CmdMonitor(ctx *GoInk.Context) {
 	ctx.Render("admin/cmd/monitor", map[string]interface{}{
 		"Title": "系统监控",
 		"M":     cmd.ReadMemStats(),
+	})
+}
+
+func CmdTheme(ctx *GoInk.Context) {
+	if ctx.Method == "POST" {
+		change := ctx.String("cache")
+		if change != "" {
+			cmd.SetThemeCache(ctx, change == "true")
+			Json(ctx, true).End()
+			return
+		}
+		theme := ctx.String("theme")
+		if theme != "" {
+			model.SetSetting("site_theme", theme)
+			model.SyncSettings()
+			Json(ctx, true).End()
+			return
+		}
+		return
+	}
+	ctx.Layout("admin/cmd")
+	ctx.Render("admin/cmd/theme", map[string]interface{}{
+		"Title":        "主题",
+		"Themes":       cmd.GetThemes(ctx.App().Get("view_dir")),
+		"CurrentTheme": model.GetSetting("site_theme"),
+	})
+}
+
+func CmdReader(ctx *GoInk.Context) {
+	if ctx.Method == "POST" {
+		email := ctx.String("email")
+		model.RemoveReader(email)
+		Json(ctx, true).End()
+		return
+	}
+	ctx.Layout("admin/cmd")
+	ctx.Render("admin/cmd/reader", map[string]interface{}{
+		"Title":   "读者",
+		"Readers": model.GetReaders(),
 	})
 }

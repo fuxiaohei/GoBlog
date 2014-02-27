@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>{{if .Title}}{{.Title}} - {{end}}{{Setting "site_title"}}</title>
+    <meta name="keywords" content="{{Setting `site_keywords`}}"/>
+    <meta name="description" content="{{Setting `site_description`}}"/>
+    <meta name="generator" content="FxhGo Blog" />
+    <link rel="stylesheet" href="/static/css/saber.css"/>
+    <link rel="alternate" type="application/rss+xml" title="{{Setting `site_title`}} - RSS 2.0" href="/feed/"/>
+    <script src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+    <script src="/static/lib/jquery.form.min.js"></script>
+    <script src="/static/lib/marked.min.js"></script>
+</head>
+<body>
+<header id="header">
+    <div class="container clear">
+        <img src="{{Setting `c_home_avatar`}}" alt="site" id="header-img" class="left"/>
+        <h1 id="header-h" class="left"><a href="/">{{Setting "site_title"}}</a></h1>
+        <h4 id="header-sub" class="left">{{Setting "site_sub_title"}}</h4>
+        <nav id="nav" class="right">
+            <ul>{{range Navigator}}
+                <li class="inline-block"><a href="{{.Link}}" title="{{.Title}}">{{.Text}}</a></li>{{end}}
+            </ul>
+        </nav>
+    </div>
+</header>
+<div id="main" class="container grid clear relative">
+    {@Content}
+</div>
+<footer id="footer" class="text-center">
+    <div class="container clear">
+        <span class="left">Go © 2014 All rights reserved.</span>
+        <span class="right">
+            <a href="{{Setting `c_footer_github`}}" target="_blank">GitHub</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="/feed/">Feed</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            Proudly Powered by Fxh.Go.
+        </span>
+    </div>
+    <a id="go-top" href="#" class="lbl hide lbl-blue" title="回到顶部">Top</a>
+    {{Setting `c_footer_ga` | Html}}
+</footer>
+<script src="/static/js/home.js"></script>
+</body>
+</html>

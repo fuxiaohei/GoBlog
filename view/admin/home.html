@@ -21,7 +21,7 @@
             <div class="msg relative {{.Type}}">
                 <span class="time">{{DateInt64 .CreateTime "MM.DD HH:mm"}}</span>
                 <div class="data">{{Html .Data}}</div>
-                <a class="read absolute" href="/admin/message/read?id={{.Id}}" rel="{{.Id}}"><i class="fa fa-check"></i></a>
+                <a class="read absolute" href="/admin/message/read?id={{.Id}}" rel="{{.Id}}">隐藏</a>
             </div>{{end}}{{if lt (len .Messages) 1}}
             <p>没有新的活动信息</p>
             {{end}}
@@ -33,7 +33,8 @@
             <p>已经发布文章 <span class="lbl lbl-red">{{.Statis.Articles}}</span> 篇，
             页面 <span class="lbl lbl-red">{{.Statis.Pages}}</span> 个， <br/>
             收到评论 <span class="lbl lbl-blue">{{.Statis.Comments}}</span> 次，
-            上传 <span class="lbl lbl-green">{{.Statis.Files}}</span> 个附件</p>
+            上传 <span class="lbl lbl-green">{{.Statis.Files}}</span> 个附件，<br/>
+            评论者 <span class="lbl lbl-green">{{.Statis.Readers}}</span> 人</p>
             <p>当前程序版本：<strong>{{.Statis.Version}}</strong></p>
         </div>
         <div class="office">

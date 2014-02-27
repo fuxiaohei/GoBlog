@@ -5,7 +5,7 @@ A fast and simple blog engine with [GoInk](https://github.com/fuxiaohei/GoInk) f
 [![Build Status](https://drone.io/github.com/fuxiaohei/GoBlog/status.png)](https://drone.io/github.com/fuxiaohei/GoBlog/latest)
 [![GoWalker](http://b.repl.ca/v1/Go_Walker-API_Documentation-green.png)](http://gowalker.org/github.com/fuxiaohei/GoBlog)
 
-Current version is **0.2.0-beta** on 2014.02.09
+Current version is **0.2.5** on 2014.02.28
 
 Development board is in [Trello](https://trello.com/b/7AHrcQL8/fxh-go-with-goink).
 
@@ -77,7 +77,7 @@ Create issues or pull requests here.
 ### Products
 
 * [抛弃世俗之浮躁，留我钻研之刻苦](http://wuwen.org)
-* [FuXiaoHei.Net](http://fuxiaohei.net)
+* [FuXiaoHei.Me](http://fuxiaohei.me)
 
 ### Thanks
 

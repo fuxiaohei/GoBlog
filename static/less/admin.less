@@ -178,6 +178,9 @@
     .btn{
       margin-right: 16px;
     }
+    .invalid{
+      display: inline;
+    }
   }
   .file-progress{
     padding: 0 12px;
@@ -233,10 +236,10 @@
 #setting-custom-form{
   width: 1000px;
   input.key{
-    width: 250px;
+    width: 240px;
   }
   input.value{
-    width: 650px;
+    width: 640px;
   }
   .item{
     .bottom-line(12px);
@@ -244,6 +247,7 @@
   .del{
     margin-left: 12px;
     color: @red1;
+    font-size: 12px;
   }
   .tip{
     margin-left: 0;
@@ -307,12 +311,6 @@
     color: @black3;
     font-size: 12px;
   }
-  .c-reply{
-    color: @black3;
-    &:hover{
-      color: @black1;
-    }
-  }
   .c-author{
     font-size: 13px;
   }
@@ -336,6 +334,9 @@
     &:hover{
       color: @red3;
     }
+  }
+  .c-reply,.c-check,.c-del{
+    font-size: 12px;
   }
 }
 

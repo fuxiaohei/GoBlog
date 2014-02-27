@@ -1,0 +1,12 @@
+<div id="article-container" class="clear container960">
+    <article class="clear article-single relative" id="article-{{.Page.Id}}">{{with .Page}}
+        <div class="main clear">
+            <span class="inline-block lbl lbl-green views right text-center">{{.Hits}}</span>
+            <h3 class="title"><a href="{{.Link}}" title="{{.Title}}">{{.Title}}</a></h3>
+            <section class="content markdown">{{Html .Content}}</section>
+            <p class="info clear">
+                <span class="time-info">{{if .User}}<strong>{{.User.Nick}}</strong>&nbsp;&nbsp;&nbsp;{{end}}发表于&nbsp;&nbsp;&nbsp;{{DateInt64 .CreateTime "YYYY 年 MM 月 DD 日"}}</span>
+            </p>
+        </div>{{end}}
+    </article>
+</div>

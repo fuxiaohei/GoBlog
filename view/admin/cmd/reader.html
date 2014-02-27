@@ -1,0 +1,29 @@
+<header class="cmd-header clear">
+    <h1 class="cmd-title left">读者</h1>
+</header>
+<ul class="cmd-list" id="reader-list">
+    <li>
+        如果删除读者，不会影响读者已有的评论；但此后该读者的新评论需要审核。
+    </li>{{range .Readers}}
+    <li>
+        <a class="lbl lbl-blue author" href="{{.Url}}" target="_blank">{{.Author}}</a>
+        <span class="email">{{.Email}}</span>
+        <span class="lbl lbl-red comments">{{.Comments}}</span>
+        <a class="del" href="#">删除</a>
+    </li>{{end}}
+</ul>
+<script>
+    $(function(){
+        $('.del').on("click", function () {
+            var $this = $(this);
+            var email = $this.parent().find('.email').text();
+            console.log(email);
+            $.post("/cmd/reader/", {"email": email}, function (json) {
+                if (json.res) {
+                    $this.parent().remove();
+                }
+            });
+            return false;
+        });
+    });
+</script>

@@ -6,7 +6,7 @@
         <span class="name inline-block">{{.Name}}</span>
         <span class="time inline-block">{{DateInt64 .CreateTime "MM.DD HH:mm"}}</span>
         <pre class="text">{{.Text}}</pre>
-        <a class="remove absolute" href="/cmd/logs/?file={{.Name}}"><i class="fa fa-times"></i></a>
+        <a class="remove absolute" href="/cmd/logs/?file={{.Name}}">删除</a>
     </li>{{end}}
 </ul>
 <script>

@@ -2,7 +2,7 @@ package model
 
 import (
 	"github.com/fuxiaohei/GoBlog/app/utils"
-	"time"
+	"strings"
 )
 
 var (
@@ -14,6 +14,7 @@ var (
 func init() {
 	messageGenerator = make(map[string]func(v interface{}) string)
 	messageGenerator["comment"] = generateCommentMessage
+	messageGenerator["backup"] = generateBackupMessage
 }
 
 type Message struct {
@@ -134,11 +135,18 @@ func generateCommentMessage(co interface{}) string {
 	return s
 }
 
-func StartMessageTimer() {
-	time.AfterFunc(time.Duration(90)*time.Minute, func() {
+func generateBackupMessage(co interface{}) string {
+	str := co.(string)
+	if strings.HasPrefix(str, "[0]") {
+		return "备份全站失败: " + strings.TrimPrefix(str, "[0]") + "."
+	}
+	return "备份全站到 " + strings.TrimPrefix(str, "[1]") + " 成功."
+}
+
+func startMessageTimer() {
+	SetTimerFunc("message-sync", 9, func() {
 		println("write messages in 1.5 hour timer")
 		RecycleMessages()
 		SyncMessages()
-		StartMessageTimer()
 	})
 }

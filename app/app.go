@@ -18,7 +18,9 @@ import (
 )
 
 var (
-	VERSION          = 20140209
+	// APP VERSION, as date version
+	VERSION = 20140228
+	// Global GoInk application
 	App              *GoInk.App
 	staticFileSuffix = ".css,.js,.jpg,.jpeg,.png,.gif,.ico,.xml,.zip,.txt,.html,.otf,.svg,.eot,.woff,.ttf,.doc,.ppt,.xls,.docx,.pptx,.xlsx,.xsl"
 	uploadFileSuffix = ".jpg,.png,.gif,.zip,.txt,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
@@ -32,6 +34,7 @@ func init() {
 	App.Config().StringOr("app.static_dir", "static")
 	App.Config().StringOr("app.log_dir", "tmp/log")
 	os.MkdirAll(App.Get("log_dir"), os.ModePerm)
+	os.MkdirAll("tmp/data", os.ModePerm)
 
 	App.Config().IntOr("app.upload_size", 1024*1024*10)
 	App.Config().StringOr("app.upload_files", uploadFileSuffix)
@@ -135,6 +138,8 @@ func catchExit() {
 	}
 }
 
+// Init starts Fxh.Go application preparation.
+// Load models and plugins, update views.
 func Init() {
 
 	// init storage
@@ -158,48 +163,9 @@ func Init() {
 	App.View().FuncMap["Setting"] = model.GetSetting
 	App.View().FuncMap["Navigator"] = model.GetNavigators
 	App.View().FuncMap["Md2html"] = utils.Markdown2HtmlTemplate
+	App.View().IsCache = (model.GetSetting("theme_cache") == "true")
 
 	println("app version @ " + strconv.Itoa(model.GetVersion().Version))
-}
-
-func registerAdminHandler() {
-	// add admin handlers
-	App.Get("/admin/", handler.Auth, handler.Admin)
-
-	App.Route("GET,POST", "/admin/profile/", handler.Auth, handler.AdminProfile)
-
-	App.Route("GET,POST", "/admin/password/", handler.Auth, handler.AdminPassword)
-
-	App.Route("GET,POST", "/admin/article/write/", handler.Auth, handler.ArticleWrite)
-	App.Get("/admin/articles/", handler.Auth, handler.AdminArticle)
-	App.Route("GET,POST,DELETE", "/admin/article/:id/", handler.Auth, handler.ArticleEdit)
-
-	App.Route("GET,POST", "/admin/page/write/", handler.Auth, handler.PageWrite)
-	App.Get("/admin/pages/", handler.Auth, handler.AdminPage)
-	App.Route("GET,POST,DELETE", "/admin/page/:id/", handler.Auth, handler.PageEdit)
-
-	App.Route("GET,POST,PUT,DELETE", "/admin/comments/", handler.Auth, handler.AdminComments)
-
-	App.Route("GET,POST", "/admin/setting/", handler.Auth, handler.AdminSetting)
-	App.Post("/admin/setting/custom/", handler.Auth, handler.CustomSetting)
-	App.Post("/admin/setting/nav/", handler.Auth, handler.NavigatorSetting)
-
-	App.Route("GET,DELETE", "/admin/files/", handler.Auth, handler.AdminFiles)
-	App.Post("/admin/files/upload/", handler.Auth, handler.FileUpload)
-
-	App.Route("GET,POST", "/admin/plugins/", handler.Auth, handler.AdminPlugin)
-	App.Route("GET,POST", "/admin/plugins/:plugin_key/", handler.Auth, handler.PluginSetting)
-
-	App.Post("/admin/message/read/", handler.Auth, handler.AdminMessageRead)
-}
-
-func registerCmdHandler() {
-	App.Route("GET,POST,DELETE", "/cmd/backup/", handler.Auth, handler.CmdBackup)
-	App.Get("/cmd/backup/file/", handler.Auth, handler.CmdBackupFile)
-
-	App.Route("GET,POST,DELETE", "/cmd/message/", handler.Auth, handler.CmdMessage)
-	App.Route("GET,DELETE", "/cmd/logs/", handler.Auth, handler.CmdLogs)
-	App.Get("/cmd/monitor/", handler.Auth, handler.CmdMonitor)
 }
 
 func registerHomeHandler() {
@@ -210,6 +176,8 @@ func registerHomeHandler() {
 	App.Get("/page/:id/:slug", handler.Page)
 	App.Get("/p/:page/", handler.Home)
 	App.Post("/comment/:id/", handler.Comment)
+	App.Get("/tag/:tag/", handler.TagArticles)
+	App.Get("/tag/:tag/p/:page/", handler.TagArticles)
 
 	App.Get("/feed/", handler.Rss)
 	App.Get("/sitemap", handler.SiteMap)
@@ -218,6 +186,7 @@ func registerHomeHandler() {
 	App.Get("/", handler.Home)
 }
 
+// Run begins Fxh.Go http server.
 func Run() {
 
 	registerAdminHandler()

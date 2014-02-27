@@ -34,7 +34,7 @@
 <footer id="footer" class="text-center">
     <div class="container960 clear">
         <span class="left">Go © 2014 All rights reserved.</span>
-        <span class="right">Proudly Powered by Fxh.Go.</span>
+        <span class="right"><a href="/feed/">RSS</a> . Proudly Powered by <a href="https://github.com/fuxiaohei/GoBlog" target="_blank">Fxh.Go</a>.</span>
     </div>
     <a id="go-top" href="#" class="lbl hide lbl-blue" title="回到顶部"><i class="fa fa-arrow-up fa-lg"></i></a>
     {{Setting `c_footer_ga` | Html}}

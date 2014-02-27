@@ -8,8 +8,18 @@
   .bottom-line(12px);
 }
 
-#backup-btn{
+#backup-btn,#theme-cache-btn{
   margin: 10px 0 0 30px;
+  min-width: 0;
+  padding: 0 2em;
+}
+
+#theme-cache-btn{
+  .btn-red;
+}
+
+#theme-cache-btn.true{
+  .btn-green;
 }
 
 .cmd-list li{
@@ -93,5 +103,36 @@
     top:0;
     right:12px;
     color: @red1;
+  }
+}
+
+#theme-list{
+  span{
+    margin-left: 12px;
+  }
+  span.file{
+    color: @blue1;
+  }
+  span.error-file{
+    color: @red2;
+  }
+  h5{
+    cursor: pointer;
+  }
+}
+
+#reader-list{
+  li{
+    > *{
+      margin-right: 18px;
+    }
+  }
+  .email{
+    color: @black3;
+  }
+  .comments{
+    font-family:Verdana, Tahoma, '微软雅黑', '宋体', sans-serif;
+    font-size: 12px;
+    padding: 2px 6px;
   }
 }

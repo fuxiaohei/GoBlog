@@ -1,0 +1,23 @@
+<div id="article-container" class="clear grid-3-4 left">{{if .Tag}}
+    <div class="tag-banner">标签：{{.Tag}}</div>{{end}}{{range .Articles}}
+    <article class="clear {{.Status}}" id="article-{{.Id}}">
+        <div class="meta left text-center relative">
+            <p class="lbl lbl-red comments"><a href="{{.Link}}#comment">{{.CommentNum}}</a></p>
+            <p class="lbl lbl-green views absolute">{{.Hits}}</p>
+        </div>
+        <div class="main">
+            <h3 class="title"><a href="{{.Link}}" title="{{.Title}}">{{.Title}}</a></h3>
+            <section class="content markdown">{{Html .Summary}}</section>
+            <p class="info clear">
+                <span class="time-info">{{if .User}}<strong>{{.User.Nick}}</strong>&nbsp;&nbsp;&nbsp;{{end}}发表于&nbsp;&nbsp;&nbsp;{{DateInt64 .CreateTime "YYYY 年 MM 月 DD 日"}}</span>
+                <span class="tag">标签：{{range .GetTags}}<a href="{{.Link}}">{{.Name}}</a>{{end}}</span>
+                <a class="inline-block read right" href="{{.Link}}">继续阅读</a>
+            </p>
+        </div>
+    </article>{{end}}
+    <div class="pager text-center" id="article-pager">
+        {{if .Pager.IsNext}}<a href="/p/{{.Pager.Next}}/" class="item left">较旧的文章</a>{{end}}
+        {{if .Pager.IsPrev}}<a href="/p/{{.Pager.Prev}}/" class="item right">较新的文章</a>{{end}}
+    </div>
+</div>
+{{Html .SidebarHtml}}

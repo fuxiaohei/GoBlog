@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/Unknwon/cae/zip"
+	"github.com/fuxiaohei/GoBlog/app/model"
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"github.com/fuxiaohei/GoInk"
 	"os"
@@ -12,8 +13,16 @@ import (
 
 var backupDir = "backup"
 
+func init() {
+	// close zip terminal output
+	zip.Verbose = false
+}
+
+// DoBackup backups whole files to zip archive.
+// If withData is false, it compresses static files to zip archive without data files, config files and install lock file.
 func DoBackup(app *GoInk.App, withData bool) (string, error) {
 	os.Mkdir(backupDir, os.ModePerm)
+	// create zip file name from time unix
 	filename := path.Join(backupDir, utils.DateTime(time.Now(), "YYYYMMDDHHmmss"))
 	if withData {
 		filename += ".zip"
@@ -26,6 +35,7 @@ func DoBackup(app *GoInk.App, withData bool) (string, error) {
 	}
 	root, _ := os.Getwd()
 	if withData {
+		// if with data, add install lock file and config file
 		lockFile := path.Join(root, "install.lock")
 		if utils.IsFile(lockFile) {
 			z.AddFile("install.lock", lockFile)
@@ -41,6 +51,7 @@ func DoBackup(app *GoInk.App, withData bool) (string, error) {
 	z.AddDir("static/lib", path.Join(root, "static", "lib"))
 	z.AddFile("static/favicon.ico", path.Join(root, "static", "favicon.ico"))
 	if withData {
+		// if with data, backup data files and uploaded files
 		z.AddDir("data", path.Join(root, "data"))
 		z.AddDir("static/upload", path.Join(root, "static", "upload"))
 	}
@@ -53,15 +64,18 @@ func DoBackup(app *GoInk.App, withData bool) (string, error) {
 	return filename, nil
 }
 
+// RemoveBackupFile removes backup zip file with filename(not filepath).
 func RemoveBackupFile(file string) {
 	file = path.Join(backupDir, file)
 	os.Remove(file)
 }
 
+// GetBackupFileAbsPath returns backup zip absolute filepath by filename.
 func GetBackupFileAbsPath(name string) string {
 	return path.Join(backupDir, name)
 }
 
+// GetBackupFile returns fileinfo slice of all backup files.
 func GetBackupFiles() ([]os.FileInfo, error) {
 	fi := make([]os.FileInfo, 0)
 	e := filepath.Walk(backupDir, func(_ string, info os.FileInfo, _ error) error {
@@ -74,4 +88,17 @@ func GetBackupFiles() ([]os.FileInfo, error) {
 		return nil
 	})
 	return fi, e
+}
+
+// StartBackupTimer starts backup operation timer for auto backup stuff.
+func StartBackupTimer(app *GoInk.App, t int) {
+	model.SetTimerFunc("backup-data", 144, func() {
+		filename, e := DoBackup(app, true)
+		if e != nil {
+			model.CreateMessage("backup", "[0]"+e.Error())
+		} else {
+			model.CreateMessage("backup", "[1]"+filename)
+		}
+		println("backup files in", t, "hours")
+	})
 }

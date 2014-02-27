@@ -1,5 +1,6 @@
 <ul id="setting-nav" class="container text-center">
     <li><a href="#general">基本</a></li>
+    <li><a href="#content">内容</a></li>
     <li><a href="#nav">导航</a></li>
     <li><a href="#custom">自定义</a></li>
 </ul>
@@ -25,15 +26,23 @@
             <label for="site-desc">Meta站点介绍</label>
             <input id="site-desc" class="ipt" type="text" name="site_description" value="{{Setting `site_description`}}"/>
         </p>
+        <p>
+            <label>&nbsp;</label>
+            <button class="btn btn-blue">保存</button>
+        </p>
+    </form>
+    <form id="setting-content-form" class="setting-form form form-align setting-panel" action="/admin/setting/" method="post">
         <p class="item">
             <label for="article-size">单页文章列表数</label>
-            <input id="article-size" class="ipt" type="number" name="article_size" value="{{Setting `article_size`}}" max="10" min="3"/>
+            <input id="article-size" class="ipt" type="number" name="article_size" value="{{Setting `article_size`}}" max="10" min="3" required="required"/>
         </p>
         <p class="item">
-            <label for="site-theme">主题目录名</label>
-            <input id="site-theme" class="ipt" type="text" name="site_theme" value="{{Setting `site_theme`}}"/>
-            <span class="tip block">主题即指向的模板目录，具体内容请参考 default 目录（即 default 主题）</span>
-            <input type="hidden" name="site_theme_def" value="default"/>
+            <label for="popular-size">热评文章列表数</label>
+            <input id="popular-size" class="ipt" type="number" name="popular_size" value="{{Setting `popular_size`}}" max="10" min="3"  required="required"/>
+        </p>
+        <p class="item">
+            <label for="recent-comment-size">最近评论列表数</label>
+            <input id="recent-comment-size" class="ipt" type="number" name="recent_comment_size" value="{{Setting `recent_comment_size`}}" max="10" min="3" required="required"/>
         </p>
         <p class="item">
             <label for="go-markdown">Go渲染Markdown</label>
@@ -52,7 +61,7 @@
             <span class="label">文本</span><input class="ipt text" type="text" name="text" value="{{.Text}}" required="required"/>&nbsp;&nbsp;&nbsp;&nbsp;
             <span class="label">标题</span><input class="ipt title" type="text" name="title" value="{{.Title}}"/>&nbsp;&nbsp;&nbsp;&nbsp;
             <span class="label">链接</span><input class="ipt link" type="text" name="link" value="{{.Link}}" required="required"/>&nbsp;&nbsp;&nbsp;&nbsp;
-            <a class="del" href="#"><i class="fa fa-times"></i></a>
+            <a class="del" href="#">删除</a>
         </p>{{end}}
         <p>
             <button class="btn btn-blue">保存</button>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -64,7 +73,7 @@
                 <span class="label">文本</span><input class="ipt text" type="text" name="text" value="" required="required"/>&nbsp;&nbsp;&nbsp;&nbsp;
                 <span class="label">标题</span><input class="ipt title" type="text" name="title" value=""/>&nbsp;&nbsp;&nbsp;&nbsp;
                 <span class="label">链接</span><input class="ipt link" type="text" name="link" value="" required="required"/>&nbsp;&nbsp;&nbsp;&nbsp;
-                <a class="del" href="#"><i class="fa fa-times"></i></a>
+                <a class="del" href="#">删除</a>
             </p>
         </script>
     </form>
@@ -72,7 +81,7 @@
         <p class="item">
             <input class="ipt key" type="text" name="key" value="{{$k}}"/>&nbsp;&nbsp;&nbsp;&nbsp;
             <input name="value" class="ipt value" type="text" value="{{$v}}"/>
-            <a class="del" href="#"><i class="fa fa-times"></i></a>
+            <a class="del" href="#">删除</a>
         </p>{{end}}
         <p>
             <button class="btn btn-blue">保存</button>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -83,7 +92,7 @@
             <p class="item">
                 <input class="ipt key" type="text" name="key" placeholder="字段名"/>&nbsp;&nbsp;&nbsp;&nbsp;
                 <input name="value" class="ipt value" type="text" placeholder="字段值"/>
-                <a class="del" href="#"><i class="fa fa-times"></i></a>
+                <a class="del" href="#">删除</a>
             </p>
         </script>
     </form>

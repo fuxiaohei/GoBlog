@@ -11,7 +11,10 @@ import (
 
 var (
 	appVersion int
-	Storage    *jsonStorage
+	// global data storage instance
+	Storage *jsonStorage
+	// global tmp data storage instance. Temp data are generated for special usages, will not backup.
+	TmpStorage *jsonStorage
 )
 
 type jsonStorage struct {
@@ -20,12 +23,6 @@ type jsonStorage struct {
 
 func (jss *jsonStorage) Init(dir string) {
 	jss.dir = dir
-	if !jss.Has("version") {
-		os.Mkdir(jss.dir, os.ModePerm)
-		os.Mkdir(path.Join(jss.dir, "content"), os.ModePerm)
-		os.Mkdir(path.Join(jss.dir, "plugin"), os.ModePerm)
-		writeDefaultData()
-	}
 }
 
 func (jss *jsonStorage) Has(key string) bool {
@@ -212,6 +209,13 @@ func writeDefaultData() {
 	n3.Title = "好友"
 	n3.Link = "/friends.html"
 	Storage.Set("navigators", []*navItem{n, n2, n3})
+
+	// write default tmp data
+	writeDefaultTmpData()
+}
+
+func writeDefaultTmpData() {
+	TmpStorage.Set("contents", make(map[string][]int))
 }
 
 func loadAllData() {
@@ -227,26 +231,45 @@ func loadAllData() {
 	LoadFiles()
 }
 
+// TimeInc returns time step value devided by d int with time unix stamp.
 func (jss *jsonStorage) TimeInc(d int) int {
 	return int(utils.Now())%d + 1
 }
 
+// Init does model initialization.
+// If first run, write default data.
+// v means app.Version number. It's needed for version data.
 func Init(v int) {
 	appVersion = v
 	Storage = new(jsonStorage)
 	Storage.Init("data")
+	TmpStorage = new(jsonStorage)
+	TmpStorage.dir = "tmp/data"
+	if !Storage.Has("version") {
+		os.Mkdir(Storage.dir, os.ModePerm)
+		os.Mkdir(path.Join(Storage.dir, "content"), os.ModePerm)
+		os.Mkdir(path.Join(Storage.dir, "plugin"), os.ModePerm)
+		writeDefaultData()
+	}
 }
 
+// All loads all data from storage to memory.
+// Start timers for content, comment and message.
 func All() {
 	loadAllData()
-	// content timer, save visit hits and comment numbers
-	StartContentsTimer()
-	// comment timer, recycle invalid comments whose parents or contents are removed
-	StartCommentsTimer()
-	// message timer, recycle old messages and save read status
-	StartMessageTimer()
+	// generate indexes
+	SyncIndexes()
+	// start model timer, do all timer stuffs
+	StartModelTimer()
 }
 
+func SyncIndexes() {
+	// generate indexes
+	generatePublishArticleIndex()
+	generateContentTmpIndexes()
+}
+
+// SyncAll writes all current memory data to storage files.
 func SyncAll() {
 	SyncContents()
 	SyncMessages()
