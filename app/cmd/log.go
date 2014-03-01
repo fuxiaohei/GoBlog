@@ -13,6 +13,7 @@ type logItem struct {
 	Text       string
 }
 
+// GetLogs scans all log files in log dir and returns all log items.
 func GetLogs(app *GoInk.App) []*logItem {
 	dir := app.Get("log_dir")
 	logs := make([]*logItem, 0)
@@ -40,6 +41,7 @@ func GetLogs(app *GoInk.App) []*logItem {
 	return logs
 }
 
+// RemoveLogFile removes log file by file string.
 func RemoveLogFile(app *GoInk.App, file string) {
 	f := filepath.Join(app.Get("log_dir"), file)
 	os.Remove(f)

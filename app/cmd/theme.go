@@ -16,6 +16,8 @@ type themeItem struct {
 	Layout     []string
 }
 
+// SetThemeCache sets theme cache setting, true or false.
+// It affects immediately.
 func SetThemeCache(ctx *GoInk.Context, cache bool) {
 	ctx.App().View().NoCache()
 	ctx.App().View().IsCache = cache
@@ -27,6 +29,7 @@ func SetThemeCache(ctx *GoInk.Context, cache bool) {
 	model.SyncSettings()
 }
 
+// GetThemes return a themeItem by parsed files in given dir.
 func GetThemes(dir string) map[string]*themeItem {
 	m := make(map[string]*themeItem)
 	files, e := ioutil.ReadDir(dir)

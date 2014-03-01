@@ -17,6 +17,8 @@ func SetUpgradeScript(v int, script func(app *GoInk.App) bool) {
 	upgradeScript[v] = script
 }
 
+// CheckUpgrade checks app version and current data version.
+// If app version is ahead, return true, need upgrade.
 func CheckUpgrade(v int, print bool) bool {
 	model.Init(v)
 	appV := model.GetVersion()
@@ -27,6 +29,7 @@ func CheckUpgrade(v int, print bool) bool {
 	return b
 }
 
+// DoUpgrade does all upgrade scripts by given app version.
 func DoUpgrade(v int, app *GoInk.App) {
 	if !CheckUpgrade(v, false) {
 		println("app version @", v, "is updated")
@@ -34,11 +37,13 @@ func DoUpgrade(v int, app *GoInk.App) {
 	}
 	oldVersion := model.GetVersion().Version
 	scriptIndex := []int{}
+	// load all upgrade scripts if version is less
 	for vr, _ := range upgradeScript {
 		if vr <= v && vr > oldVersion {
 			scriptIndex = append(scriptIndex, vr)
 		}
 	}
+	// sort scripts and run in order
 	sort.Sort(sort.IntSlice(scriptIndex))
 	for _, cv := range scriptIndex {
 		upgradeScript[cv](app)

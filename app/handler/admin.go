@@ -9,6 +9,7 @@ import (
 	"strings"
 )
 
+// Admin is admin dashboard handler, pattern /admin/.
 func Admin(context *GoInk.Context) {
 	uid, _ := strconv.Atoi(context.Cookie("token-user"))
 	user := model.GetUserById(uid)
@@ -21,11 +22,13 @@ func Admin(context *GoInk.Context) {
 	})
 }
 
+// AdminProfile is user profile admin handler, pattern /admin/profile/.
 func AdminProfile(context *GoInk.Context) {
 	uid, _ := strconv.Atoi(context.Cookie("token-user"))
 	user := model.GetUserById(uid)
 	if context.Method == "POST" {
 		data := context.Input()
+		// check email unique
 		if !user.ChangeEmail(data["email"]) {
 			Json(context, false).Set("msg", "邮箱与别的用户重复").End()
 			return
@@ -37,8 +40,10 @@ func AdminProfile(context *GoInk.Context) {
 		user.Nick = data["nick"]
 		user.Bio = data["bio"]
 		Json(context, true).End()
-		go model.SyncUsers()
-		go model.UpdateCommentAdmin(user)
+		go func() {
+			model.SyncUsers()
+			model.UpdateCommentAdmin(user)
+		}()
 		context.Do("profile_update", user)
 		return
 	}
@@ -49,6 +54,7 @@ func AdminProfile(context *GoInk.Context) {
 	})
 }
 
+// AdminPassword is changing password handler, pattern /admin/password/.
 func AdminPassword(context *GoInk.Context) {
 	if context.Method == "POST" {
 		uid, _ := strconv.Atoi(context.Cookie("token-user"))
@@ -70,6 +76,7 @@ func AdminPassword(context *GoInk.Context) {
 	})
 }
 
+// AdminArticle is admin article list page, pattern /admin/articles/.
 func AdminArticle(context *GoInk.Context) {
 	articles, pager := model.GetArticleList(context.Int("page"), 10)
 	context.Layout("admin/admin")
@@ -80,6 +87,7 @@ func AdminArticle(context *GoInk.Context) {
 	})
 }
 
+// ArticleWrite is article writing page, pattern /admin/article/write/.
 func ArticleWrite(context *GoInk.Context) {
 	if context.Method == "POST" {
 		c := new(model.Content)
@@ -116,6 +124,7 @@ func ArticleWrite(context *GoInk.Context) {
 	})
 }
 
+// ArticleEdit is article editing page, pattern /admin/article/edit/.
 func ArticleEdit(context *GoInk.Context) {
 	id, _ := strconv.Atoi(context.Param("id"))
 	c := model.GetContentById(id)
@@ -156,6 +165,7 @@ func ArticleEdit(context *GoInk.Context) {
 	})
 }
 
+// PageWrite is page writing page , pattern /admin/page/write/.
 func PageWrite(context *GoInk.Context) {
 	if context.Method == "POST" {
 		c := new(model.Content)
@@ -192,6 +202,7 @@ func PageWrite(context *GoInk.Context) {
 	})
 }
 
+// AdminPage is admin page list handler, pattern /admin/pages/.
 func AdminPage(context *GoInk.Context) {
 	pages, pager := model.GetPageList(context.Int("page"), 10)
 	context.Layout("admin/admin")
@@ -202,6 +213,7 @@ func AdminPage(context *GoInk.Context) {
 	})
 }
 
+// PageEdit is page editing handler, pattern /admin/page/edit/.
 func PageEdit(context *GoInk.Context) {
 	id, _ := strconv.Atoi(context.Param("id"))
 	c := model.GetContentById(id)
@@ -242,11 +254,13 @@ func PageEdit(context *GoInk.Context) {
 	})
 }
 
+// AdminSetting is setting page, pattern /admin/setting/.
 func AdminSetting(context *GoInk.Context) {
 	if context.Method == "POST" {
 		data := context.Input()
 		for k, v := range data {
 			if v == "" {
+				// use def suffixed value to fill empty value
 				if data[k+"_def"] != "" {
 					v = data[k+"_def"]
 				}
@@ -266,6 +280,7 @@ func AdminSetting(context *GoInk.Context) {
 	})
 }
 
+// CustomSetting is custom setting saving post handler, pattern /admin/setting/custom/.
 func CustomSetting(context *GoInk.Context) {
 	keys := context.Strings("key")
 	values := context.Strings("value")
@@ -281,6 +296,7 @@ func CustomSetting(context *GoInk.Context) {
 	return
 }
 
+// NavigatorSetting is navigator setting saving post handler, pattern /admin/setting/navigator/.
 func NavigatorSetting(context *GoInk.Context) {
 	order := context.Strings("order")
 	text := context.Strings("text")
@@ -292,7 +308,9 @@ func NavigatorSetting(context *GoInk.Context) {
 	return
 }
 
+// AdminComments is admin comment list and operations page, pattern /admin/comments/.
 func AdminComments(context *GoInk.Context) {
+	// delete comment
 	if context.Method == "DELETE" {
 		id := context.Int("id")
 		cmt := model.GetCommentById(id)
@@ -301,6 +319,7 @@ func AdminComments(context *GoInk.Context) {
 		context.Do("comment_delete", id)
 		return
 	}
+	// change comment status
 	if context.Method == "PUT" {
 		id := context.Int("id")
 		cmt2 := model.GetCommentById(id)
@@ -311,6 +330,7 @@ func AdminComments(context *GoInk.Context) {
 		context.Do("comment_change_status", cmt2)
 		return
 	}
+	// reply comment
 	if context.Method == "POST" {
 		// get required data
 		pid := context.Int("pid")
@@ -344,7 +364,9 @@ func AdminComments(context *GoInk.Context) {
 	})
 }
 
+// AdminPlugin is plugin list and operation page, pattern /admin/plugins/.
 func AdminPlugin(context *GoInk.Context) {
+	// activate or deactivate plugin
 	if context.Method == "POST" {
 		action := context.String("action")
 		if action == "" {
@@ -376,6 +398,7 @@ func AdminPlugin(context *GoInk.Context) {
 	})
 }
 
+// PluginSetting is plugin setting showing and saving handler, pattern /admin/plugins/:plugin_name/.
 func PluginSetting(context *GoInk.Context) {
 	key := context.Param("plugin_key")
 	if key == "" {
@@ -400,6 +423,7 @@ func PluginSetting(context *GoInk.Context) {
 	})
 }
 
+// AdminMessageRead is message read status saving post handler, pattern /admin/message/read/.
 func AdminMessageRead(context *GoInk.Context) {
 	id := context.Int("id")
 	if id < 0 {

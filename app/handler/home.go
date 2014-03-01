@@ -9,6 +9,7 @@ import (
 	"strings"
 )
 
+// Login is login page handler, pattern /login/.
 func Login(context *GoInk.Context) {
 	if context.Method == "POST" {
 		data := context.Input()
@@ -36,6 +37,7 @@ func Login(context *GoInk.Context) {
 	context.Render("admin/login", nil)
 }
 
+// Auth is authorization checking handler, use for middleware.
 func Auth(context *GoInk.Context) {
 	tokenValue := context.Cookie("token-value")
 	token := model.GetTokenByValue(tokenValue)
@@ -51,12 +53,14 @@ func Auth(context *GoInk.Context) {
 	}
 }
 
+// Logout is safely log out page, pattern /logout/.
 func Logout(context *GoInk.Context) {
 	context.Cookie("token-user", "", "-3600")
 	context.Cookie("token-value", "", "-3600")
 	context.Redirect("/login/")
 }
 
+// TagArticles is tag article list page, pattern /tag/:tag_name/.
 func TagArticles(ctx *GoInk.Context) {
 	ctx.Layout("home")
 	page, _ := strconv.Atoi(ctx.Param("page"))
@@ -76,6 +80,7 @@ func TagArticles(ctx *GoInk.Context) {
 	})
 }
 
+// Home is home page handler, pattern /.
 func Home(context *GoInk.Context) {
 	context.Layout("home")
 	page, _ := strconv.Atoi(context.Param("page"))
@@ -91,6 +96,7 @@ func Home(context *GoInk.Context) {
 	Theme(context).Layout("home").Render("index", data)
 }
 
+// Article is single article page, pattern /article/:article_id/:article_slug.
 func Article(context *GoInk.Context) {
 	id, _ := strconv.Atoi(context.Param("id"))
 	slug := context.Param("slug")
@@ -111,6 +117,7 @@ func Article(context *GoInk.Context) {
 	})
 }
 
+// Page is single page showing page, pattern /page/:page_id/:page_slug.
 func Page(context *GoInk.Context) {
 	id, _ := strconv.Atoi(context.Param("id"))
 	slug := context.Param("slug")
@@ -131,6 +138,7 @@ func Page(context *GoInk.Context) {
 	})
 }
 
+// TopPage is top level page handler, pattern /:page_slug.
 func TopPage(context *GoInk.Context) {
 	slug := context.Param("slug")
 	page := model.GetContentBySlug(slug)
@@ -149,6 +157,7 @@ func TopPage(context *GoInk.Context) {
 	context.Redirect("/")
 }
 
+// Comment is ajax comment post handler, pattern /comment/:content_id/.
 func Comment(context *GoInk.Context) {
 	cid, _ := strconv.Atoi(context.Param("id"))
 	if cid < 1 {

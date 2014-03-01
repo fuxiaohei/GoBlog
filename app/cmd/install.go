@@ -15,11 +15,15 @@ var (
 	installLockFile = "install.lock"
 )
 
+// CheckInstall checks install.lock existing.
+// If install.lock, return true.
 func CheckInstall() bool {
 	_, e := os.Stat(installLockFile)
 	return e == nil
 }
 
+// ExtractBundlesBytes extracts bundle zip bytes to file.
+// When installing or upgrading, app call this method.
 func ExtractBundleBytes() {
 	// origin from https://github.com/wendal/gor/blob/master/gor/gor.go
 	decoder := base64.NewDecoder(base64.StdEncoding, bytes.NewBufferString(zipBytes))
@@ -38,12 +42,15 @@ func ExtractBundleBytes() {
 	}()
 }
 
+// DoInstall installs app with zip data and install.lock.
 func DoInstall() {
 	ExtractBundleBytes()
 	ioutil.WriteFile(installLockFile, []byte(fmt.Sprint(utils.Now())), os.ModePerm)
 	println("install success")
 }
 
+// DoUpdateZipBytes updates zip file bytes to go source code.
+// Then go build new app for deployment.
 func DoUpdateZipBytes(file string) error {
 	// copy from https://github.com/wendal/gor/blob/master/gor/gor.go
 	bytes, _ := ioutil.ReadFile(file)

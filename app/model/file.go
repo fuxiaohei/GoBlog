@@ -12,6 +12,7 @@ var (
 	fileMaxId int
 )
 
+// File struct contains file name, type and upload time data.
 type File struct {
 	Id          int
 	Name        string
@@ -25,6 +26,7 @@ type File struct {
 	Hits        int
 }
 
+// CreateFile saves a file instance to json storage.
 func CreateFile(f *File) *File {
 	fileMaxId += Storage.TimeInc(3)
 	f.Id = fileMaxId
@@ -36,6 +38,7 @@ func CreateFile(f *File) *File {
 	return f
 }
 
+// CreateFilePath generates a file path for new uploading file.
 func CreateFilePath(dir string, f *File) string {
 	os.MkdirAll(dir, os.ModePerm)
 	name := utils.DateInt64(utils.Now(), "YYYYMMDDHHmmss")
@@ -43,6 +46,7 @@ func CreateFilePath(dir string, f *File) string {
 	return path.Join(dir, name)
 }
 
+// GetFileList returns a uploaded file instance list with page and size int.
 func GetFileList(page, size int) ([]*File, *utils.Pager) {
 	pager := utils.NewPager(page, size, len(files))
 	f := make([]*File, 0)
@@ -55,6 +59,7 @@ func GetFileList(page, size int) ([]*File, *utils.Pager) {
 	return f, pager
 }
 
+// RemoveFile removes file by id.
 func RemoveFile(id int) {
 	for i, f2 := range files {
 		if id == f2.Id {
@@ -65,10 +70,12 @@ func RemoveFile(id int) {
 	go SyncFiles()
 }
 
+// SyncFiles saves all files data to json storage.
 func SyncFiles() {
 	Storage.Set("files", files)
 }
 
+// LoadFiles loads all files data from json storage.
 func LoadFiles() {
 	files = make([]*File, 0)
 	fileMaxId = 0

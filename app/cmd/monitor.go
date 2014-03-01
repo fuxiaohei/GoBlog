@@ -18,6 +18,8 @@ type monitorStats struct {
 	LastGcTime   string
 }
 
+// ReadMemStats returns monitor status data.
+// It contains number of goroutines, allocated memory, total memory , heap memory, malloc memory and last gc time.
 func ReadMemStats() *monitorStats {
 	m := new(runtime.MemStats)
 	runtime.ReadMemStats(m)

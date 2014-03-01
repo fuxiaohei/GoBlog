@@ -8,13 +8,14 @@ import (
 	"time"
 )
 
+// SiteMap is sitemap xml handler, pattern /sitemap.xml.
 func SiteMap(ctx *GoInk.Context) {
 	baseUrl := model.GetSetting("site_url")
-	println(baseUrl)
 	article, _ := model.GetPublishArticleList(1, 50)
 	navigators := model.GetNavigators()
 	now := time.Unix(utils.Now(), 0).Format(time.RFC3339)
 
+	// article links
 	articleMap := make([]map[string]string, len(article))
 	for i, a := range article {
 		m := make(map[string]string)
@@ -23,6 +24,7 @@ func SiteMap(ctx *GoInk.Context) {
 		articleMap[i] = m
 	}
 
+	// nav links
 	navMap := make([]map[string]string, 0)
 	for _, n := range navigators {
 		m := make(map[string]string)
@@ -53,6 +55,7 @@ func SiteMap(ctx *GoInk.Context) {
 
 }
 
+// RSS is feed generator handler, pattern /feed/.
 func Rss(ctx *GoInk.Context) {
 	baseUrl := model.GetSetting("site_url")
 	article, _ := model.GetPublishArticleList(1, 20)

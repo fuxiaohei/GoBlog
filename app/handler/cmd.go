@@ -6,7 +6,9 @@ import (
 	"github.com/fuxiaohei/GoInk"
 )
 
+// CmdBackup is backup list and operation page, pattern /cmd/backup/.
 func CmdBackup(context *GoInk.Context) {
+	// backup in manual
 	if context.Method == "POST" {
 		file, e := cmd.DoBackup(context.App(), true)
 		if e != nil {
@@ -18,6 +20,7 @@ func CmdBackup(context *GoInk.Context) {
 		model.CreateMessage("backup", "[1]"+file)
 		return
 	}
+	// delete backup file
 	if context.Method == "DELETE" {
 		file := context.String("file")
 		if file == "" {
@@ -37,12 +40,14 @@ func CmdBackup(context *GoInk.Context) {
 	})
 }
 
+// CmdBackupFile is downloading page for backup file, pattern /cmd/backup/file/.
 func CmdBackupFile(context *GoInk.Context) {
 	file := context.String("file")
 	context.Download(cmd.GetBackupFileAbsPath(file))
 	context.Do("backup_download", file)
 }
 
+// CmdMessage is message list page, pattern /cmd/message/.
 func CmdMessage(context *GoInk.Context) {
 	context.Layout("admin/cmd")
 	context.Render("admin/cmd/message", map[string]interface{}{
@@ -51,7 +56,9 @@ func CmdMessage(context *GoInk.Context) {
 	})
 }
 
+// CmdLogs is logs list and operation page, pattern /cmd/logs/.
 func CmdLogs(context *GoInk.Context) {
+	// delete log item
 	if context.Method == "DELETE" {
 		cmd.RemoveLogFile(context.App(), context.String("file"))
 		Json(context, true).End()
@@ -64,6 +71,7 @@ func CmdLogs(context *GoInk.Context) {
 	})
 }
 
+// CmdMonitor is app monitor data page, pattern /cmd/monitor/.
 func CmdMonitor(ctx *GoInk.Context) {
 	ctx.Layout("admin/cmd")
 	ctx.Render("admin/cmd/monitor", map[string]interface{}{
@@ -72,14 +80,17 @@ func CmdMonitor(ctx *GoInk.Context) {
 	})
 }
 
+// CmdTheme is theme list and operation page, pattern /cmd/theme/.
 func CmdTheme(ctx *GoInk.Context) {
 	if ctx.Method == "POST" {
+		// set theme cache
 		change := ctx.String("cache")
 		if change != "" {
 			cmd.SetThemeCache(ctx, change == "true")
 			Json(ctx, true).End()
 			return
 		}
+		// change theme
 		theme := ctx.String("theme")
 		if theme != "" {
 			model.SetSetting("site_theme", theme)
@@ -97,6 +108,7 @@ func CmdTheme(ctx *GoInk.Context) {
 	})
 }
 
+// CmdReader is reader list page, pattern /cmd/reader/.
 func CmdReader(ctx *GoInk.Context) {
 	if ctx.Method == "POST" {
 		email := ctx.String("email")

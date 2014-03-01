@@ -11,7 +11,9 @@ import (
 	"strings"
 )
 
+// AdminFiles is uploaded file list and operation page, pattern /admin/files/.
 func AdminFiles(context *GoInk.Context) {
+	// delete file
 	if context.Method == "DELETE" {
 		id := context.Int("id")
 		model.RemoveFile(id)
@@ -28,6 +30,7 @@ func AdminFiles(context *GoInk.Context) {
 	})
 }
 
+// FileUpload is file upload post handler, pattern /admin/files/upload/.
 func FileUpload(context *GoInk.Context) {
 	var req *http.Request
 	req = context.Request
