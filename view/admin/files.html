@@ -4,9 +4,10 @@
     </li>{{range .Files}}
     <li class="file" id="file-{{.Id}}">
         <span class="upload-time">{{DateInt64 .UploadTime "MM.DD"}}</span>
+        <span class="id">【{{.Id}}】</span>
         <span class="size">{{FileSize .Size}}</span>
         <span class="name">{{.Name}}</span>
-        <a class="link" href="/{{.Url}}" target="_blank" title="/{{.Url}}">查看</a>
+        <a class="link" href="{{.Link}}" target="_blank" title="{{.Link}}">查看</a>
         <a class="del fade-out" href="#" rel="{{.Id}}" title="删除附件">删除</a>
     </li>{{end}}
     {{range .Pager.PageSlice}}

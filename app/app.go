@@ -162,6 +162,14 @@ func Init() {
 	App.View().FuncMap["FileSize"] = utils.FileSize
 	App.View().FuncMap["Setting"] = model.GetSetting
 	App.View().FuncMap["Navigator"] = model.GetNavigators
+	/*App.View().FuncMap["Render"] = func(str string) string {
+		bytes, e := App.View().RenderString(str, nil)
+		if e != nil {
+			println(e.Error())
+			return str
+		}
+		return string(bytes)
+	}*/
 	App.View().FuncMap["Md2html"] = utils.Markdown2HtmlTemplate
 	App.View().IsCache = (model.GetSetting("theme_cache") == "true")
 
@@ -181,6 +189,7 @@ func registerHomeHandler() {
 
 	App.Get("/feed/", handler.Rss)
 	App.Get("/sitemap", handler.SiteMap)
+	App.Get("/upload/:id/:name", handler.Upload)
 
 	App.Get("/:slug", handler.TopPage)
 	App.Get("/", handler.Home)

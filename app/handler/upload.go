@@ -24,17 +24,17 @@ func AdminFiles(context *GoInk.Context) {
 	files, pager := model.GetFileList(context.Int("page"), 10)
 	context.Layout("admin/admin")
 	context.Render("admin/files", map[string]interface{}{
-		"Title": "媒体文件",
-		"Files": files,
-		"Pager": pager,
-	})
+			"Title": "媒体文件",
+			"Files": files,
+			"Pager": pager,
+		})
 }
 
 // FileUpload is file upload post handler, pattern /admin/files/upload/.
 func FileUpload(context *GoInk.Context) {
 	var req *http.Request
 	req = context.Request
-	req.ParseMultipartForm(32 << 20)
+	req.ParseMultipartForm(32<<20)
 	f, h, e := req.FormFile("file")
 	if e != nil {
 		Json(context, false).Set("msg", e.Error()).End()
@@ -70,4 +70,21 @@ func FileUpload(context *GoInk.Context) {
 	model.CreateFile(ff)
 	Json(context, true).Set("file", ff).End()
 	context.Do("attach_created", ff)
+}
+
+func Upload(ctx *GoInk.Context) {
+	idStr, name := ctx.Param("id"), ctx.Param("name")
+	id, _ := strconv.Atoi(idStr)
+	file := model.GetFileById(id)
+	if file == nil {
+		ctx.Status = 404
+		return
+	}
+	if !strings.Contains(file.Url, name) {
+		ctx.Status = 404
+		return
+	}
+	http.ServeFile(ctx.Response, ctx.Request, file.Url)
+	file.Hits++
+	ctx.IsSend = true
 }

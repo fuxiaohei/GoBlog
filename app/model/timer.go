@@ -62,6 +62,7 @@ func StartModelTimer() {
 	startContentSyncTimer()
 	startContentTmpIndexesTimer()
 	startMessageTimer()
+	startFileSyncTimer()
 	// start time ticker
 	ticker := time.NewTicker(time.Duration(10) * time.Minute)
 	go doTimers(ticker.C)
