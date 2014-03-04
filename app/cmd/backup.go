@@ -2,7 +2,8 @@ package cmd
 
 import (
 	"github.com/Unknwon/cae/zip"
-	"github.com/fuxiaohei/GoBlog/app/model"
+	"github.com/fuxiaohei/GoBlog/app/model/message"
+	"github.com/fuxiaohei/GoBlog/app/model/timer"
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"github.com/fuxiaohei/GoInk"
 	"os"
@@ -92,12 +93,12 @@ func GetBackupFiles() ([]os.FileInfo, error) {
 
 // StartBackupTimer starts backup operation timer for auto backup stuff.
 func StartBackupTimer(app *GoInk.App, t int) {
-	model.SetTimerFunc("backup-data", 144, func() {
+	timer.SetFunc("backup-data", 144, func() {
 		filename, e := DoBackup(app, true)
 		if e != nil {
-			model.CreateMessage("backup", "[0]"+e.Error())
+			message.Create("backup", "[0]"+e.Error())
 		} else {
-			model.CreateMessage("backup", "[1]"+filename)
+			message.Create("backup", "[1]"+filename)
 		}
 		println("backup files in", t, "hours")
 	})

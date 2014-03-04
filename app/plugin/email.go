@@ -4,7 +4,10 @@ import (
 	"bytes"
 	"encoding/base64"
 	"fmt"
-	"github.com/fuxiaohei/GoBlog/app/model"
+	"github.com/fuxiaohei/GoBlog/app/model/content"
+	"github.com/fuxiaohei/GoBlog/app/model/setting"
+	"github.com/fuxiaohei/GoBlog/app/model/storage"
+	"github.com/fuxiaohei/GoBlog/app/model/user"
 	"github.com/fuxiaohei/GoInk"
 	"html/template"
 	"net/mail"
@@ -99,8 +102,8 @@ func (p *EmailPlugin) Activate() {
 		p.isActive = true
 		return
 	}
-	if model.Storage.Has("plugin/" + p.Key()) {
-		model.Storage.Get("plugin/"+p.Key(), &p.settings)
+	if storage.Storage.Has("plugin/" + p.Key()) {
+		storage.Storage.Get("plugin/"+p.Key(), &p.settings)
 	}
 	// email middleware handler
 	fn := func(context *GoInk.Context) {
@@ -113,7 +116,7 @@ func (p *EmailPlugin) Activate() {
 					println("no setting in smtp email plugin")
 					return
 				}
-				p.sendEmail(co.(*model.Comment), true)
+				p.sendEmail(co.(*content.Comment), true)
 			}()
 		})
 		context.On("comment_reply", func(co interface{}) {
@@ -125,7 +128,7 @@ func (p *EmailPlugin) Activate() {
 					fmt.Println("no setting in smtp email plugin")
 					return
 				}
-				p.sendEmail(co.(*model.Comment), false)
+				p.sendEmail(co.(*content.Comment), false)
 			}()
 		})
 	}
@@ -182,25 +185,25 @@ func (p *EmailPlugin) Form() string {
 // SetSettings saves plugin settings to json.
 func (p *EmailPlugin) SetSetting(settings map[string]string) {
 	p.settings = settings
-	model.Storage.Set("plugin/"+p.Key(), p.settings)
+	storage.Storage.Set("plugin/"+p.Key(), p.settings)
 }
 
-func (p *EmailPlugin) sendEmail(co *model.Comment, isCreate bool) {
+func (p *EmailPlugin) sendEmail(co *content.Comment, isCreate bool) {
 	var (
-		tpl     *template.Template
-		buff    bytes.Buffer
-		pco     *model.Comment
-		content *model.Content
-		err     error
-		user    *model.User
-		title   string
-		from    mail.Address
-		to      mail.Address
+		tpl   *template.Template
+		buff  bytes.Buffer
+		pco   *content.Comment
+		cnt   *content.Content
+		err   error
+		u     *user.User
+		title string
+		from  mail.Address
+		to    mail.Address
 	)
 
 	// get article or page content instance
-	content = model.GetContentById(co.Cid)
-	if content == nil {
+	cnt = content.ById(co.Cid)
+	if cnt == nil {
 		println("error content getting in email plugin")
 		return
 	}
@@ -209,44 +212,44 @@ func (p *EmailPlugin) sendEmail(co *model.Comment, isCreate bool) {
 		tpl = p.templates["created"]
 
 		err = tpl.Execute(&buff, map[string]interface{}{
-			"link":      model.GetSetting("site_url"),
-			"site":      model.GetSetting("site_title"),
+			"link":      setting.Get("site_url"),
+			"site":      setting.Get("site_title"),
 			"author":    co.Author,
 			"text":      template.HTML(co.Content),
-			"title":     content.Title,
-			"permalink": path.Join(model.GetSetting("site_url"), content.Link()),
+			"title":     cnt.Title,
+			"permalink": path.Join(setting.Get("site_url"), cnt.Link()),
 		})
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		user = model.GetUsersByRole("ADMIN")[0]
-		from = mail.Address{"no-reply@" + model.GetSetting("site_url"), p.settings["smtp_email_user"]}
-		to = mail.Address{user.Nick, user.Email}
+		u = user.ListByRole("ADMIN")[0]
+		from = mail.Address{"no-reply@" + setting.Get("site_url"), p.settings["smtp_email_user"]}
+		to = mail.Address{u.Nick, u.Email}
 		title = co.Author + "在您的网站发表新评论"
 		p.sendSmtp(from, to, title, buff.Bytes())
 		return
 	}
 	// send mail for the author of comment replying to
-	pco = model.GetCommentById(co.Pid)
+	pco = content.CommentById(co.Pid)
 	tpl = p.templates["reply"]
 	err = tpl.Execute(&buff, map[string]interface{}{
-		"link":      model.GetSetting("site_url"),
-		"site":      model.GetSetting("site_title"),
+		"link":      setting.Get("site_url"),
+		"site":      setting.Get("site_title"),
 		"author_p":  pco.Author,
 		"text_p":    template.HTML(pco.Content),
 		"author":    co.Author,
 		"text":      template.HTML(co.Content),
-		"title":     content.Title,
-		"permalink": path.Join(model.GetSetting("site_url"), content.Link()),
+		"title":     cnt.Title,
+		"permalink": path.Join(setting.Get("site_url"), cnt.Link()),
 	})
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	user = model.GetUsersByRole("ADMIN")[0]
+	u = user.ListByRole("ADMIN")[0]
 
-	from = mail.Address{pco.Author + "@" + model.GetSetting("site_url"), p.settings["smtp_email_user"]}
+	from = mail.Address{pco.Author + "@" + setting.Get("site_url"), p.settings["smtp_email_user"]}
 	to = mail.Address{pco.Author, pco.Email}
 	title = "您的评论有了回复"
 	p.sendSmtp(from, to, title, buff.Bytes())
@@ -257,20 +260,20 @@ func (p *EmailPlugin) sendEmail(co *model.Comment, isCreate bool) {
 			tpl = p.templates["created"]
 
 			err = tpl.Execute(&buff, map[string]interface{}{
-				"link":      model.GetSetting("site_url"),
-				"site":      model.GetSetting("site_title"),
+				"link":      setting.Get("site_url"),
+				"site":      setting.Get("site_title"),
 				"author":    co.Author,
 				"text":      template.HTML("回复" + pco.Author + ":<br/>" + co.Content),
-				"title":     content.Title,
-				"permalink": path.Join(model.GetSetting("site_url"), content.Link()),
+				"title":     cnt.Title,
+				"permalink": path.Join(setting.Get("site_url"), cnt.Link()),
 			})
 			if err != nil {
 				fmt.Println(err)
 				return
 			}
-			user = model.GetUsersByRole("ADMIN")[0]
-			from = mail.Address{"no-reply@" + model.GetSetting("site_url"), p.settings["smtp_email_user"]}
-			to = mail.Address{user.Nick, user.Email}
+			u = user.ListByRole("ADMIN")[0]
+			from = mail.Address{"no-reply@" + setting.Get("site_url"), p.settings["smtp_email_user"]}
+			to = mail.Address{u.Nick, u.Email}
 			title = co.Author + "在您的网站发表新评论"
 			p.sendSmtp(from, to, title, buff.Bytes())
 		}()

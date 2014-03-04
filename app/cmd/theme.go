@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/fuxiaohei/GoBlog/app/model"
+	"github.com/fuxiaohei/GoBlog/app/model/setting"
 	"github.com/fuxiaohei/GoInk"
 	"io/ioutil"
 	"path/filepath"
@@ -22,11 +22,11 @@ func SetThemeCache(ctx *GoInk.Context, cache bool) {
 	ctx.App().View().NoCache()
 	ctx.App().View().IsCache = cache
 	if cache {
-		model.SetSetting("theme_cache", "true")
+		setting.Set("theme_cache", "true")
 	} else {
-		model.SetSetting("theme_cache", "false")
+		setting.Set("theme_cache", "false")
 	}
-	model.SyncSettings()
+	setting.Sync()
 }
 
 // GetThemes return a themeItem by parsed files in given dir.

@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/fuxiaohei/GoBlog/app/model"
+	"github.com/fuxiaohei/GoBlog/app/model/setting"
 	"github.com/fuxiaohei/GoInk"
 	"sort"
 	"strconv"
@@ -21,7 +22,7 @@ func SetUpgradeScript(v int, script func(app *GoInk.App) bool) {
 // If app version is ahead, return true, need upgrade.
 func CheckUpgrade(v int, print bool) bool {
 	model.Init(v)
-	appV := model.GetVersion()
+	appV := setting.GetVersion()
 	b := v > appV.Version
 	if b && print {
 		println("app version @ " + strconv.Itoa(v) + " is ahead of current version @ " + strconv.Itoa(appV.Version) + " , please run 'GoBlog upgrade'")
@@ -35,7 +36,7 @@ func DoUpgrade(v int, app *GoInk.App) {
 		println("app version @", v, "is updated")
 		return
 	}
-	oldVersion := model.GetVersion().Version
+	oldVersion := setting.GetVersion().Version
 	scriptIndex := []int{}
 	// load all upgrade scripts if version is less
 	for vr, _ := range upgradeScript {
@@ -49,7 +50,7 @@ func DoUpgrade(v int, app *GoInk.App) {
 		upgradeScript[cv](app)
 		println("upgrade @", cv, "success")
 	}
-	model.GetVersion().Version = v
-	model.SyncVersion()
+	setting.GetVersion().Version = v
+	setting.SyncVersion()
 	println("app has upgraded to version @", v, "successfully, restart and keep enjoy !!")
 }

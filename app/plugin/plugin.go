@@ -1,7 +1,7 @@
 package plugin
 
 import (
-	"github.com/fuxiaohei/GoBlog/app/model"
+	. "github.com/fuxiaohei/GoBlog/app/model/storage"
 	"github.com/fuxiaohei/GoInk"
 )
 
@@ -54,8 +54,8 @@ func init() {
 
 func Init() {
 	var isChanged = false
-	if model.Storage.Has("plugins") {
-		model.Storage.Get("plugins", &pluginStorage)
+	if Storage.Has("plugins") {
+		Storage.Get("plugins", &pluginStorage)
 	}
 	// activate
 	for k, p := range pluginMap {
@@ -78,7 +78,7 @@ func Init() {
 		}
 	}
 	if isChanged {
-		model.Storage.Set("plugins", pluginStorage)
+		Storage.Set("plugins", pluginStorage)
 	}
 }
 
@@ -128,7 +128,7 @@ func Activate(name string) {
 	}
 	p.Activate()
 	pluginStorage[p.Key()] = p.ToStorage()
-	model.Storage.Set("plugins", pluginStorage)
+	Storage.Set("plugins", pluginStorage)
 	println("activate", p.Key())
 }
 
@@ -140,7 +140,7 @@ func Deactivate(name string) {
 	}
 	p.Deactivate()
 	pluginStorage[p.Key()] = p.ToStorage()
-	model.Storage.Set("plugins", pluginStorage)
+	Storage.Set("plugins", pluginStorage)
 	println("deactivate", p.Key())
 }
 
