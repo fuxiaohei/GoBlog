@@ -1,11 +1,11 @@
-package model
+package content
 
 import "github.com/fuxiaohei/GoBlog/app/utils"
 
 func generatePublishArticleIndex() {
 	arr := make([]int, 0)
 	for _, id := range contentsIndex["article"] {
-		c := GetContentById(id)
+		c := ById(id)
 		if c.Status == "publish" {
 			arr = append(arr, id)
 		}
@@ -14,7 +14,7 @@ func generatePublishArticleIndex() {
 }
 
 // GetPublishArticleList gets published article list and pager.
-func GetPublishArticleList(page, size int) ([]*Content, *utils.Pager) {
+func PublishArticleList(page, size int) ([]*Content, *utils.Pager) {
 	index := contentsIndex["article-publish"]
 	pager := utils.NewPager(page, size, len(index))
 	articles := make([]*Content, 0)
@@ -25,13 +25,13 @@ func GetPublishArticleList(page, size int) ([]*Content, *utils.Pager) {
 		return articles, pager
 	}
 	for i := pager.Begin; i <= pager.End; i++ {
-		articles = append(articles, GetContentById(index[i-1]))
+		articles = append(articles, ById(index[i-1]))
 	}
 	return articles, pager
 }
 
 // GetArticleList gets articles list and pager no matter article status.
-func GetArticleList(page, size int) ([]*Content, *utils.Pager) {
+func ArticleList(page, size int) ([]*Content, *utils.Pager) {
 	index := contentsIndex["article"]
 	pager := utils.NewPager(page, size, len(index))
 	articles := make([]*Content, 0)
@@ -42,14 +42,14 @@ func GetArticleList(page, size int) ([]*Content, *utils.Pager) {
 		return articles, pager
 	}
 	for i := pager.Begin; i <= pager.End; i++ {
-		articles = append(articles, GetContentById(index[i-1]))
+		articles = append(articles, ById(index[i-1]))
 	}
 	return articles, pager
 }
 
 // GetPopularArticleList returns popular articles list.
 // Popular articles are ordered by comment number.
-func GetPopularArticleList(size int) []*Content {
+func PopularArticleList(size int) []*Content {
 	index := contentsIndex["article-pop"]
 	pager := utils.NewPager(1, size, len(index))
 	articles := make([]*Content, 0)
@@ -60,14 +60,14 @@ func GetPopularArticleList(size int) []*Content {
 		return articles
 	}
 	for i := pager.Begin; i <= pager.End; i++ {
-		articles = append(articles, GetContentById(index[i-1]))
+		articles = append(articles, ById(index[i-1]))
 	}
 	return articles
 }
 
 // GetTaggedArticleList returns tagged articles list.
 // These articles contains same one tag.
-func GetTaggedArticleList(tag string, page, size int) ([]*Content, *utils.Pager) {
+func TaggedArticleList(tag string, page, size int) ([]*Content, *utils.Pager) {
 	index := contentsIndex["t-"+tag]
 	pager := utils.NewPager(page, size, len(index))
 	articles := make([]*Content, 0)
@@ -78,7 +78,7 @@ func GetTaggedArticleList(tag string, page, size int) ([]*Content, *utils.Pager)
 		return articles, pager
 	}
 	for i := pager.Begin; i <= pager.End; i++ {
-		articles = append(articles, GetContentById(index[i-1]))
+		articles = append(articles, ById(index[i-1]))
 	}
 	return articles, pager
 }

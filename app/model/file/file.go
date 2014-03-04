@@ -1,7 +1,9 @@
-package model
+package file
 
 import (
 	"fmt"
+	. "github.com/fuxiaohei/GoBlog/app/model/storage"
+	"github.com/fuxiaohei/GoBlog/app/model/timer"
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"os"
 	"path"
@@ -42,7 +44,7 @@ func (f *File) getLocalLink() string {
 }
 
 // CreateFile saves a file instance to json storage.
-func CreateFile(f *File) *File {
+func Create(f *File) *File {
 	fileMaxId += Storage.TimeInc(3)
 	f.Id = fileMaxId
 	f.UploadTime = utils.Now()
@@ -51,12 +53,12 @@ func CreateFile(f *File) *File {
 	f.Links = make(map[string]string)
 	f.Links["local"] = f.getLocalLink()
 	files = append([]*File{f}, files...)
-	go SyncFiles()
+	go Sync()
 	return f
 }
 
 // CreateFilePath generates a file path for new uploading file.
-func CreateFilePath(dir string, f *File) string {
+func CreatePath(dir string, f *File) string {
 	os.MkdirAll(dir, os.ModePerm)
 	name := utils.DateInt64(utils.Now(), "YYYYMMDDHHmmss")
 	name += strconv.Itoa(Storage.TimeInc(10)) + path.Ext(f.Name)
@@ -64,7 +66,7 @@ func CreateFilePath(dir string, f *File) string {
 }
 
 // GetFileList returns a uploaded file instance list with page and size int.
-func GetFileList(page, size int) ([]*File, *utils.Pager) {
+func List(page, size int) ([]*File, *utils.Pager) {
 	pager := utils.NewPager(page, size, len(files))
 	f := make([]*File, 0)
 	if page > pager.Pages || len(files) < 1 {
@@ -77,7 +79,7 @@ func GetFileList(page, size int) ([]*File, *utils.Pager) {
 }
 
 // GetFileById returns a file instance by given id.
-func GetFileById(id int) *File {
+func ById(id int) *File {
 	for _, f := range files {
 		if f.Id == id {
 			return f
@@ -87,23 +89,23 @@ func GetFileById(id int) *File {
 }
 
 // RemoveFile removes file by id.
-func RemoveFile(id int) {
+func Remove(id int) {
 	for i, f2 := range files {
 		if id == f2.Id {
 			files = append(files[:i], files[i+1:]...)
 			os.Remove(f2.Url)
 		}
 	}
-	go SyncFiles()
+	go Sync()
 }
 
 // SyncFiles saves all files data to json storage.
-func SyncFiles() {
+func Sync() {
 	Storage.Set("files", files)
 }
 
 // LoadFiles loads all files data from json storage.
-func LoadFiles() {
+func Load() {
 	files = make([]*File, 0)
 	fileMaxId = 0
 	Storage.Get("files", &files)
@@ -115,8 +117,8 @@ func LoadFiles() {
 }
 
 func startFileSyncTimer() {
-	SetTimerFunc("files-sync", 72, func() {
+	timer.SetFunc("files-sync", 72, func() {
 		println("write media in 12 hour timer")
-		SyncContents()
+		Sync()
 	})
 }

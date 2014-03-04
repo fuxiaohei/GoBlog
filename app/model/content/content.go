@@ -1,8 +1,13 @@
-package model
+package content
 
 import (
 	"errors"
 	"fmt"
+	"github.com/fuxiaohei/GoBlog/app/model/comment"
+	"github.com/fuxiaohei/GoBlog/app/model/setting"
+	. "github.com/fuxiaohei/GoBlog/app/model/storage"
+	"github.com/fuxiaohei/GoBlog/app/model/timer"
+	"github.com/fuxiaohei/GoBlog/app/model/user"
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"net/url"
 	"os"
@@ -50,7 +55,7 @@ type Content struct {
 	// Format defines the content text format type. Now only support markdown.
 	Format string
 
-	Comments []*Comment
+	Comments []*comment.Comment
 	Hits     int
 }
 
@@ -85,7 +90,7 @@ func (cnt *Content) Link() string {
 // If enable go-markdown, return markdown-rendered content.
 func (cnt *Content) Content() string {
 	txt := strings.Replace(cnt.Text, "<!--more-->", "", -1)
-	if GetSetting("enable_go_markdown") == "true" {
+	if setting.Get("enable_go_markdown") == "true" {
 		if cnt.textRendered == "" {
 			cnt.textRendered = utils.Markdown2Html(txt)
 		}
@@ -99,7 +104,7 @@ func (cnt *Content) Content() string {
 // It can be go-markdown rendered.
 func (cnt *Content) Summary() string {
 	text := strings.Split(cnt.Text, "<!--more-->")[0]
-	if GetSetting("enable_go_markdown") == "true" {
+	if setting.Get("enable_go_markdown") == "true" {
 		return utils.Markdown2Html(text)
 	}
 	return text
@@ -120,7 +125,7 @@ func (cnt *Content) CommentNum() int {
 // ChangeSlug changes content's slug.
 // It checks whether this slug is unique.
 func (cnt *Content) ChangeSlug(slug string) bool {
-	c2 := GetContentBySlug(slug)
+	c2 := BySlug(slug)
 	if c2 == nil {
 		cnt.Slug = slug
 		return true
@@ -133,8 +138,8 @@ func (cnt *Content) ChangeSlug(slug string) bool {
 }
 
 // User returns content author user instance.
-func (cnt *Content) User() *User {
-	return GetUserById(cnt.AuthorId)
+func (cnt *Content) User() *user.User {
+	return user.ById(cnt.AuthorId)
 }
 
 // Content Tag struct. It convert tag string to proper struct or link.
@@ -149,12 +154,12 @@ func (t *Tag) Link() string {
 }
 
 // GetContentById gets a content by given id.
-func GetContentById(id int) *Content {
+func ById(id int) *Content {
 	return contents[id]
 }
 
 // GetContentBySlug gets a content by given slug.
-func GetContentBySlug(slug string) *Content {
+func BySlug(slug string) *Content {
 	for _, c := range contents {
 		if c.Slug == slug {
 			return c
@@ -165,8 +170,8 @@ func GetContentBySlug(slug string) *Content {
 
 // CreateContent creates new content.
 // t means content type, article or page.
-func CreateContent(c *Content, t string) (*Content, error) {
-	c2 := GetContentBySlug(c.Slug)
+func Create(c *Content, t string) (*Content, error) {
+	c2 := BySlug(c.Slug)
 	if c2 != nil {
 		return nil, errors.New("slug-repeat")
 	}
@@ -182,24 +187,24 @@ func CreateContent(c *Content, t string) (*Content, error) {
 	contents[c.Id] = c
 	contentsIndex[c.Type] = append([]int{c.Id}, contentsIndex[c.Type]...)
 	generatePublishArticleIndex()
-	go SyncContent(c)
+	go SyncOne(c)
 	return c, nil
 }
 
 // SaveContent saves changed content.
 // It will re-generate related indexes.
-func SaveContent(c *Content) {
+func Save(c *Content) {
 	c.EditTime = utils.Now()
 	// clean rendered cache text
 	c.textRendered = ""
 	generatePublishArticleIndex()
-	go SyncContent(c)
+	go SyncOne(c)
 }
 
 // RemoveContent removes a content.
 // Not delete file really, just change status to DELETE.
 // This content can't be loaded in memory from storage json.
-func RemoveContent(c *Content) {
+func Remove(c *Content) {
 	delete(contents, c.Id)
 	for i, id := range contentsIndex[c.Type] {
 		if c.Id == id {
@@ -209,24 +214,29 @@ func RemoveContent(c *Content) {
 	}
 	c.Status = "DELETE"
 	generatePublishArticleIndex()
-	go SyncContent(c)
+	go SyncOne(c)
+}
+
+// All returns all content order by id.
+func All() map[int]*Content {
+	return contents
 }
 
 // SyncContent writes a content to storage json.
-func SyncContent(c *Content) {
+func SyncOne(c *Content) {
 	key := fmt.Sprintf("content/%s-%d", c.Type, c.Id)
 	Storage.Set(key, c)
 }
 
 // SyncContents writes all contents to storage json.
-func SyncContents() {
+func Sync() {
 	for _, c := range contents {
-		SyncContent(c)
+		SyncOne(c)
 	}
 }
 
 // LoadContents loads all contents, then generates indexes.
-func LoadContents() {
+func Load() {
 	contents = make(map[int]*Content)
 	contentsIndex = make(map[string][]int)
 	contentMaxId = 0
@@ -268,9 +278,9 @@ func LoadContents() {
 }
 
 func startContentSyncTimer() {
-	SetTimerFunc("content-sync", 6, func() {
+	timer.SetFunc("content-sync", 6, func() {
 		println("write contents in 1 hour timer")
-		SyncContents()
+		Sync()
 	})
 }
 
@@ -329,7 +339,7 @@ func GetContentTags() []*Tag {
 }
 
 func startContentTmpIndexesTimer() {
-	SetTimerFunc("content-indexes", 36, func() {
+	timer.SetFunc("content-indexes", 36, func() {
 		println("write content indexes in 6 hours timer")
 		generateContentTmpIndexes()
 	})
