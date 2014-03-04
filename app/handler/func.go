@@ -1,7 +1,8 @@
 package handler
 
 import (
-	"github.com/fuxiaohei/GoBlog/app/model"
+	"github.com/fuxiaohei/GoBlog/app/model/content"
+	"github.com/fuxiaohei/GoBlog/app/model/setting"
 	"github.com/fuxiaohei/GoInk"
 	"path"
 	"strconv"
@@ -39,7 +40,7 @@ type themeContext struct {
 func Theme(context *GoInk.Context) *themeContext {
 	t := new(themeContext)
 	t.context = context
-	t.theme = model.GetSetting("site_theme")
+	t.theme = setting.Get("site_theme")
 	if t.theme == "" {
 		t.theme = "default"
 	}
@@ -69,7 +70,7 @@ func (tc *themeContext) Has(tpl string) bool {
 }
 
 // CommentHtml returns rendered comment template html with own content.
-func CommentHtml(context *GoInk.Context, c *model.Content) string {
+func CommentHtml(context *GoInk.Context, c *content.Content) string {
 	thm := Theme(context)
 	if !thm.Has("comment.html") {
 		return ""
@@ -86,17 +87,17 @@ func SidebarHtml(context *GoInk.Context) string {
 	if !thm.Has("sidebar.html") {
 		return ""
 	}
-	popSize, _ := strconv.Atoi(model.GetSetting("popular_size"))
+	popSize, _ := strconv.Atoi(setting.Get("popular_size"))
 	if popSize < 1 {
 		popSize = 4
 	}
-	cmtSize, _ := strconv.Atoi(model.GetSetting("recent_comment_size"))
+	cmtSize, _ := strconv.Atoi(setting.Get("recent_comment_size"))
 	if cmtSize < 1 {
 		cmtSize = 3
 	}
 	return thm.Tpl("sidebar", map[string]interface{}{
-		"Popular":       model.GetPopularArticleList(popSize),
-		"RecentComment": model.GetCommentRecentList(cmtSize),
-		"Tags":          model.GetContentTags(),
+		"Popular":       content.PopularArticleList(popSize),
+		"RecentComment": content.RecentCommentList(cmtSize),
+		"Tags":          content.GetContentTags(),
 	})
 }

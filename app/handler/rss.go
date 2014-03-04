@@ -1,7 +1,9 @@
 package handler
 
 import (
-	"github.com/fuxiaohei/GoBlog/app/model"
+	"github.com/fuxiaohei/GoBlog/app/model/content"
+	"github.com/fuxiaohei/GoBlog/app/model/setting"
+	"github.com/fuxiaohei/GoBlog/app/model/user"
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"github.com/fuxiaohei/GoInk"
 	"strings"
@@ -10,9 +12,9 @@ import (
 
 // SiteMap is sitemap xml handler, pattern /sitemap.xml.
 func SiteMap(ctx *GoInk.Context) {
-	baseUrl := model.GetSetting("site_url")
-	article, _ := model.GetPublishArticleList(1, 50)
-	navigators := model.GetNavigators()
+	baseUrl := setting.Get("site_url")
+	article, _ := content.PublishArticleList(1, 50)
+	navigators := setting.GetNavigators()
 	now := time.Unix(utils.Now(), 0).Format(time.RFC3339)
 
 	// article links
@@ -42,7 +44,7 @@ func SiteMap(ctx *GoInk.Context) {
 
 	ctx.ContentType("text/xml")
 	bytes, e := ctx.App().View().Render("sitemap.xml", map[string]interface{}{
-		"Title":      model.GetSetting("site_title"),
+		"Title":      setting.Get("site_title"),
 		"Link":       baseUrl,
 		"Created":    now,
 		"Articles":   articleMap,
@@ -57,9 +59,9 @@ func SiteMap(ctx *GoInk.Context) {
 
 // RSS is feed generator handler, pattern /feed/.
 func Rss(ctx *GoInk.Context) {
-	baseUrl := model.GetSetting("site_url")
-	article, _ := model.GetPublishArticleList(1, 20)
-	author := model.GetUsersByRole("ADMIN")[0]
+	baseUrl := setting.Get("site_url")
+	article, _ := content.PublishArticleList(1, 20)
+	author := user.ListByRole("ADMIN")[0]
 
 	articleMap := make([]map[string]string, len(article))
 	for i, a := range article {
@@ -78,9 +80,9 @@ func Rss(ctx *GoInk.Context) {
 	ctx.ContentType("application/rss+xml;charset=UTF-8")
 
 	bytes, e := ctx.App().View().Render("rss.xml", map[string]interface{}{
-		"Title":    model.GetSetting("site_title"),
+		"Title":    setting.Get("site_title"),
 		"Link":     baseUrl,
-		"Desc":     model.GetSetting("site_description"),
+		"Desc":     setting.Get("site_description"),
 		"Created":  time.Unix(utils.Now(), 0).Format(time.RFC822),
 		"Articles": articleMap,
 	})

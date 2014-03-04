@@ -2,7 +2,9 @@ package handler
 
 import (
 	"github.com/fuxiaohei/GoBlog/app/cmd"
-	"github.com/fuxiaohei/GoBlog/app/model"
+	"github.com/fuxiaohei/GoBlog/app/model/content"
+	"github.com/fuxiaohei/GoBlog/app/model/message"
+	"github.com/fuxiaohei/GoBlog/app/model/setting"
 	"github.com/fuxiaohei/GoInk"
 )
 
@@ -17,7 +19,7 @@ func CmdBackup(context *GoInk.Context) {
 		}
 		Json(context, true).Set("file", file).End()
 		context.Do("bakcup_success", file)
-		model.CreateMessage("backup", "[1]"+file)
+		message.Create("backup", "[1]"+file)
 		return
 	}
 	// delete backup file
@@ -52,7 +54,7 @@ func CmdMessage(context *GoInk.Context) {
 	context.Layout("admin/cmd")
 	context.Render("admin/cmd/message", map[string]interface{}{
 		"Title":    "消息",
-		"Messages": model.GetMessages(),
+		"Messages": message.All(),
 	})
 }
 
@@ -93,8 +95,8 @@ func CmdTheme(ctx *GoInk.Context) {
 		// change theme
 		theme := ctx.String("theme")
 		if theme != "" {
-			model.SetSetting("site_theme", theme)
-			model.SyncSettings()
+			setting.Set("site_theme", theme)
+			setting.Sync()
 			Json(ctx, true).End()
 			return
 		}
@@ -104,7 +106,7 @@ func CmdTheme(ctx *GoInk.Context) {
 	ctx.Render("admin/cmd/theme", map[string]interface{}{
 		"Title":        "主题",
 		"Themes":       cmd.GetThemes(ctx.App().Get("view_dir")),
-		"CurrentTheme": model.GetSetting("site_theme"),
+		"CurrentTheme": setting.Get("site_theme"),
 	})
 }
 
@@ -112,13 +114,13 @@ func CmdTheme(ctx *GoInk.Context) {
 func CmdReader(ctx *GoInk.Context) {
 	if ctx.Method == "POST" {
 		email := ctx.String("email")
-		model.RemoveReader(email)
+		content.RemoveReader(email)
 		Json(ctx, true).End()
 		return
 	}
 	ctx.Layout("admin/cmd")
 	ctx.Render("admin/cmd/reader", map[string]interface{}{
 		"Title":   "读者",
-		"Readers": model.GetReaders(),
+		"Readers": content.GetReaders(),
 	})
 }

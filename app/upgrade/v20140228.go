@@ -2,7 +2,7 @@ package upgrade
 
 import (
 	"github.com/fuxiaohei/GoBlog/app/cmd"
-	"github.com/fuxiaohei/GoBlog/app/model"
+	"github.com/fuxiaohei/GoBlog/app/model/setting"
 	"github.com/fuxiaohei/GoInk"
 )
 
@@ -13,11 +13,11 @@ func init() {
 func upgrade_20140228(_ *GoInk.App) bool {
 
 	// change settings
-	model.LoadSettings()
-	model.SetSetting("popular_size", "4")
-	model.SetSetting("recent_comment_size", "3")
-	model.SetSetting("theme_cache", "false")
-	model.SyncSettings()
+	setting.Load()
+	setting.Set("popular_size", "4")
+	setting.Set("recent_comment_size", "3")
+	setting.Set("theme_cache", "false")
+	setting.Sync()
 
 	// overwrite zip bundle bytes
 	cmd.ExtractBundleBytes()

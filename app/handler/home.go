@@ -1,7 +1,10 @@
 package handler
 
 import (
-	"github.com/fuxiaohei/GoBlog/app/model"
+	"github.com/fuxiaohei/GoBlog/app/model/content"
+	"github.com/fuxiaohei/GoBlog/app/model/message"
+	"github.com/fuxiaohei/GoBlog/app/model/setting"
+	mUser "github.com/fuxiaohei/GoBlog/app/model/user"
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"github.com/fuxiaohei/GoInk"
 	"net/url"
@@ -13,7 +16,7 @@ import (
 func Login(context *GoInk.Context) {
 	if context.Method == "POST" {
 		data := context.Input()
-		user := model.GetUserByName(data["user"])
+		user := mUser.ByName(data["user"])
 		if user == nil {
 			Json(context, false).End()
 			return
@@ -24,7 +27,7 @@ func Login(context *GoInk.Context) {
 		}
 		exp := 3600 * 24 * 3
 		expStr := strconv.Itoa(exp)
-		s := model.CreateToken(user, context, int64(exp))
+		s := mUser.CreateToken(user, context, int64(exp))
 		context.Cookie("token-user", strconv.Itoa(s.UserId), expStr)
 		context.Cookie("token-value", s.Value, expStr)
 		Json(context, true).End()
@@ -40,7 +43,7 @@ func Login(context *GoInk.Context) {
 // Auth is authorization checking handler, use for middleware.
 func Auth(context *GoInk.Context) {
 	tokenValue := context.Cookie("token-value")
-	token := model.GetTokenByValue(tokenValue)
+	token := mUser.TokenByValue(tokenValue)
 	if token == nil {
 		context.Redirect("/logout/")
 		context.End()
@@ -66,10 +69,10 @@ func TagArticles(ctx *GoInk.Context) {
 	page, _ := strconv.Atoi(ctx.Param("page"))
 	tag, _ := url.QueryUnescape(ctx.Param("tag"))
 	size := getArticleListSize()
-	articles, pager := model.GetTaggedArticleList(tag, page, getArticleListSize())
+	articles, pager := content.TaggedArticleList(tag, page, getArticleListSize())
 	// fix dotted tag
 	if len(articles) < 1 && strings.Contains(tag, "-") {
-		articles, pager = model.GetTaggedArticleList(strings.Replace(tag, "-", ".", -1), page, size)
+		articles, pager = content.TaggedArticleList(strings.Replace(tag, "-", ".", -1), page, size)
 	}
 	Theme(ctx).Layout("home").Render("index", map[string]interface{}{
 		"Articles":    articles,
@@ -84,7 +87,7 @@ func TagArticles(ctx *GoInk.Context) {
 func Home(context *GoInk.Context) {
 	context.Layout("home")
 	page, _ := strconv.Atoi(context.Param("page"))
-	articles, pager := model.GetPublishArticleList(page, getArticleListSize())
+	articles, pager := content.PublishArticleList(page, getArticleListSize())
 	data := map[string]interface{}{
 		"Articles":    articles,
 		"Pager":       pager,
@@ -100,7 +103,7 @@ func Home(context *GoInk.Context) {
 func Article(context *GoInk.Context) {
 	id, _ := strconv.Atoi(context.Param("id"))
 	slug := context.Param("slug")
-	article := model.GetContentById(id)
+	article := content.ById(id)
 	if article == nil {
 		context.Redirect("/")
 		return
@@ -121,7 +124,7 @@ func Article(context *GoInk.Context) {
 func Page(context *GoInk.Context) {
 	id, _ := strconv.Atoi(context.Param("id"))
 	slug := context.Param("slug")
-	article := model.GetContentById(id)
+	article := content.ById(id)
 	if article == nil || article.Status != "publish" {
 		context.Redirect("/")
 		return
@@ -141,7 +144,7 @@ func Page(context *GoInk.Context) {
 // TopPage is top level page handler, pattern /:page_slug.
 func TopPage(context *GoInk.Context) {
 	slug := context.Param("slug")
-	page := model.GetContentBySlug(slug)
+	page := content.BySlug(slug)
 	if page == nil || page.Status != "publish" {
 		context.Redirect("/")
 		return
@@ -164,7 +167,7 @@ func Comment(context *GoInk.Context) {
 		Json(context, false).End()
 		return
 	}
-	if model.GetContentById(cid) == nil {
+	if content.ById(cid) == nil {
 		Json(context, false).End()
 		return
 	}
@@ -174,7 +177,7 @@ func Comment(context *GoInk.Context) {
 		Json(context, false).Set("msg", msg).End()
 		return
 	}
-	co := new(model.Comment)
+	co := new(content.Comment)
 	co.Author = data["user"]
 	co.Email = data["email"]
 	co.Url = data["url"]
@@ -184,9 +187,9 @@ func Comment(context *GoInk.Context) {
 	co.Ip = context.Ip
 	co.UserAgent = context.UserAgent
 	co.IsAdmin = false
-	model.CreateComment(cid, co)
+	content.CreateComment(cid, co)
 	Json(context, true).Set("comment", co.ToJson()).End()
-	model.CreateMessage("comment", co)
+	message.Create("comment", co)
 	context.Do("comment_created", co)
 }
 
@@ -204,7 +207,7 @@ func validateComment(data map[string]string) string {
 }
 
 func getArticleListSize() int {
-	size, _ := strconv.Atoi(model.GetSetting("article_size"))
+	size, _ := strconv.Atoi(setting.Get("article_size"))
 	if size < 1 {
 		size = 5
 	}

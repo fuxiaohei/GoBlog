@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/fuxiaohei/GoBlog/app/handler"
 	"github.com/fuxiaohei/GoBlog/app/model"
+	"github.com/fuxiaohei/GoBlog/app/model/setting"
 	"github.com/fuxiaohei/GoBlog/app/plugin"
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"github.com/fuxiaohei/GoInk"
@@ -160,8 +161,8 @@ func Init() {
 	App.View().FuncMap["Now"] = utils.Now
 	App.View().FuncMap["Html2str"] = utils.Html2str
 	App.View().FuncMap["FileSize"] = utils.FileSize
-	App.View().FuncMap["Setting"] = model.GetSetting
-	App.View().FuncMap["Navigator"] = model.GetNavigators
+	App.View().FuncMap["Setting"] = setting.Get
+	App.View().FuncMap["Navigator"] = setting.GetNavigators
 	/*App.View().FuncMap["Render"] = func(str string) string {
 		bytes, e := App.View().RenderString(str, nil)
 		if e != nil {
@@ -171,9 +172,9 @@ func Init() {
 		return string(bytes)
 	}*/
 	App.View().FuncMap["Md2html"] = utils.Markdown2HtmlTemplate
-	App.View().IsCache = (model.GetSetting("theme_cache") == "true")
+	App.View().IsCache = (setting.Get("theme_cache") == "true")
 
-	println("app version @ " + strconv.Itoa(model.GetVersion().Version))
+	println("app version @ " + strconv.Itoa(setting.GetVersion().Version))
 }
 
 func registerHomeHandler() {

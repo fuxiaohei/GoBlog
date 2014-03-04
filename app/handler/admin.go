@@ -2,6 +2,10 @@ package handler
 
 import (
 	"github.com/fuxiaohei/GoBlog/app/model"
+	"github.com/fuxiaohei/GoBlog/app/model/content"
+	"github.com/fuxiaohei/GoBlog/app/model/message"
+	"github.com/fuxiaohei/GoBlog/app/model/setting"
+	mUser "github.com/fuxiaohei/GoBlog/app/model/user"
 	"github.com/fuxiaohei/GoBlog/app/plugin"
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"github.com/fuxiaohei/GoInk"
@@ -12,20 +16,20 @@ import (
 // Admin is admin dashboard handler, pattern /admin/.
 func Admin(context *GoInk.Context) {
 	uid, _ := strconv.Atoi(context.Cookie("token-user"))
-	user := model.GetUserById(uid)
+	u := mUser.ById(uid)
 	context.Layout("admin/admin")
 	context.Render("admin/home", map[string]interface{}{
 		"Title":    "控制台",
 		"Statis":   model.NewStatis(),
-		"User":     user,
-		"Messages": model.GetUnreadMessages(),
+		"User":     u,
+		"Messages": message.Unread(),
 	})
 }
 
 // AdminProfile is user profile admin handler, pattern /admin/profile/.
 func AdminProfile(context *GoInk.Context) {
 	uid, _ := strconv.Atoi(context.Cookie("token-user"))
-	user := model.GetUserById(uid)
+	user := mUser.ById(uid)
 	if context.Method == "POST" {
 		data := context.Input()
 		// check email unique
@@ -41,8 +45,8 @@ func AdminProfile(context *GoInk.Context) {
 		user.Bio = data["bio"]
 		Json(context, true).End()
 		go func() {
-			model.SyncUsers()
-			model.UpdateCommentAdmin(user)
+			mUser.Sync()
+			content.UpdateCommentAdmin(user)
 		}()
 		context.Do("profile_update", user)
 		return
@@ -58,13 +62,13 @@ func AdminProfile(context *GoInk.Context) {
 func AdminPassword(context *GoInk.Context) {
 	if context.Method == "POST" {
 		uid, _ := strconv.Atoi(context.Cookie("token-user"))
-		user := model.GetUserById(uid)
+		user := mUser.ById(uid)
 		if !user.CheckPassword(context.String("old")) {
 			Json(context, false).Set("msg", "旧密码错误").End()
 			return
 		}
 		user.ChangePassword(context.String("new"))
-		go model.SyncUsers()
+		go mUser.Sync()
 		Json(context, true).End()
 		context.Do("password_update", user)
 		return
@@ -78,7 +82,7 @@ func AdminPassword(context *GoInk.Context) {
 
 // AdminArticle is admin article list page, pattern /admin/articles/.
 func AdminArticle(context *GoInk.Context) {
-	articles, pager := model.GetArticleList(context.Int("page"), 10)
+	articles, pager := content.ArticleList(context.Int("page"), 10)
 	context.Layout("admin/admin")
 	context.Render("admin/articles", map[string]interface{}{
 		"Title":    "文章",
@@ -90,7 +94,7 @@ func AdminArticle(context *GoInk.Context) {
 // ArticleWrite is article writing page, pattern /admin/article/write/.
 func ArticleWrite(context *GoInk.Context) {
 	if context.Method == "POST" {
-		c := new(model.Content)
+		c := new(content.Content)
 		c.Id = 0
 		data := context.Input()
 		if !c.ChangeSlug(data["slug"]) {
@@ -108,7 +112,7 @@ func ArticleWrite(context *GoInk.Context) {
 		c.Format = "markdown"
 		c.Hits = 1
 		var e error
-		c, e = model.CreateContent(c, "article")
+		c, e = content.Create(c, "article")
 		if e != nil {
 			Json(context, false).Set("msg", e.Error()).End()
 			return
@@ -127,13 +131,13 @@ func ArticleWrite(context *GoInk.Context) {
 // ArticleEdit is article editing page, pattern /admin/article/edit/.
 func ArticleEdit(context *GoInk.Context) {
 	id, _ := strconv.Atoi(context.Param("id"))
-	c := model.GetContentById(id)
+	c := content.ById(id)
 	if c == nil {
 		context.Redirect("/admin/articles/")
 		return
 	}
 	if context.Method == "DELETE" {
-		model.RemoveContent(c)
+		content.Remove(c)
 		Json(context, true).End()
 		return
 	}
@@ -152,7 +156,7 @@ func ArticleEdit(context *GoInk.Context) {
 		//c.Template = "blog.html"
 		c.Status = data["status"]
 		//c.Format = "markdown"
-		model.SaveContent(c)
+		content.Save(c)
 		Json(context, true).Set("content", c).End()
 		context.Do("article_modified", c)
 		//c.Type = "article"
@@ -168,7 +172,7 @@ func ArticleEdit(context *GoInk.Context) {
 // PageWrite is page writing page , pattern /admin/page/write/.
 func PageWrite(context *GoInk.Context) {
 	if context.Method == "POST" {
-		c := new(model.Content)
+		c := new(content.Content)
 		c.Id = 0
 		data := context.Input()
 		if !c.ChangeSlug(data["slug"]) {
@@ -186,7 +190,7 @@ func PageWrite(context *GoInk.Context) {
 		c.Format = "markdown"
 		c.Hits = 1
 		var e error
-		c, e = model.CreateContent(c, "page")
+		c, e = content.Create(c, "page")
 		if e != nil {
 			Json(context, false).Set("msg", e.Error()).End()
 			return
@@ -204,7 +208,7 @@ func PageWrite(context *GoInk.Context) {
 
 // AdminPage is admin page list handler, pattern /admin/pages/.
 func AdminPage(context *GoInk.Context) {
-	pages, pager := model.GetPageList(context.Int("page"), 10)
+	pages, pager := content.PageList(context.Int("page"), 10)
 	context.Layout("admin/admin")
 	context.Render("admin/pages", map[string]interface{}{
 		"Title": "页面",
@@ -216,13 +220,13 @@ func AdminPage(context *GoInk.Context) {
 // PageEdit is page editing handler, pattern /admin/page/edit/.
 func PageEdit(context *GoInk.Context) {
 	id, _ := strconv.Atoi(context.Param("id"))
-	c := model.GetContentById(id)
+	c := content.ById(id)
 	if c == nil {
 		context.Redirect("/admin/pages/")
 		return
 	}
 	if context.Method == "DELETE" {
-		model.RemoveContent(c)
+		content.Remove(c)
 		Json(context, true).End()
 		return
 	}
@@ -241,7 +245,7 @@ func PageEdit(context *GoInk.Context) {
 		//c.Template = "blog.html"
 		c.Status = data["status"]
 		//c.Format = "markdown"
-		model.SaveContent(c)
+		content.Save(c)
 		Json(context, true).Set("content", c).End()
 		context.Do("page_modified", c)
 		//c.Type = "article"
@@ -265,9 +269,9 @@ func AdminSetting(context *GoInk.Context) {
 					v = data[k+"_def"]
 				}
 			}
-			model.SetSetting(k, v)
+			setting.Set(k, v)
 		}
-		model.SyncSettings()
+		setting.Sync()
 		Json(context, true).End()
 		context.Do("setting_saved")
 		return
@@ -275,8 +279,8 @@ func AdminSetting(context *GoInk.Context) {
 	context.Layout("admin/admin")
 	context.Render("admin/setting", map[string]interface{}{
 		"Title":      "配置",
-		"Custom":     model.GetCustomSettings(),
-		"Navigators": model.GetNavigators(),
+		"Custom":     setting.GetCustom(),
+		"Navigators": setting.GetNavigators(),
 	})
 }
 
@@ -288,9 +292,9 @@ func CustomSetting(context *GoInk.Context) {
 		if len(k) < 1 {
 			continue
 		}
-		model.SetSetting("c_"+k, values[i])
+		setting.Set("c_"+k, values[i])
 	}
-	model.SyncSettings()
+	setting.Sync()
 	Json(context, true).End()
 	context.Do("setting_saved")
 	return
@@ -302,7 +306,7 @@ func NavigatorSetting(context *GoInk.Context) {
 	text := context.Strings("text")
 	title := context.Strings("title")
 	link := context.Strings("link")
-	model.SetNavigators(order, text, title, link)
+	setting.SetNavigators(order, text, title, link)
 	Json(context, true).End()
 	context.Do("setting_saved")
 	return
@@ -313,8 +317,8 @@ func AdminComments(context *GoInk.Context) {
 	// delete comment
 	if context.Method == "DELETE" {
 		id := context.Int("id")
-		cmt := model.GetCommentById(id)
-		model.RemoveComment(cmt.Cid, id)
+		cmt := content.CommentById(id)
+		content.RemoveComment(cmt.Cid, id)
 		Json(context, true).End()
 		context.Do("comment_delete", id)
 		return
@@ -322,10 +326,10 @@ func AdminComments(context *GoInk.Context) {
 	// change comment status
 	if context.Method == "PUT" {
 		id := context.Int("id")
-		cmt2 := model.GetCommentById(id)
+		cmt2 := content.CommentById(id)
 		cmt2.Status = "approved"
 		cmt2.GetReader().Active = true
-		model.SaveComment(cmt2)
+		content.SaveComment(cmt2)
 		Json(context, true).End()
 		context.Do("comment_change_status", cmt2)
 		return
@@ -334,11 +338,11 @@ func AdminComments(context *GoInk.Context) {
 	if context.Method == "POST" {
 		// get required data
 		pid := context.Int("pid")
-		cid := model.GetCommentById(pid).Cid
+		cid := content.CommentById(pid).Cid
 		uid, _ := strconv.Atoi(context.Cookie("token-user"))
-		user := model.GetUserById(uid)
+		user := mUser.ById(uid)
 
-		co := new(model.Comment)
+		co := new(content.Comment)
 		co.Author = user.Nick
 		co.Email = user.Email
 		co.Url = user.Url
@@ -348,14 +352,14 @@ func AdminComments(context *GoInk.Context) {
 		co.Ip = context.Ip
 		co.UserAgent = context.UserAgent
 		co.IsAdmin = true
-		model.CreateComment(cid, co)
+		content.CreateComment(cid, co)
 		Json(context, true).Set("comment", co.ToJson()).End()
-		model.CreateMessage("comment", co)
+		message.Create("comment", co)
 		context.Do("comment_reply", co)
 		return
 	}
 	page := context.IntOr("page", 1)
-	comments, pager := model.GetCommentList(page, 10)
+	comments, pager := content.CommentList(page, 10)
 	context.Layout("admin/admin")
 	context.Render("admin/comments", map[string]interface{}{
 		"Title":    "评论",
@@ -430,11 +434,11 @@ func AdminMessageRead(context *GoInk.Context) {
 		Json(context, false).End()
 		return
 	}
-	m := model.GetMessage(id)
+	m := message.ById(id)
 	if m == nil {
 		Json(context, false).End()
 		return
 	}
-	model.SaveMessageRead(m)
+	message.SetRead(m)
 	Json(context, true).End()
 }

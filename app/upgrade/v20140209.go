@@ -2,7 +2,9 @@ package upgrade
 
 import (
 	"github.com/fuxiaohei/GoBlog/app/cmd"
-	"github.com/fuxiaohei/GoBlog/app/model"
+	"github.com/fuxiaohei/GoBlog/app/model/message"
+	"github.com/fuxiaohei/GoBlog/app/model/setting"
+	"github.com/fuxiaohei/GoBlog/app/model/storage"
 	"github.com/fuxiaohei/GoInk"
 	"os"
 	"path"
@@ -19,10 +21,10 @@ func upgrade_20140209(app *GoInk.App) bool {
 	os.Remove(path.Join(vDir, "cmd.layout"))
 
 	// write default menu setting
-	model.DefaultNavigators()
+	setting.SetDefaultNavigators()
 
 	// write message storage
-	model.Storage.Set("messages",[]*model.Message{})
+	storage.Storage.Set("messages", []*message.Message{})
 
 	cmd.ExtractBundleBytes()
 	return true

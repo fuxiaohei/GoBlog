@@ -2,7 +2,8 @@ package upgrade
 
 import (
 	"github.com/fuxiaohei/GoBlog/app/cmd"
-	"github.com/fuxiaohei/GoBlog/app/model"
+	"github.com/fuxiaohei/GoBlog/app/model/setting"
+	"github.com/fuxiaohei/GoBlog/app/model/storage"
 	"github.com/fuxiaohei/GoBlog/app/plugin"
 	"github.com/fuxiaohei/GoInk"
 	"os"
@@ -16,18 +17,18 @@ func init() {
 func upgrade_20140130(app *GoInk.App) bool {
 
 	// change settings
-	model.LoadSettings()
-	model.SetSetting("c_footer_ga", "<!-- google analytics or other -->")
-	model.SetSetting("enable_go_markdown", "false")
-	model.SetSetting("enable_go_markdown_def", "false")
-	model.SetSetting("site_theme", "default")
-	model.SetSetting("site_theme_def", "default")
-	model.SetSetting("c_home_avatar", "/static/img/site.png")
-	model.SyncSettings()
+	setting.Load()
+	setting.Set("c_footer_ga", "<!-- google analytics or other -->")
+	setting.Set("enable_go_markdown", "false")
+	setting.Set("enable_go_markdown_def", "false")
+	setting.Set("site_theme", "default")
+	setting.Set("site_theme_def", "default")
+	setting.Set("c_home_avatar", "/static/img/site.png")
+	setting.Sync()
 
 	// init plugin
 	plugin.Init()
-	model.Storage.Dir("plugin")
+	storage.Storage.MkDir("plugin")
 
 	// remove static files
 	os.RemoveAll(app.Get("view_dir"))
