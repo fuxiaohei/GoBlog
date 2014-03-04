@@ -1,4 +1,4 @@
-package model
+package setting
 
 type Statis struct {
 	Comments int

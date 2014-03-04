@@ -1,11 +1,12 @@
-package model
+package setting
 
 import (
+	. "github.com/fuxiaohei/GoBlog/app/model/storage"
 	"strconv"
 	"strings"
 )
 
-type navItem struct {
+type NavItem struct {
 	Order int
 	Text  string
 	Title string
@@ -14,14 +15,14 @@ type navItem struct {
 
 var (
 	settings   map[string]string
-	navigators []*navItem
+	navigators []*NavItem
 )
 
-func GetSetting(key string) string {
+func Get(key string) string {
 	return settings[key]
 }
 
-func GetCustomSettings() map[string]string {
+func GetCustom() map[string]string {
 	m := make(map[string]string)
 	for k, v := range settings {
 		if strings.HasPrefix(k, "c_") {
@@ -31,15 +32,15 @@ func GetCustomSettings() map[string]string {
 	return m
 }
 
-func SetSetting(key string, v string) {
+func Set(key string, v string) {
 	settings[key] = v
 }
 
-func SyncSettings() {
+func Sync() {
 	Storage.Set("settings", settings)
 }
 
-func LoadSettings() {
+func Load() {
 	settings = make(map[string]string)
 	Storage.Get("settings", &settings)
 }
@@ -56,15 +57,15 @@ func SortNavigators() {
 }
 
 func LoadNavigators() {
-	navigators = make([]*navItem, 0)
+	navigators = make([]*NavItem, 0)
 	Storage.Get("navigators", &navigators)
 	SortNavigators()
 }
 
 func SetNavigators(order []string, text []string, title []string, link []string) {
-	navs := make([]*navItem, len(text))
+	navs := make([]*NavItem, len(text))
 	for i, t := range text {
-		n := new(navItem)
+		n := new(NavItem)
 		n.Order, _ = strconv.Atoi(order[i])
 		n.Text = t
 		n.Title = title[i]
@@ -75,23 +76,23 @@ func SetNavigators(order []string, text []string, title []string, link []string)
 	SyncNavigators()
 }
 
-func DefaultNavigators() {
-	n := new(navItem)
+func SetDefaultNavigators() {
+	n := new(NavItem)
 	n.Order = 1
 	n.Text = "文章"
 	n.Title = "文章"
 	n.Link = "/"
-	n2 := new(navItem)
+	n2 := new(NavItem)
 	n2.Order = 2
 	n2.Text = "关于"
 	n2.Title = "关于"
 	n2.Link = "/about-me.html"
-	n3 := new(navItem)
+	n3 := new(NavItem)
 	n3.Order = 3
 	n3.Text = "好友"
 	n3.Title = "好友"
 	n3.Link = "/friends.html"
-	navigators = []*navItem{n, n2, n3}
+	navigators = []*NavItem{n, n2, n3}
 	Storage.Set("navigators", navigators)
 }
 
@@ -100,6 +101,6 @@ func SyncNavigators() {
 	SortNavigators()
 }
 
-func GetNavigators() []*navItem {
+func GetNavigators() []*NavItem {
 	return navigators
 }

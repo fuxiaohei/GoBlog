@@ -1,8 +1,12 @@
-package model
+package setting
 
-var ver *version
+import (
+	. "github.com/fuxiaohei/GoBlog/app/model/storage"
+)
 
-type version struct {
+var ver *Version
+
+type Version struct {
 	Name           string
 	BuildTime      int64
 	Version        int
@@ -10,11 +14,11 @@ type version struct {
 }
 
 func loadVersion() {
-	ver = new(version)
-	Storage.Get("version", ver)
+	ver = new(Version)
+	Storage.Get("Version", ver)
 }
 
-func GetVersion() *version {
+func GetVersion() *Version {
 	if ver == nil {
 		loadVersion()
 	}

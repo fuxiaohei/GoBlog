@@ -1,6 +1,10 @@
-package model
+package message
 
 import (
+	"github.com/fuxiaohei/GoBlog/app/model/comment"
+	"github.com/fuxiaohei/GoBlog/app/model/content"
+	. "github.com/fuxiaohei/GoBlog/app/model/storage"
+	"github.com/fuxiaohei/GoBlog/app/model/timer"
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"strings"
 )
@@ -25,7 +29,7 @@ type Message struct {
 	IsRead     bool
 }
 
-func CreateMessage(tp string, data interface{}) *Message {
+func Create(tp string, data interface{}) *Message {
 	m := new(Message)
 	m.Type = tp
 	m.Data = messageGenerator[tp](data)
@@ -38,15 +42,15 @@ func CreateMessage(tp string, data interface{}) *Message {
 	messageMaxId += Storage.TimeInc(3)
 	m.Id = messageMaxId
 	messages = append([]*Message{m}, messages...)
-	SyncMessages()
+	Sync()
 	return m
 }
 
-func SetMessageGenerator(name string, fn func(v interface{}) string) {
+func SetGenerator(name string, fn func(v interface{}) string) {
 	messageGenerator[name] = fn
 }
 
-func GetMessage(id int) *Message {
+func ById(id int) *Message {
 	for _, m := range messages {
 		if m.Id == id {
 			return m
@@ -55,7 +59,7 @@ func GetMessage(id int) *Message {
 	return nil
 }
 
-func GetUnreadMessages() []*Message {
+func Unread() []*Message {
 	ms := make([]*Message, 0)
 	for _, m := range messages {
 		if m.IsRead {
@@ -66,11 +70,11 @@ func GetUnreadMessages() []*Message {
 	return ms
 }
 
-func GetMessages() []*Message {
+func All() []*Message {
 	return messages
 }
 
-func GetTypedMessages(tp string, unread bool) []*Message {
+func Typed(tp string, unread bool) []*Message {
 	ms := make([]*Message, 0)
 	for _, m := range messages {
 		if m.Type == tp {
@@ -86,16 +90,16 @@ func GetTypedMessages(tp string, unread bool) []*Message {
 	return ms
 }
 
-func SaveMessageRead(m *Message) {
+func SetRead(m *Message) {
 	m.IsRead = true
-	SyncMessages()
+	Sync()
 }
 
-func SyncMessages() {
+func Sync() {
 	Storage.Set("messages", messages)
 }
 
-func LoadMessages() {
+func Load() {
 	messages = make([]*Message, 0)
 	messageMaxId = 0
 	Storage.Get("messages", &messages)
@@ -106,7 +110,7 @@ func LoadMessages() {
 	}
 }
 
-func RecycleMessages() {
+func Recycle() {
 	for i, m := range messages {
 		if m.CreateTime+3600*24*3 < utils.Now() {
 			messages = messages[:i]
@@ -116,11 +120,11 @@ func RecycleMessages() {
 }
 
 func generateCommentMessage(co interface{}) string {
-	c, ok := co.(*Comment)
+	c, ok := co.(*comment.Comment)
 	if !ok {
 		return ""
 	}
-	cnt := GetContentById(c.Cid)
+	cnt := content.GetContentById(c.Cid)
 	s := ""
 	if c.Pid < 1 {
 		s = "<p>" + c.Author + "同学，在文章《" + cnt.Title + "》发表评论："
@@ -144,9 +148,9 @@ func generateBackupMessage(co interface{}) string {
 }
 
 func startMessageTimer() {
-	SetTimerFunc("message-sync", 9, func() {
+	timer.SetFunc("message-sync", 9, func() {
 		println("write messages in 1.5 hour timer")
-		RecycleMessages()
-		SyncMessages()
+		Recycle()
+		Sync()
 	})
 }
