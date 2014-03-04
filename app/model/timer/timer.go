@@ -1,4 +1,4 @@
-package model
+package timer
 
 import (
 	"time"
@@ -22,7 +22,7 @@ func init() {
 // SetTimerFunc adds timer func for time ticker.
 // Ticker means step time, after ticker size step passed, do function.
 // Name is unique name of func.If set same name func, use the last one.
-func SetTimerFunc(name string, ticker int, fn func()) {
+func SetFunc(name string, ticker int, fn func()) {
 	tfn := new(timerFunc)
 	tfn.Fn = fn
 	tfn.Ticker = ticker
@@ -31,7 +31,7 @@ func SetTimerFunc(name string, ticker int, fn func()) {
 
 // ChangeTimerFunc can change timer func by given name.
 // If the func of name is none, do not change anything, print error message.
-func ChangeTimerFunc(name string, ticker int, fn func()) {
+func ChangeFunc(name string, ticker int, fn func()) {
 	if _, ok := timerFuncs[name]; ok {
 		timerFuncs[name].Fn = fn
 		timerFuncs[name].Ticker = ticker
@@ -41,12 +41,12 @@ func ChangeTimerFunc(name string, ticker int, fn func()) {
 }
 
 // DelTimerFunc deletes timer func.
-func DelTimerFunc(name string) {
+func DelFunc(name string) {
 	delete(timerFuncs, name)
 }
 
 // GetTimerFuncs returns registered timer func with its name and ticker int.
-func GetTimerFuncs() map[string]int {
+func GetFuncs() map[string]int {
 	m := make(map[string]int)
 	for n, f := range timerFuncs {
 		m[n] = f.Ticker
@@ -57,12 +57,7 @@ func GetTimerFuncs() map[string]int {
 // StartModelTimer adds models' timer and starts time ticker.
 // The default step is 10 min once.
 func StartModelTimer() {
-	// start all timers
-	startCommentsTimer()
-	startContentSyncTimer()
-	startContentTmpIndexesTimer()
-	startMessageTimer()
-	startFileSyncTimer()
+	// todo start all timers
 	// start time ticker
 	ticker := time.NewTicker(time.Duration(10) * time.Minute)
 	go doTimers(ticker.C)
