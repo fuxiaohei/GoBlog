@@ -2,7 +2,7 @@ package content
 
 import "github.com/fuxiaohei/GoBlog/app/utils"
 
-func generatePublishArticleIndex() {
+func UpdatePublishIndex() {
 	arr := make([]int, 0)
 	for _, id := range contentsIndex["article"] {
 		c := ById(id)

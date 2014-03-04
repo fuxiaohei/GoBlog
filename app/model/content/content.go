@@ -186,7 +186,7 @@ func Create(c *Content, t string) (*Content, error) {
 	c.textRendered = ""
 	contents[c.Id] = c
 	contentsIndex[c.Type] = append([]int{c.Id}, contentsIndex[c.Type]...)
-	generatePublishArticleIndex()
+	UpdatePublishIndex()
 	go SyncOne(c)
 	return c, nil
 }
@@ -197,7 +197,7 @@ func Save(c *Content) {
 	c.EditTime = utils.Now()
 	// clean rendered cache text
 	c.textRendered = ""
-	generatePublishArticleIndex()
+	UpdatePublishIndex()
 	go SyncOne(c)
 }
 
@@ -213,7 +213,7 @@ func Remove(c *Content) {
 		}
 	}
 	c.Status = "DELETE"
-	generatePublishArticleIndex()
+	UpdatePublishIndex()
 	go SyncOne(c)
 }
 
@@ -284,7 +284,7 @@ func startContentSyncTimer() {
 	})
 }
 
-func generateContentTmpIndexes() {
+func UpdateTmpIndex() {
 	var (
 		popTmp     = make([][2]int, 0)
 		popIndex   = make([]int, 0)
@@ -341,6 +341,6 @@ func GetContentTags() []*Tag {
 func startContentTmpIndexesTimer() {
 	timer.SetFunc("content-indexes", 36, func() {
 		println("write content indexes in 6 hours timer")
-		generateContentTmpIndexes()
+		UpdateTmpIndex()
 	})
 }

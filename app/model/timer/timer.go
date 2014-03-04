@@ -56,7 +56,7 @@ func GetFuncs() map[string]int {
 
 // StartModelTimer adds models' timer and starts time ticker.
 // The default step is 10 min once.
-func StartModelTimer() {
+func Start() {
 	// todo start all timers
 	// start time ticker
 	ticker := time.NewTicker(time.Duration(10) * time.Minute)

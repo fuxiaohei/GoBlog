@@ -13,14 +13,14 @@ type Version struct {
 	CurrentVersion int
 }
 
-func loadVersion() {
+func LoadVersion() {
 	ver = new(Version)
 	Storage.Get("Version", ver)
 }
 
 func GetVersion() *Version {
 	if ver == nil {
-		loadVersion()
+		LoadVersion()
 	}
 	return ver
 }
