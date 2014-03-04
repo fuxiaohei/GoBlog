@@ -1,7 +1,12 @@
-package model
+package storage
 
 import (
 	"encoding/json"
+	"github.com/fuxiaohei/GoBlog/app/model/comment"
+	"github.com/fuxiaohei/GoBlog/app/model/content"
+	"github.com/fuxiaohei/GoBlog/app/model/message"
+	"github.com/fuxiaohei/GoBlog/app/model/setting"
+	"github.com/fuxiaohei/GoBlog/app/model/user"
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"io/ioutil"
 	"os"
@@ -66,7 +71,7 @@ func (jss *jsonStorage) Dir(name string) {
 
 func writeDefaultData() {
 	// write user
-	u := new(User)
+	u := new(user.User)
 	u.Id = Storage.TimeInc(10)
 	u.Name = "admin"
 	u.Password = utils.Sha1("adminxxxxx")
@@ -77,13 +82,13 @@ func writeDefaultData() {
 	u.Bio = "这是站点的管理员，你可以添加一些个人介绍，支持换行不支持markdown"
 	u.LastLoginTime = u.CreateTime
 	u.Role = "ADMIN"
-	Storage.Set("users", []*User{u})
+	Storage.Set("users", []*user.User{u})
 
 	// write token
-	Storage.Set("tokens", map[string]*Token{})
+	Storage.Set("tokens", map[string]*user.Token{})
 
 	// write contents
-	a := new(Content)
+	a := new(content.Content)
 	a.Id = Storage.TimeInc(9)
 	a.Title = "欢迎使用 Fxh.Go"
 	a.Slug = "welcome-fxh-go"
@@ -101,7 +106,7 @@ func writeDefaultData() {
 	a.Template = "blog.html"
 	a.Hits = 1
 	// write comments
-	co := new(Comment)
+	co := new(comment.Comment)
 	co.Author = u.Nick
 	co.Email = u.Email
 	co.Url = u.Url
@@ -115,7 +120,7 @@ func writeDefaultData() {
 	co.CreateTime = utils.Now()
 	co.Status = "approved"
 	co.Cid = a.Id
-	a.Comments = []*Comment{co}
+	a.Comments = []*comment.Comment{co}
 	Storage.Set("content/article-"+strconv.Itoa(a.Id), a)
 
 	// write pages
@@ -134,7 +139,7 @@ func writeDefaultData() {
 	p.Type = "page"
 	p.Status = "publish"
 	p.Format = "markdown"
-	p.Comments = make([]*Comment, 0)
+	p.Comments = make([]*comment.Comment, 0)
 	p.Template = "page.html"
 	p.Hits = 1
 	Storage.Set("content/page-"+strconv.Itoa(p.Id), p)
@@ -153,16 +158,16 @@ func writeDefaultData() {
 	p2.Type = "page"
 	p2.Status = "publish"
 	p2.Format = "markdown"
-	p2.Comments = make([]*Comment, 0)
+	p2.Comments = make([]*comment.Comment, 0)
 	p2.Template = "page.html"
 	p2.Hits = 1
 	Storage.Set("content/page-"+strconv.Itoa(p2.Id), p2)
 
 	// write new reader
-	Storage.Set("readers", map[string]*Reader{})
+	Storage.Set("readers", map[string]*comment.Reader{})
 
 	// write version
-	v := new(version)
+	v := new(setting.Version)
 	v.Name = "Fxh.Go"
 	v.BuildTime = utils.Now()
 	v.Version = appVersion
@@ -190,25 +195,25 @@ func writeDefaultData() {
 	Storage.Set("files", []*File{})
 
 	// write message
-	Storage.Set("messages", []*Message{})
+	Storage.Set("messages", []*message.Message{})
 
 	// write navigators
-	n := new(navItem)
+	n := new(setting.NavItem)
 	n.Order = 1
 	n.Text = "文章"
 	n.Title = "文章"
 	n.Link = "/"
-	n2 := new(navItem)
+	n2 := new(setting.NavItem)
 	n2.Order = 2
 	n2.Text = "关于"
 	n2.Title = "关于"
 	n2.Link = "/about-me.html"
-	n3 := new(navItem)
+	n3 := new(setting.NavItem)
 	n3.Order = 3
 	n3.Text = "好友"
 	n3.Title = "好友"
 	n3.Link = "/friends.html"
-	Storage.Set("navigators", []*navItem{n, n2, n3})
+	Storage.Set("navigators", []*setting.NavItem{n, n2, n3})
 
 	// write default tmp data
 	writeDefaultTmpData()
@@ -218,66 +223,7 @@ func writeDefaultTmpData() {
 	TmpStorage.Set("contents", make(map[string][]int))
 }
 
-func loadAllData() {
-	loadVersion()
-	LoadSettings()
-	LoadNavigators()
-	LoadUsers()
-	LoadTokens()
-	LoadContents()
-	LoadMessages()
-	LoadReaders()
-	LoadComments()
-	LoadFiles()
-}
-
 // TimeInc returns time step value devided by d int with time unix stamp.
 func (jss *jsonStorage) TimeInc(d int) int {
 	return int(utils.Now())%d + 1
-}
-
-// Init does model initialization.
-// If first run, write default data.
-// v means app.Version number. It's needed for version data.
-func Init(v int) {
-	appVersion = v
-	Storage = new(jsonStorage)
-	Storage.Init("data")
-	TmpStorage = new(jsonStorage)
-	TmpStorage.dir = "tmp/data"
-	if !Storage.Has("version") {
-		os.Mkdir(Storage.dir, os.ModePerm)
-		os.Mkdir(path.Join(Storage.dir, "content"), os.ModePerm)
-		os.Mkdir(path.Join(Storage.dir, "plugin"), os.ModePerm)
-		writeDefaultData()
-	}
-}
-
-// All loads all data from storage to memory.
-// Start timers for content, comment and message.
-func All() {
-	loadAllData()
-	// generate indexes
-	SyncIndexes()
-	// start model timer, do all timer stuffs
-	StartModelTimer()
-}
-
-func SyncIndexes() {
-	// generate indexes
-	generatePublishArticleIndex()
-	generateContentTmpIndexes()
-}
-
-// SyncAll writes all current memory data to storage files.
-func SyncAll() {
-	SyncContents()
-	SyncMessages()
-	SyncFiles()
-	SyncReaders()
-	SyncSettings()
-	SyncNavigators()
-	SyncTokens()
-	SyncUsers()
-	SyncVersion()
 }
