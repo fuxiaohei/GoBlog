@@ -1,7 +1,6 @@
 package message
 
 import (
-	"github.com/fuxiaohei/GoBlog/app/model/comment"
 	"github.com/fuxiaohei/GoBlog/app/model/content"
 	. "github.com/fuxiaohei/GoBlog/app/model/storage"
 	"github.com/fuxiaohei/GoBlog/app/model/timer"
@@ -120,17 +119,17 @@ func Recycle() {
 }
 
 func generateCommentMessage(co interface{}) string {
-	c, ok := co.(*comment.Comment)
+	c, ok := co.(*content.Comment)
 	if !ok {
 		return ""
 	}
-	cnt := content.GetContentById(c.Cid)
+	cnt := content.ById(c.Cid)
 	s := ""
 	if c.Pid < 1 {
 		s = "<p>" + c.Author + "同学，在文章《" + cnt.Title + "》发表评论："
 		s += utils.Html2str(c.Content) + "</p>"
 	} else {
-		p := GetCommentById(c.Pid)
+		p := (c.Pid)
 		s = "<p>" + p.Author + "同学，在文章《" + cnt.Title + "》的评论："
 		s += utils.Html2str(p.Content) + "</p>"
 		s += "<p>" + c.Author + "同学的回复："

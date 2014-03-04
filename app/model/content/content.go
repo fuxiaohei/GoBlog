@@ -3,7 +3,6 @@ package content
 import (
 	"errors"
 	"fmt"
-	"github.com/fuxiaohei/GoBlog/app/model/comment"
 	"github.com/fuxiaohei/GoBlog/app/model/setting"
 	. "github.com/fuxiaohei/GoBlog/app/model/storage"
 	"github.com/fuxiaohei/GoBlog/app/model/timer"
@@ -55,7 +54,7 @@ type Content struct {
 	// Format defines the content text format type. Now only support markdown.
 	Format string
 
-	Comments []*comment.Comment
+	Comments []*Comment
 	Hits     int
 }
 

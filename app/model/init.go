@@ -1,18 +1,17 @@
 package model
 
 import (
-	"github.com/fuxiaohei/GoBlog/app/model/comment"
 	"github.com/fuxiaohei/GoBlog/app/model/content"
 	"github.com/fuxiaohei/GoBlog/app/model/file"
 	"github.com/fuxiaohei/GoBlog/app/model/message"
 	"github.com/fuxiaohei/GoBlog/app/model/setting"
 	"github.com/fuxiaohei/GoBlog/app/model/storage"
+	"github.com/fuxiaohei/GoBlog/app/model/timer"
 	"github.com/fuxiaohei/GoBlog/app/model/user"
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"os"
 	"path"
 	"strconv"
-	"github.com/fuxiaohei/GoBlog/app/model/timer"
 )
 
 func loadAllData() {
@@ -23,8 +22,8 @@ func loadAllData() {
 	user.LoadTokens()
 	content.Load()
 	message.Load()
-	comment.LoadReaders()
-	comment.Load()
+	content.LoadReaders()
+	content.LoadComments()
 	file.Load()
 }
 
@@ -65,7 +64,7 @@ func writeDefaultData() {
 	a.Template = "blog.html"
 	a.Hits = 1
 	// write comments
-	co := new(comment.Comment)
+	co := new(content.Comment)
 	co.Author = u.Nick
 	co.Email = u.Email
 	co.Url = u.Url
@@ -79,7 +78,7 @@ func writeDefaultData() {
 	co.CreateTime = utils.Now()
 	co.Status = "approved"
 	co.Cid = a.Id
-	a.Comments = []*comment.Comment{co}
+	a.Comments = []*content.Comment{co}
 	Storage.Set("content/article-"+strconv.Itoa(a.Id), a)
 
 	// write pages
@@ -98,7 +97,7 @@ func writeDefaultData() {
 	p.Type = "page"
 	p.Status = "publish"
 	p.Format = "markdown"
-	p.Comments = make([]*comment.Comment, 0)
+	p.Comments = make([]*content.Comment, 0)
 	p.Template = "page.html"
 	p.Hits = 1
 	Storage.Set("content/page-"+strconv.Itoa(p.Id), p)
@@ -117,13 +116,13 @@ func writeDefaultData() {
 	p2.Type = "page"
 	p2.Status = "publish"
 	p2.Format = "markdown"
-	p2.Comments = make([]*comment.Comment, 0)
+	p2.Comments = make([]*content.Comment, 0)
 	p2.Template = "page.html"
 	p2.Hits = 1
 	Storage.Set("content/page-"+strconv.Itoa(p2.Id), p2)
 
 	// write new reader
-	Storage.Set("readers", map[string]*comment.Reader{})
+	Storage.Set("readers", map[string]*content.Reader{})
 
 	// write version
 	v := new(setting.Version)
@@ -220,7 +219,7 @@ func SyncAll() {
 	content.Sync()
 	message.Sync()
 	file.Sync()
-	comment.SyncReaders()
+	content.SyncReaders()
 	user.Sync()
 	user.SyncTokens()
 	setting.Sync()

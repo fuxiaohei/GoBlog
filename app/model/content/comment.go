@@ -1,7 +1,6 @@
 package content
 
 import (
-	"github.com/fuxiaohei/GoBlog/app/model/content"
 	. "github.com/fuxiaohei/GoBlog/app/model/storage"
 	"github.com/fuxiaohei/GoBlog/app/model/timer"
 	"github.com/fuxiaohei/GoBlog/app/model/user"
@@ -88,7 +87,7 @@ func (c *Comment) IsValid() bool {
 // IsRemovable returns whether this comment can remove.
 // If content or parent comment of this comment is removed, return true.
 func (c *Comment) IsRemovable() bool {
-	if content.ById(c.Cid) == nil {
+	if ById(c.Cid) == nil {
 		return true
 	}
 	if c.Pid > 0 {
@@ -110,12 +109,12 @@ func (c *Comment) GetReader() *Reader {
 }
 
 // GetContent returns the content item of this comment.
-func (c *Comment) GetContent() *content.Content {
-	return content.ById(c.Cid)
+func (c *Comment) GetContent() *Content {
+	return ById(c.Cid)
 }
 
 // CreateComment creates a comment and links it to the cid content.
-func Create(cid int, c *Comment) {
+func CreateComment(cid int, c *Comment) {
 	commentMaxId += Storage.TimeInc(4)
 	c.Id = commentMaxId
 	c.CreateTime = utils.Now()
@@ -145,16 +144,16 @@ func Create(cid int, c *Comment) {
 	comments[c.Id] = c
 	commentsIndex = append([]int{c.Id}, commentsIndex...)
 	// append to content
-	cnt := content.ById(cid)
+	cnt := ById(cid)
 	cnt.Comments = append(cnt.Comments, c)
-	go content.SyncOne(cnt)
+	go SyncOne(cnt)
 }
 
 // SaveComment saves a comment and related updates content and reader data.
-func Save(c *Comment) {
-	cnt := content.ById(c.Cid)
+func SaveComment(c *Comment) {
+	cnt := ById(c.Cid)
 	go func() {
-		content.SyncOne(cnt)
+		SyncOne(cnt)
 		SyncReaders()
 	}()
 }
@@ -167,7 +166,7 @@ func removeOneComment(cid int, id int) {
 			break
 		}
 	}
-	cnt := content.ById(cid)
+	cnt := ById(cid)
 	if cnt == nil {
 		return
 	}
@@ -179,23 +178,23 @@ func removeOneComment(cid int, id int) {
 }
 
 // RemoveComment removes a comment by id and updates content iten by cid.
-func Remove(cid int, id int) {
+func RemoveComment(cid int, id int) {
 	removeOneComment(cid, id)
-	cnt := content.ById(cid)
+	cnt := ById(cid)
 	if cnt == nil {
 		return
 	}
-	go content.SyncOne(cnt)
+	go SyncOne(cnt)
 }
 
 // GetCommentById returns a comment by id.
-func ById(id int) *Comment {
+func CommentById(id int) *Comment {
 	return comments[id]
 }
 
 // GetCommentList returns a comments list and pager.
 // This list scans all comments no matter its status.
-func List(page, size int) ([]*Comment, *utils.Pager) {
+func CommentList(page, size int) ([]*Comment, *utils.Pager) {
 	index := commentsIndex
 	pager := utils.NewPager(page, size, len(index))
 	comments := make([]*Comment, 0)
@@ -211,7 +210,7 @@ func List(page, size int) ([]*Comment, *utils.Pager) {
 // GetCommentRecentList returns a comments list of recent comments.
 // Recent comments are approved and no parent and not admin comment.
 // It's ordered by comment id desc.
-func RecentList(size int) []*Comment {
+func RecentCommentList(size int) []*Comment {
 	comments, i := make([]*Comment, 0), 0
 	for _, id := range commentsIndex {
 		if i >= size {
@@ -227,11 +226,11 @@ func RecentList(size int) []*Comment {
 }
 
 // LoadComments loads all comments from contents.
-func Load() {
+func LoadComments() {
 	comments = make(map[int]*Comment)
 	commentsIndex = make([]int, 0)
 	commentMaxId = 0
-	for _, c := range content.All() {
+	for _, c := range All() {
 		if len(c.Comments) < 1 {
 			continue
 		}
@@ -248,7 +247,7 @@ func Load() {
 
 // UpdateCommentAdmin updates comment author data if admin user data updated.
 // It only updates admin comments.
-func UpdateAdmin(u *user.User) {
+func UpdateCommentAdmin(u *user.User) {
 	for _, co := range comments {
 		if co.IsAdmin {
 			co.Author = u.Nick
@@ -260,7 +259,7 @@ func UpdateAdmin(u *user.User) {
 }
 
 // RecycleComments cleans removable comments.
-func Recycle() {
+func RecycleComments() {
 	readerTmp := make(map[string][]int)
 	for _, co := range comments {
 		if co.IsRemovable() {
@@ -281,13 +280,13 @@ func Recycle() {
 			r.Comments = len(readerTmp[r.Email])
 		}
 	}
-	content.Sync()
+	Sync()
 	SyncReaders()
 }
 
 func startCommentsTimer() {
 	timer.SetFunc("comment-recycle", 36, func() {
 		println("recycle comments in 6 hours timer")
-		Recycle()
+		RecycleComments()
 	})
 }
