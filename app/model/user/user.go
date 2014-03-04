@@ -1,7 +1,8 @@
-package model
+package user
 
 import (
 	"errors"
+	. "github.com/fuxiaohei/GoBlog/app/model/storage"
 	"github.com/fuxiaohei/GoBlog/app/utils"
 )
 
@@ -32,7 +33,7 @@ func (u *User) CheckPassword(pwd string) bool {
 // change user email.
 // check unique.
 func (u *User) ChangeEmail(email string) bool {
-	u2 := GetUserByEmail(u.Email)
+	u2 := ByEmail(u.Email)
 	if u2.Id != u.Id {
 		return false
 	}
@@ -46,7 +47,7 @@ func (u *User) ChangePassword(pwd string) {
 }
 
 // get a user by given id.
-func GetUserById(id int) *User {
+func ById(id int) *User {
 	for _, u := range users {
 		if u.Id == id {
 			return u
@@ -56,7 +57,7 @@ func GetUserById(id int) *User {
 }
 
 // get a user by given name.
-func GetUserByName(name string) *User {
+func ByName(name string) *User {
 	for _, u := range users {
 		if u.Name == name {
 			return u
@@ -66,7 +67,7 @@ func GetUserByName(name string) *User {
 }
 
 // get a user by given email.
-func GetUserByEmail(email string) *User {
+func ByEmail(email string) *User {
 	for _, u := range users {
 		if u.Email == email {
 			return u
@@ -76,7 +77,7 @@ func GetUserByEmail(email string) *User {
 }
 
 // get users of given role.
-func GetUsersByRole(role string) []*User {
+func ListByRole(role string) []*User {
 	us := make([]*User, 0)
 	for _, u := range users {
 		if u.Role == role {
@@ -87,8 +88,8 @@ func GetUsersByRole(role string) []*User {
 }
 
 // create new user.
-func CreateUser(u *User) error {
-	if GetUserByName(u.Email) != nil {
+func Create(u *User) error {
+	if ByName(u.Email) != nil {
 		return errors.New("email-repeat")
 	}
 	userMaxId += Storage.TimeInc(5)
@@ -96,27 +97,27 @@ func CreateUser(u *User) error {
 	u.CreateTime = utils.Now()
 	u.LastLoginTime = u.CreateTime
 	users = append(users, u)
-	go SyncUsers()
+	go Sync()
 	return nil
 }
 
 // remove a user.
-func RemoveUser(u *User) {
+func Remove(u *User) {
 	for i, u2 := range users {
 		if u2.Id == u.Id {
 			users = append(users[:i], users[i+1:]...)
 			break
 		}
 	}
-	go SyncUsers()
+	go Sync()
 }
 
 // write users to json.
-func SyncUsers() {
+func Sync() {
 	Storage.Set("users", users)
 }
 
-func LoadUsers() {
+func Load() {
 	users = make([]*User, 0)
 	userMaxId = 0
 	Storage.Get("users", &users)

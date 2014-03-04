@@ -1,7 +1,8 @@
-package model
+package user
 
 import (
 	"fmt"
+	. "github.com/fuxiaohei/GoBlog/app/model/storage"
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"github.com/fuxiaohei/GoInk"
 )
@@ -17,7 +18,7 @@ type Token struct {
 
 // check token is valid or expired.
 func (t *Token) IsValid() bool {
-	if GetUserById(t.UserId) == nil {
+	if ById(t.UserId) == nil {
 		return false
 	}
 	return t.ExpireTime > utils.Now()
@@ -36,12 +37,12 @@ func CreateToken(u *User, context *GoInk.Context, expire int64) *Token {
 }
 
 // get token by token value.
-func GetTokenByValue(v string) *Token {
+func TokenByValue(v string) *Token {
 	return tokens[v]
 }
 
 // get tokens of given user.
-func GetTokensByUser(u *User) []*Token {
+func TokensByUser(u *User) []*Token {
 	ts := make([]*Token, 0)
 	for _, t := range tokens {
 		if t.UserId == u.Id {
