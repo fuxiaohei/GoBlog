@@ -2,16 +2,10 @@ package storage
 
 import (
 	"encoding/json"
-	"github.com/fuxiaohei/GoBlog/app/model/comment"
-	"github.com/fuxiaohei/GoBlog/app/model/content"
-	"github.com/fuxiaohei/GoBlog/app/model/message"
-	"github.com/fuxiaohei/GoBlog/app/model/setting"
-	"github.com/fuxiaohei/GoBlog/app/model/user"
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"io/ioutil"
 	"os"
 	"path"
-	"strconv"
 )
 
 var (

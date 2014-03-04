@@ -1,4 +1,4 @@
-package comment
+package content
 
 import (
 	. "github.com/fuxiaohei/GoBlog/app/model/storage"
