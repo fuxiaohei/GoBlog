@@ -30,7 +30,7 @@ func loadAllData() {
 func writeDefaultData() {
 	// write user
 	u := new(user.User)
-	u.Id = Storage.TimeInc(10)
+	u.Id = storage.Storage.TimeInc(10)
 	u.Name = "admin"
 	u.Password = utils.Sha1("adminxxxxx")
 	u.Nick = "管理员"
@@ -40,14 +40,14 @@ func writeDefaultData() {
 	u.Bio = "这是站点的管理员，你可以添加一些个人介绍，支持换行不支持markdown"
 	u.LastLoginTime = u.CreateTime
 	u.Role = "ADMIN"
-	Storage.Set("users", []*user.User{u})
+	storage.Storage.Set("users", []*user.User{u})
 
 	// write token
-	Storage.Set("tokens", map[string]*user.Token{})
+	storage.Storage.Set("tokens", map[string]*user.Token{})
 
 	// write contents
 	a := new(content.Content)
-	a.Id = Storage.TimeInc(9)
+	a.Id = storage.Storage.TimeInc(9)
 	a.Title = "欢迎使用 Fxh.Go"
 	a.Slug = "welcome-fxh-go"
 	a.Text = "如果您看到这篇文章,表示您的 blog 已经安装成功."
@@ -74,16 +74,16 @@ func writeDefaultData() {
 	co.Ip = "127.0.0.1"
 	co.UserAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17"
 	co.IsAdmin = true
-	co.Id = Storage.TimeInc(7)
+	co.Id = storage.Storage.TimeInc(7)
 	co.CreateTime = utils.Now()
 	co.Status = "approved"
 	co.Cid = a.Id
 	a.Comments = []*content.Comment{co}
-	Storage.Set("content/article-"+strconv.Itoa(a.Id), a)
+	storage.Storage.Set("content/article-"+strconv.Itoa(a.Id), a)
 
 	// write pages
-	p := new(Content)
-	p.Id = a.Id + Storage.TimeInc(6)
+	p := new(content.Content)
+	p.Id = a.Id + storage.Storage.TimeInc(6)
 	p.Title = "关于"
 	p.Slug = "about-me"
 	p.Text = "本页面由 Fxh.Go 创建, 这只是个测试页面."
@@ -100,9 +100,9 @@ func writeDefaultData() {
 	p.Comments = make([]*content.Comment, 0)
 	p.Template = "page.html"
 	p.Hits = 1
-	Storage.Set("content/page-"+strconv.Itoa(p.Id), p)
-	p2 := new(Content)
-	p2.Id = p.Id + Storage.TimeInc(6)
+	storage.Storage.Set("content/page-"+strconv.Itoa(p.Id), p)
+	p2 := new(content.Content)
+	p2.Id = p.Id + storage.Storage.TimeInc(6)
 	p2.Title = "好友"
 	p2.Slug = "friends"
 	p2.Text = "本页面由 Fxh.Go 创建, 这只是个测试页面."
@@ -119,17 +119,17 @@ func writeDefaultData() {
 	p2.Comments = make([]*content.Comment, 0)
 	p2.Template = "page.html"
 	p2.Hits = 1
-	Storage.Set("content/page-"+strconv.Itoa(p2.Id), p2)
+	storage.Storage.Set("content/page-"+strconv.Itoa(p2.Id), p2)
 
 	// write new reader
-	Storage.Set("readers", map[string]*content.Reader{})
+	storage.Storage.Set("readers", map[string]*content.Reader{})
 
 	// write version
 	v := new(setting.Version)
 	v.Name = "Fxh.Go"
 	v.BuildTime = utils.Now()
-	v.Version = AppVersion
-	Storage.Set("version", v)
+	v.Version = storage.AppVersion
+	storage.Storage.Set("version", v)
 
 	// write settings
 	s := map[string]string{
@@ -147,13 +147,13 @@ func writeDefaultData() {
 		"c_home_avatar":      "/static/img/site.png",
 		"c_footer_ga":        "<!-- google analytics or other -->",
 	}
-	Storage.Set("settings", s)
+	storage.Storage.Set("settings", s)
 
 	// write files
-	Storage.Set("files", []*File{})
+	storage.Storage.Set("files", []*file.File{})
 
 	// write message
-	Storage.Set("messages", []*message.Message{})
+	storage.Storage.Set("messages", []*message.Message{})
 
 	// write navigators
 	n := new(setting.NavItem)
@@ -171,14 +171,14 @@ func writeDefaultData() {
 	n3.Text = "好友"
 	n3.Title = "好友"
 	n3.Link = "/friends.html"
-	Storage.Set("navigators", []*setting.NavItem{n, n2, n3})
+	storage.Storage.Set("navigators", []*setting.NavItem{n, n2, n3})
 
 	// write default tmp data
 	writeDefaultTmpData()
 }
 
 func writeDefaultTmpData() {
-	TmpStorage.Set("contents", make(map[string][]int))
+	storage.TmpStorage.Set("contents", make(map[string][]int))
 }
 
 // Init does model initialization.
@@ -187,13 +187,14 @@ func writeDefaultTmpData() {
 func Init(v int) {
 	storage.AppVersion = v
 	storage.Storage = new(storage.JsonStorage)
-	Storage.Init("data")
+	storage.Storage.Init("data")
 	storage.TmpStorage = new(storage.JsonStorage)
-	storage.TmpStorage.dir = "tmp/data"
-	if !Storage.Has("version") {
-		os.Mkdir(Storage.dir, os.ModePerm)
-		os.Mkdir(path.Join(Storage.dir, "content"), os.ModePerm)
-		os.Mkdir(path.Join(Storage.dir, "plugin"), os.ModePerm)
+	storage.TmpStorage.SetDir("tmp/data")
+	if !storage.Storage.Has("version") {
+		dir := storage.Storage.GetDir()
+		os.Mkdir(dir, os.ModePerm)
+		os.Mkdir(path.Join(dir, "content"), os.ModePerm)
+		os.Mkdir(path.Join(dir, "plugin"), os.ModePerm)
 		writeDefaultData()
 	}
 }

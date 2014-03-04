@@ -116,6 +116,10 @@ func Load() {
 	}
 }
 
+func Len()int{
+	return len(files)
+}
+
 func startFileSyncTimer() {
 	timer.SetFunc("files-sync", 72, func() {
 		println("write media in 12 hour timer")

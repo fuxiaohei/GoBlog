@@ -42,7 +42,7 @@ func (c *Comment) ParentMd() string {
 	if c.Pid < 1 {
 		return ""
 	}
-	co := ById(c.Pid)
+	co := CommentById(c.Pid)
 	if co == nil {
 		return "> 已失效"
 	}
@@ -202,7 +202,7 @@ func CommentList(page, size int) ([]*Comment, *utils.Pager) {
 		return comments, pager
 	}
 	for i := pager.Begin; i <= pager.End; i++ {
-		comments = append(comments, ById(index[i-1]))
+		comments = append(comments, CommentById(index[i-1]))
 	}
 	return comments, pager
 }
@@ -216,7 +216,7 @@ func RecentCommentList(size int) []*Comment {
 		if i >= size {
 			return comments
 		}
-		c := ById(id)
+		c := CommentById(id)
 		if c.Pid < 1 && c.IsAdmin == false && c.Status == "approved" {
 			comments = append(comments, c)
 			i++

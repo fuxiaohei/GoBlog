@@ -129,7 +129,7 @@ func generateCommentMessage(co interface{}) string {
 		s = "<p>" + c.Author + "同学，在文章《" + cnt.Title + "》发表评论："
 		s += utils.Html2str(c.Content) + "</p>"
 	} else {
-		p := (c.Pid)
+		p := content.CommentById(c.Pid)
 		s = "<p>" + p.Author + "同学，在文章《" + cnt.Title + "》的评论："
 		s += utils.Html2str(p.Content) + "</p>"
 		s += "<p>" + c.Author + "同学的回复："

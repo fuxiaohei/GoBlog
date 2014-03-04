@@ -242,7 +242,7 @@ func Load() {
 	articleIndex := make([]int, 0)
 	pageIndex := make([]int, 0)
 	// walk files in directory
-	filepath.Walk(filepath.Join(Storage.dir, "content"), func(_ string, info os.FileInfo, err error) error {
+	filepath.Walk(filepath.Join(Storage.GetDir(), "content"), func(_ string, info os.FileInfo, err error) error {
 		if err == nil {
 			// ignore dir and sub-dir
 			if info.IsDir() {
@@ -342,4 +342,14 @@ func startContentTmpIndexesTimer() {
 		println("write content indexes in 6 hours timer")
 		UpdateTmpIndex()
 	})
+}
+
+func Len(t string) int {
+	if t == "comment" {
+		return len(commentsIndex)
+	}
+	if _, ok := contentsIndex[t]; ok {
+		return len(contentsIndex[t])
+	}
+	return 0
 }

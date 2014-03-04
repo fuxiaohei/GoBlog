@@ -59,7 +59,15 @@ func (jss *JsonStorage) Set(key string, v interface{}) {
 	}
 }
 
-func (jss *JsonStorage) Dir(name string) {
+func (jss *JsonStorage) GetDir() string {
+	return jss.dir
+}
+
+func (jss *JsonStorage) SetDir(dir string) {
+	jss.dir = dir
+}
+
+func (jss *JsonStorage) MkDir(name string) {
 	os.MkdirAll(path.Join(jss.dir, name), os.ModePerm)
 }
 
