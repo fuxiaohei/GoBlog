@@ -114,6 +114,7 @@ func Load() {
 			fileMaxId = f.Id
 		}
 	}
+	startFileSyncTimer()
 }
 
 func Len()int{

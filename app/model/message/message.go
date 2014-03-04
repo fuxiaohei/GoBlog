@@ -107,6 +107,7 @@ func Load() {
 			messageMaxId = m.Id
 		}
 	}
+	startMessageTimer()
 }
 
 func Recycle() {

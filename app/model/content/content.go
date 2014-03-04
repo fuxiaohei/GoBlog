@@ -274,6 +274,9 @@ func Load() {
 	sort.Sort(sort.Reverse(sort.IntSlice(pageIndex)))
 	contentsIndex["article"] = articleIndex
 	contentsIndex["page"] = pageIndex
+	startContentSyncTimer()
+	startContentTmpIndexesTimer()
+	startCommentsTimer()
 }
 
 func startContentSyncTimer() {
