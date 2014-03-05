@@ -190,6 +190,7 @@ func registerHomeHandler() {
 	App.Post("/comment/:id/", handler.Comment)
 	App.Get("/tag/:tag/", handler.TagArticles)
 	App.Get("/tag/:tag/p/:page/", handler.TagArticles)
+	App.Get("/robots", handler.Robots)
 
 	App.Get("/redirect/", handler.Redirect)
 	App.Get("/feed/", handler.Rss)

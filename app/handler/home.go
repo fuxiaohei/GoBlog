@@ -7,7 +7,9 @@ import (
 	mUser "github.com/fuxiaohei/GoBlog/app/model/user"
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"github.com/fuxiaohei/GoInk"
+	"net/http"
 	"net/url"
+	"path"
 	"strconv"
 	"strings"
 )
@@ -196,6 +198,15 @@ func Comment(context *GoInk.Context) {
 func Redirect(ctx *GoInk.Context) {
 	to := ctx.StringOr("to", "/")
 	ctx.Redirect(to, 302)
+}
+
+func Robots(ctx *GoInk.Context) {
+	if path.Ext(ctx.Url) == ".txt" {
+		http.ServeFile(ctx.Response, ctx.Request, "robots.txt")
+		ctx.IsSend = true
+		return
+	}
+	ctx.Status = 404
 }
 
 func validateComment(data map[string]string) string {
