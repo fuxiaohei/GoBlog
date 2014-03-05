@@ -3,7 +3,7 @@
         <img class="c-avatar left" src="{{.Avatar}}" alt="{{.Author}}"/>
         <div class="c-section left">
             <div class="c-meta">
-                <a class="lbl lbl-blue c-author{{if .IsAdmin}} admin{{end}}" href="{{.Url}}" target="_blank">{{.Author}}{{if .IsAdmin}}&nbsp;&nbsp;(admin){{end}}</a>
+                <a class="lbl lbl-blue c-author{{if .IsAdmin}} admin{{end}}" href="{{Redirect .Url}}" target="_blank">{{.Author}}{{if .IsAdmin}}&nbsp;&nbsp;(admin){{end}}</a>
                 <span class="c-time">{{DateInt64 .CreateTime "MM.DD HH:mm"}}</span>
                 <span class="c-email">{{.Email}}</span>{{if .GetContent}}
                 <span class="c-cnt">@{{.GetContent.Title}}</span>{{else}}

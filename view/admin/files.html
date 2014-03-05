@@ -7,10 +7,10 @@
         <span class="id">【{{.Id}}】</span>
         <span class="size">{{FileSize .Size}}</span>
         <span class="name">{{.Name}}</span>
+        <span class="hits lbl lbl-blue">{{.Hits}}</span>
         <a class="link" href="{{.Link}}" target="_blank" title="{{.Link}}">查看</a>
         <a class="del fade-out" href="#" rel="{{.Id}}" title="删除附件">删除</a>
-    </li>{{end}}
-    {{range .Pager.PageSlice}}
+    </li>{{end}}{{range .Pager.PageSlice}}
     <li class="item{{if eq $.Pager.Current .}} current{{end}}"><a href="/admin/files/?page={{.}}">{{.}}</a></li>{{end}}
 </ul>
 <form class="form hide" id="attach-form" action="/admin/files/upload/" enctype="multipart/form-data" method="post">

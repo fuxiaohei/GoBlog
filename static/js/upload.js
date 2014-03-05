@@ -20,7 +20,7 @@ function initUpload(p) {
                             bar.remove();
                         }, 5000);
                     } else {
-                        bar.html("/" + json.file.Url + "&nbsp;&nbsp;&nbsp;(@" + json.file.Name + ")");
+                        bar.html(json.link + "&nbsp;&nbsp;&nbsp;(@" + json.file.Name + ")");
                     }
                     $('#attach-upload').val("");
                 }

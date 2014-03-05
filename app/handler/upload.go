@@ -68,7 +68,7 @@ func FileUpload(context *GoInk.Context) {
 		return
 	}
 	file.Create(ff)
-	Json(context, true).Set("file", ff).End()
+	Json(context, true).Set("file", ff).Set("link",ff.Link()).End()
 	context.Do("attach_created", ff)
 }
 
