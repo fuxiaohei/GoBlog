@@ -1,0 +1,6 @@
+#
+# robots.txt for Fxh.Go
+#
+
+User-agent: *
+Disallow: /admin/

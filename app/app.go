@@ -172,6 +172,9 @@ func Init() {
 		return string(bytes)
 	}*/
 	App.View().FuncMap["Md2html"] = utils.Markdown2HtmlTemplate
+	App.View().FuncMap["Redirect"] = func(url string) string {
+		return "/redirect?to=" + url
+	}
 	App.View().IsCache = (setting.Get("theme_cache") == "true")
 
 	println("app version @ " + strconv.Itoa(setting.GetVersion().Version))
@@ -188,6 +191,7 @@ func registerHomeHandler() {
 	App.Get("/tag/:tag/", handler.TagArticles)
 	App.Get("/tag/:tag/p/:page/", handler.TagArticles)
 
+	App.Get("/redirect/", handler.Redirect)
 	App.Get("/feed/", handler.Rss)
 	App.Get("/sitemap", handler.SiteMap)
 	App.Get("/upload/:id/:name", handler.Upload)

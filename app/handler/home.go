@@ -193,6 +193,11 @@ func Comment(context *GoInk.Context) {
 	context.Do("comment_created", co)
 }
 
+func Redirect(ctx *GoInk.Context) {
+	to := ctx.StringOr("to", "/")
+	ctx.Redirect(to, 302)
+}
+
 func validateComment(data map[string]string) string {
 	if utils.IsEmptyString(data["user"]) || utils.IsEmptyString(data["content"]) {
 		return "称呼，邮箱，内容必填"
