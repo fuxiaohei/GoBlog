@@ -17,10 +17,10 @@ func Cmd() {
 		case "install":
 			cmd.DoInstall()
 		case "update":
-			file, _ := cmd.DoBackup(App, false)
+			file, _ := cmd.DoBackup(App, []string{"static", "theme"})
 			cmd.DoUpdateZipBytes(file)
 		case "backup":
-			cmd.DoBackup(App, true)
+			cmd.DoBackup(App, []string{"static", "data", "upload", "theme"})
 		case "upgrade":
 			cmd.DoUpgrade(VERSION, App)
 		}

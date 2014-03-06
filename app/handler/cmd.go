@@ -12,7 +12,7 @@ import (
 func CmdBackup(context *GoInk.Context) {
 	// backup in manual
 	if context.Method == "POST" {
-		file, e := cmd.DoBackup(context.App(), true)
+		file, e := cmd.DoBackup(context.App(), []string{"static", "data", "upload", "theme"})
 		if e != nil {
 			Json(context, false).Set("msg", e.Error()).End()
 			return

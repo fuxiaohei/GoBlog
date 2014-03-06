@@ -9,6 +9,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -21,42 +22,42 @@ func init() {
 
 // DoBackup backups whole files to zip archive.
 // If withData is false, it compresses static files to zip archive without data files, config files and install lock file.
-func DoBackup(app *GoInk.App, withData bool) (string, error) {
+func DoBackup(app *GoInk.App, com []string) (string, error) {
 	os.Mkdir(backupDir, os.ModePerm)
 	// create zip file name from time unix
 	filename := path.Join(backupDir, utils.DateTime(time.Now(), "YYYYMMDDHHmmss"))
-	if withData {
-		filename += ".zip"
-	} else {
-		filename += "_static.zip"
-	}
+	filename += "_" + strings.Join(com, "_") + ".zip"
 	z, e := zip.Create(filename)
 	if e != nil {
 		return "", e
 	}
 	root, _ := os.Getwd()
-	if withData {
-		// if with data, add install lock file and config file
-		lockFile := path.Join(root, "install.lock")
-		if utils.IsFile(lockFile) {
-			z.AddFile("install.lock", lockFile)
+	for _, c := range com {
+		if c == "static" {
+			z.AddDir("static/css", path.Join(root, "static", "css"))
+			z.AddDir("static/img", path.Join(root, "static", "img"))
+			z.AddDir("static/js", path.Join(root, "static", "js"))
+			z.AddDir("static/lib", path.Join(root, "static", "lib"))
+			z.AddFile("static/favicon.ico", path.Join(root, "static", "favicon.ico"))
 		}
-		configFile := path.Join(root, "config.json")
-		if utils.IsFile(configFile) {
-			z.AddFile("config.json", configFile)
+		if c == "data" {
+			lockFile := path.Join(root, "install.lock")
+			if utils.IsFile(lockFile) {
+				z.AddFile("install.lock", lockFile)
+			}
+			configFile := path.Join(root, "config.json")
+			if utils.IsFile(configFile) {
+				z.AddFile("config.json", configFile)
+			}
+			z.AddDir("data", path.Join(root, "data"))
+		}
+		if c == "upload" {
+			z.AddDir("static/upload", path.Join(root, "static", "upload"))
+		}
+		if c == "theme" {
+			z.AddDir(app.View().Dir, path.Join(root, app.View().Dir))
 		}
 	}
-	z.AddDir("static/css", path.Join(root, "static", "css"))
-	z.AddDir("static/img", path.Join(root, "static", "img"))
-	z.AddDir("static/js", path.Join(root, "static", "js"))
-	z.AddDir("static/lib", path.Join(root, "static", "lib"))
-	z.AddFile("static/favicon.ico", path.Join(root, "static", "favicon.ico"))
-	if withData {
-		// if with data, backup data files and uploaded files
-		z.AddDir("data", path.Join(root, "data"))
-		z.AddDir("static/upload", path.Join(root, "static", "upload"))
-	}
-	z.AddDir(app.View().Dir, path.Join(root, app.View().Dir))
 	e = z.Flush()
 	if e != nil {
 		return "", e
@@ -94,7 +95,7 @@ func GetBackupFiles() ([]os.FileInfo, error) {
 // StartBackupTimer starts backup operation timer for auto backup stuff.
 func StartBackupTimer(app *GoInk.App, t int) {
 	timer.SetFunc("backup-data", 144, func() {
-		filename, e := DoBackup(app, true)
+		filename, e := DoBackup(app, []string{"static", "data", "upload", "theme"})
 		if e != nil {
 			message.Create("backup", "[0]"+e.Error())
 		} else {
