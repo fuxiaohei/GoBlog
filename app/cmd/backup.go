@@ -1,8 +1,10 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/Unknwon/cae/zip"
 	"github.com/fuxiaohei/GoBlog/app/model/message"
+	"github.com/fuxiaohei/GoBlog/app/model/setting"
 	"github.com/fuxiaohei/GoBlog/app/model/timer"
 	"github.com/fuxiaohei/GoBlog/app/utils"
 	"github.com/fuxiaohei/GoInk"
@@ -22,7 +24,8 @@ func init() {
 
 // DoBackup backups whole files to zip archive.
 // If withData is false, it compresses static files to zip archive without data files, config files and install lock file.
-func DoBackup(app *GoInk.App, com []string) (string, error) {
+func DoBackup(app *GoInk.App, cs string) (string, error) {
+	com := strings.Split(cs, ",")
 	os.Mkdir(backupDir, os.ModePerm)
 	// create zip file name from time unix
 	filename := path.Join(backupDir, utils.DateTime(time.Now(), "YYYYMMDDHHmmss"))
@@ -95,9 +98,9 @@ func GetBackupFiles() ([]os.FileInfo, error) {
 // StartBackupTimer starts backup operation timer for auto backup stuff.
 func StartBackupTimer(app *GoInk.App, t int) {
 	timer.SetFunc("backup-data", 144, func() {
-		filename, e := DoBackup(app, []string{"static", "data", "upload", "theme"})
+		filename, e := DoBackup(app, setting.Get("backup_setting"))
 		if e != nil {
-			message.Create("backup", "[0]"+e.Error())
+			message.Create("backup", "[0]"+fmt.Sprint(e))
 		} else {
 			message.Create("backup", "[1]"+filename)
 		}

@@ -8,130 +8,147 @@
   .bottom-line(12px);
 }
 
-#backup-btn,#theme-cache-btn{
+form.backup-setting {
+  line-height: 54px;
+  margin-left: 16px;
+  label {
+    margin-right: 16px;
+    .checkbox {
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+  }
+}
+
+#theme-cache-btn, #backup-setting-btn {
   margin: 10px 0 0 30px;
   min-width: 0;
   padding: 0 2em;
 }
 
-#theme-cache-btn{
+#backup-btn {
+  padding: 0 2em;
+  min-width: 0;
+}
+
+#theme-cache-btn {
   .btn-red;
 }
 
-#theme-cache-btn.true{
+#theme-cache-btn.true {
   .btn-green;
 }
 
-.cmd-list li{
+.cmd-list li {
   .bottom-line(12px);
 }
 
-#backup-list{
-  li{
+#backup-list {
+  li {
     list-style: disc inside;
-    >span,>a{
+    > span, > a {
       margin-right: 16px;
     }
     font-family: Verdana, Tahoma, '微软雅黑', '宋体', sans-serif;
-    .del{
+    .del {
       color: @red1;
       opacity: 0;
     }
-    .link{
+    .link {
       margin-left: 12px;
     }
-    &:hover{
-      .del{
+    &:hover {
+      .del {
         opacity: 1;
       }
     }
   }
 }
 
-#message-list{
-  .message{
+#message-list {
+  .message {
     padding: 8px 12px;
     .bottom-line(8px);
     line-height: 24px;
     font-size: 12px;
-    .time{
+    .time {
       font-family: Verdana, Tahoma, '微软雅黑', '宋体', sans-serif;
     }
-    .data{
+    .data {
       color: @black2;
       margin-left: 1.2em;
-      p{
+      p {
         margin-bottom: 0;
         line-height: 24px;
       }
     }
-    .read{
-      top:0;
-      right:12px;
+    .read {
+      top: 0;
+      right: 12px;
       opacity: 0;
-      &:hover{
+      &:hover {
         color: @red1;
       }
     }
-    &:hover{
-      .read{
+    &:hover {
+      .read {
         opacity: 1;
       }
     }
   }
 }
 
-#log-list{
-  .log{
+#log-list {
+  .log {
     font-size: 12px;
   }
-  .name{
+  .name {
     margin-right: 1.5em;
     font-weight: bold;
   }
-  .time,.name{
+  .time, .name {
     font-family: Verdana, Tahoma, '微软雅黑', '宋体', sans-serif;
   }
-  .text{
+  .text {
     line-height: 20px;
     font-family: Consolas, "Courier New", Arial;
     color: @black2;
     padding: 8px 12px;
     background: @white4;
   }
-  .remove{
-    top:0;
-    right:12px;
+  .remove {
+    top: 0;
+    right: 12px;
     color: @red1;
   }
 }
 
-#theme-list{
-  span{
+#theme-list {
+  span {
     margin-left: 12px;
   }
-  span.file{
+  span.file {
     color: @blue1;
   }
-  span.error-file{
+  span.error-file {
     color: @red2;
   }
-  h5{
+  h5 {
     cursor: pointer;
   }
 }
 
-#reader-list{
-  li{
-    > *{
+#reader-list {
+  li {
+    > * {
       margin-right: 18px;
     }
   }
-  .email{
+  .email {
     color: @black3;
   }
-  .comments{
-    font-family:Verdana, Tahoma, '微软雅黑', '宋体', sans-serif;
+  .comments {
+    font-family: Verdana, Tahoma, '微软雅黑', '宋体', sans-serif;
     font-size: 12px;
     padding: 2px 6px;
   }

@@ -1,6 +1,13 @@
 <header class="cmd-header clear">
     <h1 class="cmd-title left">备份数据</h1>
-    <button class="btn btn-blue left" id="backup-btn">备份</button>
+    <form class="backup-setting left form" action="?set=true" method="post" data-setting="{{.BackupSettings}}">
+        <label class="left">配置参数</label>
+        <label class="left"><input type="checkbox" name="setting" value="static" class="checkbox"/>静态文件</label>
+        <label class="left"><input type="checkbox" name="setting" value="data" class="checkbox"/>内容数据</label>
+        <label class="left"><input type="checkbox" name="setting" value="upload" class="checkbox"/>上传数据</label>
+        <label class="left"><input type="checkbox" name="setting" value="theme" class="checkbox"/>主题文件</label>
+        <button class="btn btn-blue left" id="backup-setting-btn">保存</button>
+    </form>
 </header>
 <ul class="cmd-list" id="backup-list">{{range .Files}}
     <li>
@@ -9,9 +16,15 @@
         <span class="size">{{FileSize .Size}}</span>
         <a class="del" href="#" rel="{{.Name}}">删除</a>
     </li>{{end}}
+    <li style="list-style: none"><button class="btn btn-blue" id="backup-btn">备份</button></li>
 </ul>
+<script src="/static/lib/jquery.form.min.js"></script>
 <script>
     $(function () {
+        var data = $("form").data("setting").toString().split(",");
+        $(data).each(function(i,item){
+           $('input[value='+item+']').attr("checked","checked");
+        });
         $('#backup-btn').on("click", function () {
             $.ajax({
                 type: "post",
@@ -43,6 +56,13 @@
                 }
             });
             return false;
-        })
+        });
+        $('form.backup-setting').ajaxForm(function(json){
+            if(json.res){
+                alert("已保存");
+            }else{
+                alert(json.msg);
+            }
+        });
     })
 </script>

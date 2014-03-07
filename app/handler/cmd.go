@@ -6,13 +6,27 @@ import (
 	"github.com/fuxiaohei/GoBlog/app/model/message"
 	"github.com/fuxiaohei/GoBlog/app/model/setting"
 	"github.com/fuxiaohei/GoInk"
+	"strings"
 )
 
 // CmdBackup is backup list and operation page, pattern /cmd/backup/.
 func CmdBackup(context *GoInk.Context) {
 	// backup in manual
 	if context.Method == "POST" {
-		file, e := cmd.DoBackup(context.App(), []string{"static", "data", "upload", "theme"})
+		// do setting save
+		if context.String("set") == "true" {
+			settings := context.Strings("setting")
+			if len(settings) < 1 {
+				Json(context, false).Set("msg", "至少选一项").End()
+				return
+			}
+			setting.Set("backup_setting", strings.Join(settings, ","))
+			setting.Sync()
+			Json(context, true).End()
+			return
+		}
+		// do backup files
+		file, e := cmd.DoBackup(context.App(), setting.Get("backup_setting"))
 		if e != nil {
 			Json(context, false).Set("msg", e.Error()).End()
 			return
@@ -37,8 +51,9 @@ func CmdBackup(context *GoInk.Context) {
 	files, _ := cmd.GetBackupFiles()
 	context.Layout("admin/cmd")
 	context.Render("admin/cmd/backup", map[string]interface{}{
-		"Files": files,
-		"Title": "备份",
+		"Files":          files,
+		"Title":          "备份",
+		"BackupSettings": setting.Get("backup_setting"),
 	})
 }
 
