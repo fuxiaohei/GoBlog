@@ -1,5 +1,6 @@
 <div id="comment">
-    <div id="comment-list">{{range .Comments}}{{if .IsValid}}
+    <h3 id="comment-title" class="hide">文章评论</h3>
+    <div id="comment-list" class="comment-pager-{{Setting `enable_comment_pager`}}">{{range .Comments}}{{if .IsValid}}
         <div class="comment clear" id="comment-{{.Id}}">
             <img class="c-avatar left" src="{{.Avatar}}" alt="{{.Author}}"/>
             <div class="c-section left">
