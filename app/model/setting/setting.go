@@ -22,6 +22,12 @@ func Get(key string) string {
 	return settings[key]
 }
 
+func Int(key string) int {
+	s := Get(key)
+	i, _ := strconv.Atoi(s)
+	return i
+}
+
 func GetCustom() map[string]string {
 	m := make(map[string]string)
 	for k, v := range settings {

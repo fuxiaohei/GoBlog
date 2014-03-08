@@ -50,6 +50,12 @@
             <span class="tip block">默认关闭，使用前端marked.js渲染，填true时开启</span>
             <input type="hidden" name="enable_go_markdown_def" value="false"/>
         </p>
+        <p class="item">
+            <label for="comment-pager-flag">评论列表使用分页</label>
+            <input id="comment-pager-flag" class="ipt" type="text" name="enable_comment_pager" value="{{Setting `enable_comment_pager`}}"/>
+            <span class="tip block">默认关闭，将完全列出；填true时开启，将自动分页评论列表并显示最后一列。</span>
+            <input type="hidden" name="enable_comment_pager_def" value="false"/>
+        </p>
         <p>
             <label>&nbsp;</label>
             <button class="btn btn-blue">保存</button>

@@ -77,7 +77,7 @@ func (c *Comment) IsValid() bool {
 		return false
 	}
 	if c.Pid > 0 {
-		if ById(c.Pid) == nil {
+		if CommentById(c.Pid) == nil {
 			return false
 		}
 	}
@@ -91,7 +91,7 @@ func (c *Comment) IsRemovable() bool {
 		return true
 	}
 	if c.Pid > 0 {
-		if ById(c.Pid) == nil {
+		if CommentById(c.Pid) == nil {
 			return true
 		}
 	}

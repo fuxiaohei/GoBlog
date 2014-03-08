@@ -126,4 +126,39 @@ function initComment() {
         $(this).hide();
         return false;
     });
+    if (!$list.hasClass("comment-pager-true")) {
+        return;
+    }
+    var isPager = false, index = 0;
+    $list.find(".comment").each(function (i, item) {
+        if (i >= 6 && !isPager) {
+            isPager = true;
+        }
+        index = parseInt(i / 6 + 1);
+        $(item).addClass("comment-index-" + index).hide();
+    });
+    if (!isPager) {
+        $('.comment').show();
+        return;
+    }
+    var html = ['<div id="comment-list-pager" class="pager">'];
+    for (var i = 1; i <= index; i++) {
+        if (i == index) {
+            html.push('<li class="item current"><a href="#">' + i + '</a></li>');
+            continue;
+        }
+        html.push('<li class="item"><a href="#">' + i + '</a></li>');
+    }
+    html.push('</div>');
+    $('#comment-title').after(html.join(""));
+    $('.comment-index-' + index).show();
+    var $pager = $('#comment-list-pager');
+    $pager.on("click", "a", function (e) {
+        $('.comment').hide();
+        console.log('.comment-index-' + $(e.target).text());
+        $('.comment-index-' + $(e.target).text()).show();
+        $pager.find(".current").removeClass("current");
+        $(e.target).parent().addClass("current");
+        return false;
+    });
 }
