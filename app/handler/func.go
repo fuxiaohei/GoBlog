@@ -71,6 +71,10 @@ func (tc *themeContext) Has(tpl string) bool {
 
 // CommentHtml returns rendered comment template html with own content.
 func CommentHtml(context *GoInk.Context, c *content.Content) string {
+	if c.Type == "page" && !c.IsComment{
+		// hide comment if page's comment is closed
+		return ""
+	}
 	thm := Theme(context)
 	if !thm.Has("comment.html") {
 		return ""

@@ -135,12 +135,12 @@ func Page(context *GoInk.Context) {
 		context.Redirect("/")
 		return
 	}
-	article.Hits++
 	Theme(context).Layout("home").Render("page", map[string]interface{}{
-		"Title": article.Title,
-		"Page":  article,
-		//"CommentHtml": Comments(context, article),
+		"Title":       article.Title,
+		"Page":        article,
+		"CommentHtml": CommentHtml(context, article),
 	})
+	article.Hits++
 }
 
 // TopPage is top level page handler, pattern /:page_slug.
@@ -153,8 +153,9 @@ func TopPage(context *GoInk.Context) {
 	}
 	if page.IsLinked && page.Type == "page" {
 		Theme(context).Layout("home").Render("page", map[string]interface{}{
-			"Title": page.Title,
-			"Page":  page,
+			"Title":       page.Title,
+			"Page":        page,
+			"CommentHtml": CommentHtml(context, page),
 		})
 		page.Hits++
 		return
