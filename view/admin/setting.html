@@ -56,6 +56,10 @@
             <span class="tip block">默认关闭，将完全列出；填true时开启，将自动分页评论列表并显示最后一列。</span>
             <input type="hidden" name="enable_comment_pager_def" value="false"/>
         </p>
+        <p class="item">
+            <label for="comment-pager-size">评论列表分页大小</label>
+            <input id="comment-pager-size" class="ipt" type="number" name="comment_pager_size" value="{{Setting `comment_pager_size`}}" max="10" min="3" required="required"/>
+        </p>
         <p>
             <label>&nbsp;</label>
             <button class="btn btn-blue">保存</button>

@@ -129,12 +129,12 @@ function initComment() {
     if (!$list.hasClass("comment-pager-true")) {
         return;
     }
-    var isPager = false, index = 0;
+    var isPager = false, index = 0, size = parseInt($list.data("page"));
     $list.find(".comment").each(function (i, item) {
-        if (i >= 6 && !isPager) {
+        if (i >= size && !isPager) {
             isPager = true;
         }
-        index = parseInt(i / 6 + 1);
+        index = parseInt(i / size + 1);
         $(item).addClass("comment-index-" + index).hide();
     });
     if (!isPager) {

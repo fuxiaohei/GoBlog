@@ -1,7 +1,7 @@
 <div id="comment" class="relative clear">
     <span class="right lbl lbl-red comments"><a href="{{.Link}}#comment">{{.Content.CommentNum}}</a></span>
     <h4 id="comment-title">文章评论</h4>
-    <div id="comment-list" class="comment-pager-{{Setting `enable_comment_pager`}}">{{range .Comments}}{{if .IsValid}}
+    <div id="comment-list" class="comment-pager-{{Setting `enable_comment_pager`}}" data-page="{{Setting `comment_pager_size`}}">{{range .Comments}}{{if .IsValid}}
         <div class="comment clear" id="comment-{{.Id}}">
             <img class="c-avatar left" src="{{.Avatar}}" alt="{{.Author}}"/>
             <div class="c-section">
