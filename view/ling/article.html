@@ -12,5 +12,5 @@
             </p>
         </div>{{end}}
     </article>
-    {{Html .CommentHtml}}
+    {{CommentHtml .Context .Article | Html}}
 </div>

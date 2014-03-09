@@ -9,5 +9,5 @@
             <section class="content markdown">{{Html .Content}}</section>
         </div>{{end}}
     </article>
-    {{Html .CommentHtml}}
+    {{CommentHtml .Context .Page | Html}}
 </div>
