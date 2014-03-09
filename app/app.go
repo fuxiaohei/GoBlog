@@ -4,16 +4,12 @@ import (
 	"fmt"
 	"github.com/fuxiaohei/GoBlog/app/handler"
 	"github.com/fuxiaohei/GoBlog/app/model"
-	"github.com/fuxiaohei/GoBlog/app/model/setting"
-	"github.com/fuxiaohei/GoBlog/app/plugin"
-	"github.com/fuxiaohei/GoBlog/app/utils"
 	"github.com/fuxiaohei/GoInk"
 	"net/http"
 	"os"
 	"os/signal"
 	"path"
 	"runtime/debug"
-	"strconv"
 	"strings"
 	"syscall"
 )
@@ -137,76 +133,4 @@ func catchExit() {
 			os.Exit(0)
 		}
 	}
-}
-
-// Init starts Fxh.Go application preparation.
-// Load models and plugins, update views.
-func Init() {
-
-	// init storage
-	model.Init(VERSION)
-
-	// load all data
-	model.All()
-
-	// init plugin
-	plugin.Init()
-
-	// update plugin handlers
-	plugin.Update(App)
-
-	App.View().FuncMap["DateInt64"] = utils.DateInt64
-	App.View().FuncMap["DateString"] = utils.DateString
-	App.View().FuncMap["DateTime"] = utils.DateTime
-	App.View().FuncMap["Now"] = utils.Now
-	App.View().FuncMap["Html2str"] = utils.Html2str
-	App.View().FuncMap["FileSize"] = utils.FileSize
-	App.View().FuncMap["Setting"] = setting.Get
-	App.View().FuncMap["Navigator"] = setting.GetNavigators
-	/*App.View().FuncMap["Render"] = func(str string) string {
-		bytes, e := App.View().RenderString(str, nil)
-		if e != nil {
-			println(e.Error())
-			return str
-		}
-		return string(bytes)
-	}*/
-	App.View().FuncMap["Md2html"] = utils.Markdown2HtmlTemplate
-	App.View().FuncMap["Redirect"] = func(url string) string {
-		return "/redirect?to=" + url
-	}
-	App.View().IsCache = (setting.Get("theme_cache") == "true")
-
-	println("app version @ " + strconv.Itoa(setting.GetVersion().Version))
-}
-
-func registerHomeHandler() {
-	App.Route("GET,POST", "/login/", handler.Login)
-	App.Get("/logout/", handler.Logout)
-
-	App.Get("/article/:id/:slug", handler.Article)
-	App.Get("/page/:id/:slug", handler.Page)
-	App.Get("/p/:page/", handler.Home)
-	App.Post("/comment/:id/", handler.Comment)
-	App.Get("/tag/:tag/", handler.TagArticles)
-	App.Get("/tag/:tag/p/:page/", handler.TagArticles)
-	App.Get("/robots", handler.Robots)
-
-	App.Get("/redirect/", handler.Redirect)
-	App.Get("/feed/", handler.Rss)
-	App.Get("/sitemap", handler.SiteMap)
-	App.Get("/upload/:id/:name", handler.Upload)
-
-	App.Get("/:slug", handler.TopPage)
-	App.Get("/", handler.Home)
-}
-
-// Run begins Fxh.Go http server.
-func Run() {
-
-	registerAdminHandler()
-	registerCmdHandler()
-	registerHomeHandler()
-
-	App.Run()
 }

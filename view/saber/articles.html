@@ -1,0 +1,5 @@
+<div id="article-container" class="clear grid-3-4 left">{{if .Tag}}
+    <div class="tag-banner">标签：{{.Tag}}</div>{{end}}
+    {{ArticleListHtml .Context .Articles .Pager | Html}}
+</div>
+{{SidebarHtml .Context | Html}}

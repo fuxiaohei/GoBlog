@@ -76,29 +76,29 @@ func TagArticles(ctx *GoInk.Context) {
 	if len(articles) < 1 && strings.Contains(tag, "-") {
 		articles, pager = content.TaggedArticleList(strings.Replace(tag, "-", ".", -1), page, size)
 	}
-	Theme(ctx).Layout("home").Render("index", map[string]interface{}{
-		"Articles":    articles,
-		"Pager":       pager,
-		"SidebarHtml": SidebarHtml(ctx),
-		"Tag":         tag,
-		"Title":       tag,
+	pager.Url = "tag/" + ctx.Param("tag") + "/p"
+	Theme(ctx).Layout("home").Render("articles", map[string]interface{}{
+		"Articles": articles,
+		"Pager":    pager,
+		"Tag":      tag,
+		"Title":    tag,
 	})
 }
 
 // Home is home page handler, pattern /.
-func Home(context *GoInk.Context) {
+func Articles(context *GoInk.Context) {
 	context.Layout("home")
 	page, _ := strconv.Atoi(context.Param("page"))
 	articles, pager := content.PublishArticleList(page, getArticleListSize())
+	pager.Url = "p"
 	data := map[string]interface{}{
-		"Articles":    articles,
-		"Pager":       pager,
-		"SidebarHtml": SidebarHtml(context),
+		"Articles": articles,
+		"Pager":    pager,
 	}
 	if page > 1 {
 		data["Title"] = "第 " + strconv.Itoa(page) + " 页"
 	}
-	Theme(context).Layout("home").Render("index", data)
+	Theme(context).Layout("home").Render("articles", data)
 }
 
 // Article is single article page, pattern /article/:article_id/:article_slug.
@@ -116,9 +116,8 @@ func Article(context *GoInk.Context) {
 	}
 	article.Hits++
 	Theme(context).Layout("home").Render("article", map[string]interface{}{
-		"Title":       article.Title,
-		"Article":     article,
-		"CommentHtml": CommentHtml(context, article),
+		"Title":   article.Title,
+		"Article": article,
 	})
 }
 
@@ -135,10 +134,13 @@ func Page(context *GoInk.Context) {
 		context.Redirect("/")
 		return
 	}
-	Theme(context).Layout("home").Render("page", map[string]interface{}{
-		"Title":       article.Title,
-		"Page":        article,
-		"CommentHtml": CommentHtml(context, article),
+	tpl := strings.Split(article.Template, "@")
+	if len(tpl) < 2 {
+		tpl = []string{"home", tpl[0]}
+	}
+	Theme(context).Layout(tpl[0]).Render(tpl[1], map[string]interface{}{
+		"Title": article.Title,
+		"Page":  article,
 	})
 	article.Hits++
 }
@@ -152,10 +154,13 @@ func TopPage(context *GoInk.Context) {
 		return
 	}
 	if page.IsLinked && page.Type == "page" {
-		Theme(context).Layout("home").Render("page", map[string]interface{}{
-			"Title":       page.Title,
-			"Page":        page,
-			"CommentHtml": CommentHtml(context, page),
+		tpl := strings.Split(page.Template, "@")
+		if len(tpl) < 2 {
+			tpl = []string{"home", tpl[0]}
+		}
+		Theme(context).Layout(tpl[0]).Render(tpl[1], map[string]interface{}{
+			"Title": page.Title,
+			"Page":  page,
 		})
 		page.Hits++
 		return
@@ -224,9 +229,9 @@ func validateComment(data map[string]string) string {
 }
 
 func getArticleListSize() int {
-	size, _ := strconv.Atoi(setting.Get("article_size"))
+	size := setting.Int("article_size")
 	if size < 1 {
-		size = 5
+		return 5
 	}
 	return size
 }

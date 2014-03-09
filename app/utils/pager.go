@@ -12,6 +12,7 @@ type Pager struct {
 	Next      int
 	IsPrev    bool
 	IsNext    bool
+	Url       string
 }
 
 func NewPager(page, size, total int) *Pager {
@@ -53,5 +54,6 @@ func NewPager(page, size, total int) *Pager {
 		p.Next = p.Pages
 		p.IsNext = false
 	}
+	p.Url = ""
 	return p
 }

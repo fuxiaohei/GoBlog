@@ -107,7 +107,7 @@ func ArticleWrite(context *GoInk.Context) {
 		c.IsComment = data["comment"] == "1"
 		c.IsLinked = false
 		c.AuthorId, _ = strconv.Atoi(context.Cookie("token-user"))
-		c.Template = "blog.html"
+		c.Template = ""
 		c.Status = data["status"]
 		c.Format = "markdown"
 		c.Hits = 1
@@ -185,7 +185,7 @@ func PageWrite(context *GoInk.Context) {
 		c.IsComment = data["comment"] == "1"
 		c.IsLinked = data["link"] == "1"
 		c.AuthorId, _ = strconv.Atoi(context.Cookie("token-user"))
-		c.Template = "page.html"
+		c.Template = context.StringOr("template", "home@page")
 		c.Status = data["status"]
 		c.Format = "markdown"
 		c.Hits = 1
@@ -242,7 +242,7 @@ func PageEdit(context *GoInk.Context) {
 		c.IsComment = data["comment"] == "1"
 		c.IsLinked = data["link"] == "1"
 		//c.AuthorId, _ = strconv.Atoi(context.Cookie("token-user"))
-		//c.Template = "blog.html"
+		c.Template = context.StringOr("template", "home@page")
 		c.Status = data["status"]
 		//c.Format = "markdown"
 		content.Save(c)
