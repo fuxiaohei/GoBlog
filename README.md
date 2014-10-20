@@ -9,6 +9,8 @@ Current version is **0.2.5** on 2014.02.28
 
 Development board is in [Trello](https://trello.com/b/7AHrcQL8/fxh-go-with-goink).
 
+** Notice: the project is planning to rebuild with sqlite database. I make sure the data are compatible and all functionalities are same - 2014.10.20 **
+
 ### Overview
 
 `Fxh.Go` is a dynamic blog engine written in Golang. It's fast and very simple configs. Fxh.Go persists data into pieces of json files and support compress them as backup zip for next upgrade or installation.
