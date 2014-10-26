@@ -1,7 +1,6 @@
 package gof
 
 import (
-	"fmt"
 	"net/http"
 )
 

@@ -67,6 +67,9 @@ func (c *Config) Set(key string, value interface{}) {
 
 func (c *Config) getDeepMap(key string) (*map[string]interface{}, string) {
 	keySlice := strings.Split(key, ".")
+	if len(keySlice) == 1 {
+		return &c.data, key
+	}
 	keyName := keySlice[len(keySlice)-1]
 	var mapPtr *map[string]interface{}
 	for _, k := range keySlice[:len(keySlice)-1] {
@@ -91,7 +94,7 @@ func (c *Config) getDeepMap(key string) (*map[string]interface{}, string) {
 func (c *Config) String(key string, def ...string) string {
 	mapPtr, keyName := c.getDeepMap(key)
 	v := fmt.Sprint((*mapPtr)[keyName])
-	if v == "" && len(def) > 0 {
+	if (v == "<nil>" || v == "") && len(def) > 0 {
 		return def[0]
 	}
 	return v
