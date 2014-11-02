@@ -24,11 +24,11 @@ import (
 )
 
 const (
-	PREFIX      = "[Fxh.Go]"
 	TIME_FORMAT = "01/02 15:04:05"
 )
 
 var (
+	PREFIX      = "[Log]"
 	NonColor    bool
 	ShowDepth   bool = false
 	CallerDepth      = 2

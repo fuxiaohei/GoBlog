@@ -4,7 +4,6 @@ import "github.com/codegangsta/cli"
 
 var (
 	CmdRegister *Command
-	Version     string
 )
 
 func init() {

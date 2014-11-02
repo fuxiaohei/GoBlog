@@ -10,18 +10,16 @@ type HttpServer struct {
 	RouterInterface
 	ConfigInterface
 	*Injector
-	mid       []RouterHandler
-	notFound  RouterHandler
-	LogPrefix string
+	mid      []RouterHandler
+	notFound RouterHandler
 }
 
-func NewHttpServer() *HttpServer {
+func NewHttpServer(configFile string) *HttpServer {
 	h := new(HttpServer)
 	h.RouterInterface = NewRouter()
-	h.ConfigInterface, _ = NewConfig("")
+	h.ConfigInterface, _ = NewConfig(configFile)
 	h.Injector = NewInjector()
 	h.mid = make([]RouterHandler, 0)
-	h.LogPrefix = "web --"
 	return h
 }
 
@@ -48,26 +46,26 @@ func (hs *HttpServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		ctx.SendResponse()
 		if ctx.Status > 0 {
 			if ctx.Status >= 400 {
-				log.Warn("%s [%d] %s %s %s %s", hs.LogPrefix, ctx.Status, r.RemoteAddr, r.Proto, r.Method, p)
+				log.Warn("[%d] %s %s %s %s", ctx.Status, r.RemoteAddr, r.Proto, r.Method, p)
 				return
 			}
-			log.Debug("%s [%d] %s %s %s %s", hs.LogPrefix, ctx.Status, r.RemoteAddr, r.Proto, r.Method, p)
+			log.Debug("[%d] %s %s %s %s", ctx.Status, r.RemoteAddr, r.Proto, r.Method, p)
 			return
 		}
 	}
 
 	if ctx.Status == 0 && hs.notFound != nil {
 		hs.notFound(ctx)
-		log.Debug("%s [%d] %s %s %s %s", hs.LogPrefix, ctx.Status, r.RemoteAddr, r.Proto, r.Method, p)
+		log.Debug("[%d] %s %s %s %s", ctx.Status, r.RemoteAddr, r.Proto, r.Method, p)
 		return
 	}
 
 	w.WriteHeader(404)
 	w.Write([]byte(http.StatusText(404)))
-	log.Warn("%s [%d] %s %s %s %s", hs.LogPrefix, 404, r.RemoteAddr, r.Proto, r.Method, p)
+	log.Warn("[%d] %s %s %s %s", 404, r.RemoteAddr, r.Proto, r.Method, p)
 }
 
 func (hs *HttpServer) Listen(addr string, port int) error {
-	log.Info("%s listen %s:%d", hs.LogPrefix, addr, port)
+	log.Info("listen %s:%d", addr, port)
 	return http.ListenAndServe(fmt.Sprintf("%s:%d", addr, port), hs)
 }

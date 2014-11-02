@@ -30,21 +30,34 @@ func NewContext(s *HttpServer, w http.ResponseWriter, r *http.Request, fn []Rout
 	return c
 }
 
+func (ctx *Context) Into(value interface{}, value2 ...interface{}) {
+	ctx.injector.Into(value, value2...)
+}
+
+func (ctx *Context) Out(v interface{}) {
+	ctx.injector.Out(v)
+}
+
 func (ctx *Context) Run() {
-	if ctx.handlerIndex >= len(ctx.handlers) {
+	if ctx.handlerIndex >= len(ctx.handlers) || ctx.handlerIndex < 0 {
 		return
 	}
 	fn := ctx.handlers[ctx.handlerIndex]
 	if fn == nil {
+		ctx.Next()
 		return
 	}
 	fn(ctx)
-	ctx.handlerIndex++
+	ctx.Next()
 }
 
 func (ctx *Context) Next() {
 	ctx.handlerIndex++
 	ctx.Run()
+}
+
+func (ctx *Context) Stop() {
+	ctx.handlerIndex = -2
 }
 
 func (ctx *Context) Request() *http.Request {

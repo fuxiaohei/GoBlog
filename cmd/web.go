@@ -4,6 +4,8 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/fuxiaohei/GoBlog/gof"
 	"github.com/fuxiaohei/GoBlog/gof/log"
+	"github.com/fuxiaohei/GoBlog/gof/middle"
+	"github.com/fuxiaohei/GoBlog/vars"
 )
 
 var CmdWeb = cli.Command{
@@ -16,12 +18,16 @@ var CmdWeb = cli.Command{
 
 func DoWeb(ctx *cli.Context) {
 
-	server := gof.NewHttpServer()
+	log.PREFIX = vars.LOG_PREFIX + "[web]"
+
+	server := gof.NewHttpServer(vars.CONFIG_FILE)
+
+	server.Use(middle.Static(nil))
 
 	addr := server.ConfigInterface.String("web.addr", "0.0.0.0")
 	port := server.ConfigInterface.Int("web.port", 8989)
 
 	if err := server.Listen(addr, int(port)); err != nil {
-		log.Fatal("%s listen to %s:%d fail - %v", server.LogPrefix, addr, port, err)
+		log.Fatal("listen to %s:%d fail - %v", addr, port, err)
 	}
 }
