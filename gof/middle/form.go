@@ -9,12 +9,46 @@ import (
 	"strings"
 )
 
+// use form binder struct to context
+// usage:
+//    server.Use(middle.Form())
 func Form() gof.RouterHandler {
-	return nil
+	return func(ctx *gof.Context) {
+		binder := &FormBinder{make(map[reflect.Type]*FormBinderValue)}
+		ctx.Into(binder)
+	}
 }
 
-func FormBind() gof.RouterHandler {
-	return nil
+// bind current context form data to struct
+// usage:
+//    server.Get("/",middle.FormBind(new(User)),routerFunc)
+//
+// then, you can get the 'new(User)' in context by :
+//    user := ctx.Out(new(User))
+//
+// this function need middle.Form() to register form binder struct.
+func FormBind(values ...interface{}) gof.RouterHandler {
+	return func(ctx *gof.Context) {
+		// get form binder
+		binder, ok := ctx.Out(new(FormBinder)).(*FormBinder)
+		if !ok {
+			Form()(ctx)
+			binder, ok = ctx.Out(new(FormBinder)).(*FormBinder)
+			if !ok {
+				return
+			}
+		}
+		// parse struct
+		ctx.Request().ParseForm()
+		for _, v := range values {
+			res, err := binder.ToStruct(ctx.Request().Form, v, true)
+			if err == nil {
+				ctx.Into(res)
+				continue
+			}
+			ctx.Into(&err, new(FormBinderError))
+		}
+	}
 }
 
 type FormBinderValue struct {
@@ -76,10 +110,32 @@ func (fb *FormBinder) toUintValue(v string, t reflect.Type) (reflect.Value, erro
 	return reflect.Zero(t), nil
 }
 
-func (fb *FormBinder) ToStruct(formValue url.Values, s interface{}, useTag bool) FormBinderError {
+func (fb *FormBinder) toFloatValue(v string, t reflect.Type) (reflect.Value, error) {
+	floatV, err := strconv.ParseFloat(v, 10)
+	if err != nil {
+		return reflect.Zero(t), err
+	}
+	if t.Kind() == reflect.Float32 {
+		return reflect.ValueOf(float32(floatV)), nil
+	}
+	if t.Kind() == reflect.Float64 {
+		return reflect.ValueOf(floatV), nil
+	}
+	return reflect.Zero(t), err
+}
+
+func (fb *FormBinder) toBoolValue(v string, t reflect.Type) (reflect.Value, error) {
+	boolV, err := strconv.ParseBool(v)
+	if err != nil {
+		return reflect.Zero(t), err
+	}
+	return reflect.ValueOf(boolV), nil
+}
+
+func (fb *FormBinder) ToStruct(formValue url.Values, s interface{}, useTag bool) (interface{}, FormBinderError) {
 	fv, err := fb.parseStruct(s, useTag)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	formValue = fb.parseFormValue(formValue)
 
@@ -95,16 +151,40 @@ func (fb *FormBinder) ToStruct(formValue url.Values, s interface{}, useTag bool)
 			rf.Set(reflect.ValueOf(value))
 			continue
 		}
+		if strings.Contains(typeName, "uint") {
+			uintValue, err := fb.toUintValue(value, t)
+			if err != nil {
+				return nil, FormBinderError(err)
+			}
+			rf.Set(uintValue)
+			continue
+		}
 		if strings.Contains(typeName, "int") {
 			intValue, err := fb.toIntValue(value, t)
 			if err != nil {
-				return FormBinderError(err)
+				return nil, FormBinderError(err)
 			}
 			rf.Set(intValue)
 			continue
 		}
+		if strings.Contains(typeName, "float") {
+			floatValue, err := fb.toFloatValue(value, t)
+			if err != nil {
+				return nil, FormBinderError(err)
+			}
+			rf.Set(floatValue)
+			continue
+		}
+		if strings.Contains(typeName, "bool") {
+			boolValue, err := fb.toBoolValue(value, t)
+			if err != nil {
+				return nil, FormBinderError(err)
+			}
+			rf.Set(boolValue)
+			continue
+		}
 	}
-	return nil
+	return s, nil
 }
 
 func (fb *FormBinder) parseStruct(s interface{}, useTag bool) (*FormBinderValue, FormBinderError) {

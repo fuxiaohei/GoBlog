@@ -1,6 +1,8 @@
 package gof
 
-import "reflect"
+import (
+	"reflect"
+)
 
 type Injector struct {
 	values map[reflect.Type]reflect.Value
@@ -15,9 +17,13 @@ func (in *Injector) Into(v interface{}, t ...interface{}) {
 }
 
 func (in *Injector) Out(v interface{}) {
-	rt := reflect.TypeOf(v).Elem()
+	rt := reflect.TypeOf(v)
 	if iv, ok := in.values[rt]; ok {
-		reflect.ValueOf(v).Elem().Set(iv)
+		if rt.Kind() == reflect.Ptr {
+			reflect.ValueOf(v).Elem().Set(iv.Elem())
+			return
+		}
+		reflect.ValueOf(v).Set(iv)
 		return
 	}
 	rv := reflect.ValueOf(v).Elem()

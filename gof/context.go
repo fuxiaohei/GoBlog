@@ -34,8 +34,9 @@ func (ctx *Context) Into(value interface{}, value2 ...interface{}) {
 	ctx.injector.Into(value, value2...)
 }
 
-func (ctx *Context) Out(v interface{}) {
+func (ctx *Context) Out(v interface{}) interface{} {
 	ctx.injector.Out(v)
+	return v
 }
 
 func (ctx *Context) Run() {

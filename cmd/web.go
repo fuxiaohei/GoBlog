@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/codegangsta/cli"
 	"github.com/fuxiaohei/GoBlog/gof"
 	"github.com/fuxiaohei/GoBlog/gof/log"
@@ -23,6 +24,11 @@ func DoWeb(ctx *cli.Context) {
 	server := gof.NewHttpServer(vars.CONFIG_FILE)
 
 	server.Use(middle.Static(nil))
+	server.Use(middle.Form())
+
+	server.RouterInterface.Get("/", middle.FormBind(new(cli.Command)), func(ctx *gof.Context) {
+		fmt.Println("cli", ctx.Out(new(cli.Command)))
+	})
 
 	addr := server.ConfigInterface.String("web.addr", "0.0.0.0")
 	port := server.ConfigInterface.Int("web.port", 8989)
