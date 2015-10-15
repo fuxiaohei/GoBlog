@@ -1,3 +1,5 @@
+### Notice: this project is deprecated. Please try my new blog engine [pugo](https://github.com/go-xiaohei/pugo).
+
 #Fxh.Go
 
 A fast and simple blog engine with [GoInk](https://github.com/fuxiaohei/GoInk) framework in Golang.
@@ -8,8 +10,6 @@ A fast and simple blog engine with [GoInk](https://github.com/fuxiaohei/GoInk) f
 Current version is **0.2.5** on 2014.02.28
 
 Development board is in [Trello](https://trello.com/b/7AHrcQL8/fxh-go-with-goink).
-
-**Notice: the project is planning to rebuild with sqlite database. I make sure the data are compatible and all functionalities are same - 2014.10.20**
 
 ### Overview
 
