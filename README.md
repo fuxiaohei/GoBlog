@@ -1,6 +1,6 @@
 ### Notice: this project is deprecated. Please try my new blog engine [pugo](https://github.com/go-xiaohei/pugo).
 
-#Fxh.Go
+# Fxh.Go
 
 A fast and simple blog engine with [GoInk](https://github.com/fuxiaohei/GoInk) framework in Golang.
 
