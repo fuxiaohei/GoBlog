@@ -7,7 +7,7 @@ import (
 	"path"
 )
 
-// LogErrors logs error bytes to tmp/log directory.
+// LogError: logs error bytes to tmp/log directory.
 func LogError(bytes []byte) {
 	dir := App.Config().String("app.log_dir")
 	file := path.Join(dir, utils.DateInt64(utils.Now(), "MMDDHHmmss.log"))

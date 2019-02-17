@@ -17,7 +17,7 @@ func (is intSorter) Less(i,j int)bool{
 	return is[i][1] > is[j][1]
 }
 
-// Sort [][2]int by the second element of [2].
+// SortInt: Sort [][2]int by the second element of [2].
 func SortInt(s [][2]int){
 	sort.Sort(intSorter(s))
 }

@@ -7,19 +7,19 @@ import (
 	"time"
 )
 
-// Format unix time int64 to string
+// DateInt64: Format unix time int64 to string
 func DateInt64(ti int64, format string) string {
 	t := time.Unix(int64(ti), 0)
 	return DateTime(t, format)
 }
 
-// Format unix time string to string
+// DateString: Format unix time string to string
 func DateString(ts string, format string) string {
 	i, _ := strconv.ParseInt(ts, 10, 64)
 	return DateInt64(i, format)
 }
 
-// Format time.Time struct to string
+// DateTime: Format time.Time struct to string
 // MM - month - 01
 // M - month - 1, single bit
 // DD - day - 02
@@ -52,7 +52,7 @@ func DateTime(t time.Time, format string) string {
 	return res
 }
 
-// Get unix stamp int64 of now
+// Now gets unix stamp int64 of now
 func Now() int64 {
 	return time.Now().Unix()
 }

@@ -75,7 +75,7 @@ func GetBackupFileAbsPath(name string) string {
 	return path.Join(backupDir, name)
 }
 
-// GetBackupFile returns fileinfo slice of all backup files.
+// GetBackupFiles returns fileinfo slice of all backup files.
 func GetBackupFiles() ([]os.FileInfo, error) {
 	fi := make([]os.FileInfo, 0)
 	e := filepath.Walk(backupDir, func(_ string, info os.FileInfo, _ error) error {

@@ -15,7 +15,7 @@ type Token struct {
 	ExpireTime int64
 }
 
-// check token is valid or expired.
+// IsValid checks token is valid or expired.
 func (t *Token) IsValid() bool {
 	if GetUserById(t.UserId) == nil {
 		return false
@@ -23,7 +23,7 @@ func (t *Token) IsValid() bool {
 	return t.ExpireTime > utils.Now()
 }
 
-// create new token from user and context.
+// CreateToken: create new token from user and context.
 func CreateToken(u *User, context *GoInk.Context, expire int64) *Token {
 	t := new(Token)
 	t.UserId = u.Id
@@ -35,12 +35,12 @@ func CreateToken(u *User, context *GoInk.Context, expire int64) *Token {
 	return t
 }
 
-// get token by token value.
+// GetTokenByValue gets token by token value.
 func GetTokenByValue(v string) *Token {
 	return tokens[v]
 }
 
-// get tokens of given user.
+// GetTokensByUser gets tokens of given user.
 func GetTokensByUser(u *User) []*Token {
 	ts := make([]*Token, 0)
 	for _, t := range tokens {
@@ -51,13 +51,13 @@ func GetTokensByUser(u *User) []*Token {
 	return ts
 }
 
-// remove a token by token value.
+// RemoveToken removes a token by token value.
 func RemoveToken(v string) {
 	delete(tokens, v)
 	go SyncTokens()
 }
 
-// clean all expired tokens in memory.
+// CleanTokens: clean all expired tokens in memory.
 // do not write to json.
 func CleanTokens() {
 	for k, t := range tokens {
@@ -67,14 +67,14 @@ func CleanTokens() {
 	}
 }
 
-// write tokens to json.
+// SyncTokens writes tokens to json.
 // it calls CleanTokens before writing.
 func SyncTokens() {
 	CleanTokens()
 	Storage.Set("tokens", tokens)
 }
 
-// load all tokens from json.
+// LoadTokens: load all tokens from json.
 func LoadTokens() {
 	tokens = make(map[string]*Token)
 	Storage.Get("tokens", &tokens)

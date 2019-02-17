@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-// generate gravatar link by email.
+// Gravatar: generate gravatar link by email.
 func Gravatar(email string, size string) string {
 	u := "http://1.gravatar.com/avatar/"
 	u += encodeAvatarEmail(email) + "?s=" + size

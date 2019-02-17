@@ -24,12 +24,12 @@ type User struct {
 	Role          string
 }
 
-// check user password.
+// CheckPassword checks user password.
 func (u *User) CheckPassword(pwd string) bool {
 	return utils.Sha1(pwd+"xxxxx") == u.Password
 }
 
-// change user email.
+// ChangeEmail: change user email.
 // check unique.
 func (u *User) ChangeEmail(email string) bool {
 	u2 := GetUserByEmail(u.Email)
@@ -40,12 +40,12 @@ func (u *User) ChangeEmail(email string) bool {
 	return true
 }
 
-// change user password.
+// ChangePassword: change user password.
 func (u *User) ChangePassword(pwd string) {
 	u.Password = utils.Sha1(pwd + "xxxxx")
 }
 
-// get a user by given id.
+// GetUserById gets a user by given id.
 func GetUserById(id int) *User {
 	for _, u := range users {
 		if u.Id == id {
@@ -55,7 +55,7 @@ func GetUserById(id int) *User {
 	return nil
 }
 
-// get a user by given name.
+// GetUserByName gets a user by given name.
 func GetUserByName(name string) *User {
 	for _, u := range users {
 		if u.Name == name {
@@ -65,7 +65,7 @@ func GetUserByName(name string) *User {
 	return nil
 }
 
-// get a user by given email.
+// GetUserByEmail gets a user by given email.
 func GetUserByEmail(email string) *User {
 	for _, u := range users {
 		if u.Email == email {
@@ -75,7 +75,7 @@ func GetUserByEmail(email string) *User {
 	return nil
 }
 
-// get users of given role.
+// GetUsersByRole gets users of given role.
 func GetUsersByRole(role string) []*User {
 	us := make([]*User, 0)
 	for _, u := range users {
@@ -86,7 +86,7 @@ func GetUsersByRole(role string) []*User {
 	return us
 }
 
-// create new user.
+// CreateUser: create new user.
 func CreateUser(u *User) error {
 	if GetUserByName(u.Email) != nil {
 		return errors.New("email-repeat")
@@ -100,7 +100,7 @@ func CreateUser(u *User) error {
 	return nil
 }
 
-// remove a user.
+// RemoveUser removes a user.
 func RemoveUser(u *User) {
 	for i, u2 := range users {
 		if u2.Id == u.Id {
@@ -111,7 +111,7 @@ func RemoveUser(u *User) {
 	go SyncUsers()
 }
 
-// write users to json.
+// SyncUsers writes users to json.
 func SyncUsers() {
 	Storage.Set("users", users)
 }

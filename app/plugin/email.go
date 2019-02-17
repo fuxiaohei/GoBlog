@@ -179,7 +179,7 @@ func (p *EmailPlugin) Form() string {
     </p>`
 }
 
-// SetSettings saves plugin settings to json.
+// SetSetting: saves plugin settings to json.
 func (p *EmailPlugin) SetSetting(settings map[string]string) {
 	p.settings = settings
 	model.Storage.Set("plugin/"+p.Key(), p.settings)
